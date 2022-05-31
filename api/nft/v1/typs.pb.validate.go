@@ -35,6 +35,210 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Trait with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Trait) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Trait with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in TraitMultiError, or nil if none found.
+func (m *Trait) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Trait) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Type
+
+	// no validation rules for Value
+
+	if len(errors) > 0 {
+		return TraitMultiError(errors)
+	}
+	return nil
+}
+
+// TraitMultiError is an error wrapping multiple validation errors returned by
+// Trait.ValidateAll() if the designated constraints aren't met.
+type TraitMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TraitMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TraitMultiError) AllErrors() []error { return m }
+
+// TraitValidationError is the validation error returned by Trait.Validate if
+// the designated constraints aren't met.
+type TraitValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TraitValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TraitValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TraitValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TraitValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TraitValidationError) ErrorName() string { return "TraitValidationError" }
+
+// Error satisfies the builtin error interface
+func (e TraitValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTrait.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TraitValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TraitValidationError{}
+
+// Validate checks the field values on Rarity with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Rarity) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Rarity with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in RarityMultiError, or nil if none found.
+func (m *Rarity) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Rarity) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Score
+
+	// no validation rules for Rank
+
+	// no validation rules for Total
+
+	if len(errors) > 0 {
+		return RarityMultiError(errors)
+	}
+	return nil
+}
+
+// RarityMultiError is an error wrapping multiple validation errors returned by
+// Rarity.ValidateAll() if the designated constraints aren't met.
+type RarityMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RarityMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RarityMultiError) AllErrors() []error { return m }
+
+// RarityValidationError is the validation error returned by Rarity.Validate if
+// the designated constraints aren't met.
+type RarityValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RarityValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RarityValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RarityValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RarityValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RarityValidationError) ErrorName() string { return "RarityValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RarityValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRarity.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RarityValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RarityValidationError{}
+
 // Validate checks the field values on Summary with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -73,6 +277,69 @@ func (m *Summary) validate(all bool) error {
 	// no validation rules for Image
 
 	// no validation rules for AnimationUrl
+
+	for idx, item := range m.GetTraits() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SummaryValidationError{
+						field:  fmt.Sprintf("Traits[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SummaryValidationError{
+						field:  fmt.Sprintf("Traits[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SummaryValidationError{
+					field:  fmt.Sprintf("Traits[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetRarity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SummaryValidationError{
+					field:  "Rarity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SummaryValidationError{
+					field:  "Rarity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRarity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SummaryValidationError{
+				field:  "Rarity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return SummaryMultiError(errors)

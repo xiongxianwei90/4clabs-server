@@ -1,24 +1,42 @@
 FROM golang:1.16 AS builder
 
-COPY . /src
-WORKDIR /src
+ARG APP_RELATIVE_PATH
 
-RUN GOPROXY=https://goproxy.cn make build
+WORKDIR src
 
-FROM debian:stable-slim
+ENV CGO_ENABLED 0
+ENV GOOS linux
+ENV GOPROXY https://goproxy.cn,direct
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		ca-certificates  \
-        netbase \
-        && rm -rf /var/lib/apt/lists/ \
-        && apt-get autoremove -y && apt-get autoclean -y
+ADD go.mod .
+ADD go.sum .
+RUN go mod download
 
-COPY --from=builder /src/bin /app
+COPY . .
+COPY ./app/${APP_RELATIVE_PATH}/configs /src/configs
 
-WORKDIR /app
+RUN go build -ldflags "-s -w" -o /src/main ./app/${APP_RELATIVE_PATH}/cmd/${APP_RELATIVE_PATH}/main.go ./app/${APP_RELATIVE_PATH}/cmd/${APP_RELATIVE_PATH}/wire_gen.go
+
+FROM alpine
+
+ARG APP_RELATIVE_PATH
+
+RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
+RUN apk add busybox-extras
+
+ENV TZ Asia/Shanghai
+
+ENV TZ Asia/Shanghai
+ENV aliyun_logs_${APP_NAME}-log stdout
+ENV aliyun_logs_${APP_NAME}-log_ttl "3"
+ENV aliyun_logs_${APP_NAME}-log_shard "2"
 
 EXPOSE 8000
 EXPOSE 9000
-VOLUME /data/conf
 
-CMD ["./server", "-conf", "/data/conf"]
+WORKDIR /src
+
+COPY --from=builder /src/main /src/main
+COPY --from=builder /src/configs /src/configs
+
+CMD ["./main"]

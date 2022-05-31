@@ -4,6 +4,15 @@ package api.nft.v1;
 
 option go_package = "4clabs-server/api/nft/v1;v1";
 
+message Trait {
+    string type = 1;
+    string value = 2;
+}
+message Rarity {
+    float score = 1;
+    int32 rank = 2;
+    int32 total = 3;
+}
 message Summary {
     string blockchain = 1;
     string collection_name = 2;
@@ -14,7 +23,9 @@ message Summary {
     string description = 7;
     string image = 8;
     string animation_url = 9;
-    repeated string owner_addresses = 10;
+    repeated string owner_addresses = 12;
+    repeated Trait traits = 13;
+    Rarity rarity = 11;
 }
 
 message Rank {

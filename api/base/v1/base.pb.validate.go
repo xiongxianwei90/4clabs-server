@@ -164,6 +164,8 @@ func (m *BaseListResponse) validate(all bool) error {
 
 	// no validation rules for HasMore
 
+	// no validation rules for Total
+
 	if len(errors) > 0 {
 		return BaseListResponseMultiError(errors)
 	}

@@ -115,6 +115,10 @@
         },
         "hasMore": {
           "type": "boolean"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -129,6 +133,23 @@
           "items": {
             "$ref": "#/definitions/v1Summary"
           }
+        }
+      }
+    },
+    "v1Rarity": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "number",
+          "format": "float"
+        },
+        "rank": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -167,6 +188,26 @@
           "items": {
             "type": "string"
           }
+        },
+        "traits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Trait"
+          }
+        },
+        "rarity": {
+          "$ref": "#/definitions/v1Rarity"
+        }
+      }
+    },
+    "v1Trait": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
         }
       }
     }

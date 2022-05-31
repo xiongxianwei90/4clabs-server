@@ -11,4 +11,5 @@ message BaseListRequest {
 message BaseListResponse {
     int64 last_score = 1;
     bool has_more = 2;
+    uint32 total = 3;
 }
