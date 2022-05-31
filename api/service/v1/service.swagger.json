@@ -1,0 +1,174 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/service/v1/service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Nft"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/address/{address}/nfts": {
+      "get": {
+        "summary": "地址下nft列表",
+        "operationId": "Nft_GetAddressNfts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAddressNftResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1BaseListRequest": {
+      "type": "object",
+      "properties": {
+        "lastScore": {
+          "type": "string",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1BaseListResponse": {
+      "type": "object",
+      "properties": {
+        "lastScore": {
+          "type": "string",
+          "format": "int64"
+        },
+        "hasMore": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1GetAddressNftResponse": {
+      "type": "object",
+      "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
+        "summaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Summary"
+          }
+        }
+      }
+    },
+    "v1Summary": {
+      "type": "object",
+      "properties": {
+        "blockchain": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "collectionSlug": {
+          "type": "string"
+        },
+        "contractAddress": {
+          "type": "string"
+        },
+        "tokenId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "animationUrl": {
+          "type": "string"
+        },
+        "ownerAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

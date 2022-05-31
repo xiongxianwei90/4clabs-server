@@ -1,0 +1,69 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/apps/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Nft
+    version: 0.0.1
+paths:
+    /v1/address/{address}/nfts:
+        get:
+            summary: 地址下nft列表
+            operationId: Nft_GetAddressNfts
+            parameters:
+                - name: base_list_request
+                  in: query
+                  schema:
+                    type: string
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAddressNftResponse'
+components:
+    schemas:
+        BaseListResponse:
+            properties:
+                last_score:
+                    type: integer
+                    format: int64
+                has_more:
+                    type: boolean
+        GetAddressNftResponse:
+            properties:
+                base_list_response:
+                    $ref: '#/components/schemas/BaseListResponse'
+                summaries:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Summary'
+        Summary:
+            properties:
+                blockchain:
+                    type: string
+                collection_name:
+                    type: string
+                collection_slug:
+                    type: string
+                contract_address:
+                    type: string
+                token_id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                image:
+                    type: string
+                animation_url:
+                    type: string
+                owner_addresses:
+                    type: array
+                    items:
+                        type: string

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api.service.v1;
+
+import "api/nft/v1/nft.proto";
+import "third_party/google/api/annotations.proto";
+
+option go_package = "4clabs-server/api/service/v1;v1";
+
+
+service Nft {
+    // 地址下nft列表
+    rpc GetAddressNfts(api.nft.v1.GetAddressNftsRequest) returns (api.nft.v1.GetAddressNftResponse) {
+        option (google.api.http) = {
+            get: "/v1/address/{address}/nfts",
+        };
+    };
+}

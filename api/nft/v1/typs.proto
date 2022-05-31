@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package api.nft.v1;
+
+option go_package = "4clabs-server/api/nft/v1;v1";
+
+message Summary {
+    string blockchain = 1;
+    string collection_name = 2;
+    string collection_slug = 3;
+    string contract_address = 4;
+    string token_id = 5;
+    string name = 6;
+    string description = 7;
+    string image = 8;
+    string animation_url = 9;
+    repeated string owner_addresses = 10;
+}
+
+message Rank {
+    float score = 1;
+    uint32 rank = 2;
+    uint32 total = 3;
+    uint64 last_updated = 4;
+}
+
+message Stat {
+    uint64 last_updated = 1;
+    uint64 sale_num_7d = 2;
+    uint64 sale_num_all = 3;
+    message PriceInfo {
+        string tx_hash = 1;
+        float price_token = 2;
+        string token_symbol = 3;
+        string  token_contract_address = 4;
+        float price_usd = 5;
+        uint64 time = 6;
+    }
+    PriceInfo max_price = 4;
+    PriceInfo min_price = 5;
+    message OwnerStat {
+        string address = 1;
+        uint64 holding_time = 2;
+    }
+    repeated OwnerStat past_owners = 6;
+
+    uint64 create_time = 7;
+    uint64 start_holding_time = 8;
+    uint64 longest_holding_time = 9;
+}

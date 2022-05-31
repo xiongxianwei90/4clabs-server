@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package api.base.v1;
+
+option go_package = "4clabs-server/api/base/v1;v1";
+
+message BaseListRequest {
+    int64 last_score = 1;
+    uint32 limit = 2;
+}
+message BaseListResponse {
+    int64 last_score = 1;
+    bool has_more = 2;
+}
