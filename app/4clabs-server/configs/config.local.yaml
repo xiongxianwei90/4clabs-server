@@ -13,3 +13,6 @@ data:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+third_party:
+  nftgo:
+    api_key: a12366dfa8e44fc99d7667765cf3608e

@@ -55,7 +55,7 @@ func main() {
 	)
 	c := config.New(
 		config.WithSource(
-			file.NewSource(fmt.Sprintf("./onfigs/config.%s.yaml", environment)),
+			file.NewSource(fmt.Sprintf("./configs/config.%s.yaml", environment)),
 		),
 	)
 	defer c.Close()
