@@ -75,7 +75,7 @@ type NftMetrics struct {
 	} `json:"min_price"`
 	LastPrice struct {
 		TxHash               string  `json:"tx_hash"`
-		PriceToken           float64     `json:"price_token"`
+		PriceToken           float64 `json:"price_token"`
 		TokenSymbol          string  `json:"token_symbol"`
 		TokenContractAddress string  `json:"token_contract_address"`
 		PriceUsd             float64 `json:"price_usd"`
@@ -176,6 +176,7 @@ func (s *Service) coverMetrics(detail NftMetrics) entity.NftStat {
 			PriceToken:           detail.MaxPrice.PriceToken,
 			TokenSymbol:          detail.MaxPrice.TokenSymbol,
 			TokenContractAddress: detail.MaxPrice.TokenContractAddress,
+			PriceUsd:             detail.MaxPrice.PriceUsd,
 			Time:                 time.Unix(int64(detail.MaxPrice.Time), 0),
 		},
 		MinPrice: entity.PriceInfo{
@@ -183,7 +184,16 @@ func (s *Service) coverMetrics(detail NftMetrics) entity.NftStat {
 			PriceToken:           detail.MinPrice.PriceToken,
 			TokenSymbol:          detail.MinPrice.TokenSymbol,
 			TokenContractAddress: detail.MinPrice.TokenContractAddress,
+			PriceUsd:             detail.MinPrice.PriceUsd,
 			Time:                 time.Unix(int64(detail.MinPrice.Time), 0),
+		},
+		LastPrice: entity.PriceInfo{
+			TxHash:               detail.LastPrice.TxHash,
+			PriceToken:           detail.LastPrice.PriceToken,
+			TokenSymbol:          detail.LastPrice.TokenSymbol,
+			TokenContractAddress: detail.LastPrice.TokenContractAddress,
+			PriceUsd:             detail.LastPrice.PriceUsd,
+			Time:                 time.Unix(int64(detail.LastPrice.Time), 0),
 		},
 		PastOwners:         PastOwners,
 		CreateTime:         time.Unix(int64(detail.CreateTime), 0),

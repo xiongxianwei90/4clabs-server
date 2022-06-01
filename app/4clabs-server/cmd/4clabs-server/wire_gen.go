@@ -7,7 +7,7 @@
 package main
 
 import (
-	server2 "4clabs-server/app/4clabs-server/internal/adapter/driven/server"
+	"4clabs-server/app/4clabs-server/internal/adapter/driven/server"
 	"4clabs-server/app/4clabs-server/internal/adapter/driven/service"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/conf"
@@ -22,9 +22,10 @@ import (
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
 	nftgoService := nftgo.NewService(bootstrap)
 	address := usecase.NewAddress(nftgoService)
-	serviceService := service.NewService(address)
-	httpServer := server2.NewHTTPServer(bootstrap, serviceService, logger)
-	grpcServer := server2.NewGRPCServer(bootstrap, logger)
+	nft := usecase.NewNft(nftgoService)
+	serviceService := service.NewService(address, nft)
+	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger)
+	grpcServer := server.NewGRPCServer(bootstrap, logger)
 	app := newApp(logger, httpServer, grpcServer)
 	return app, func() {
 	}, nil

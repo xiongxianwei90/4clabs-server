@@ -762,6 +762,35 @@ func (m *Stat) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetLastPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatValidationError{
+					field:  "LastPrice",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatValidationError{
+					field:  "LastPrice",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLastPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatValidationError{
+				field:  "LastPrice",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	for idx, item := range m.GetPastOwners() {
 		_, _ = idx, item
 

@@ -21,6 +21,7 @@ type PriceInfo struct {
 	PriceToken           float64
 	TokenSymbol          string
 	TokenContractAddress string
+	PriceUsd             float64
 	Time                 time.Time
 }
 
@@ -30,6 +31,7 @@ type NftStat struct {
 	SaleNumAll         uint64
 	MaxPrice           PriceInfo
 	MinPrice           PriceInfo
+	LastPrice          PriceInfo
 	PastOwners         []OwnerStat
 	CreateTime         time.Time
 	StartHoldingTime   time.Time

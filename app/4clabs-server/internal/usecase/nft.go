@@ -10,6 +10,10 @@ type Nft struct {
 	q ports.Query
 }
 
+func NewNft(q ports.Query) *Nft {
+	return &Nft{q: q}
+}
+
 func (n *Nft) GetNftDetail(ctx context.Context, contractAddress, tokenId string) (entity.NftDetail, error) {
 	return n.q.GetNftDetail(ctx, contractAddress, tokenId)
 }

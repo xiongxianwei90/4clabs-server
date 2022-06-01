@@ -5,6 +5,44 @@ import (
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 )
 
+func CoverNftDetailToHttpDto(nft entity.NftDetail) *typs.Detail {
+	var CoverPrice = func(p entity.PriceInfo) *typs.Stat_PriceInfo {
+		return &typs.Stat_PriceInfo{
+			TxHash:               p.TxHash,
+			PriceToken:           float32(p.PriceToken),
+			TokenSymbol:          p.TokenSymbol,
+			TokenContractAddress: p.TokenContractAddress,
+			PriceUsd:             float32(p.PriceUsd),
+			Time:                 uint64(p.Time.Unix()),
+		}
+	}
+	var CoverOwners = func(ows ...entity.OwnerStat) []*typs.Stat_OwnerStat {
+		var result []*typs.Stat_OwnerStat
+		for _, o := range ows {
+			result = append(result, &typs.Stat_OwnerStat{
+				Address:     o.Address,
+				HoldingTime: uint64(o.HoldingTime.Seconds()),
+			})
+		}
+		return result
+	}
+
+	return &typs.Detail{
+		Summary: CoverNftToHttpDto(nft.Summary)[0],
+		Stat: &typs.Stat{
+			LastUpdated:        nft.Stat.LastUpdated,
+			SaleNum_7D:         nft.Stat.SaleNum7d,
+			SaleNumAll:         nft.Stat.SaleNumAll,
+			MaxPrice:           CoverPrice(nft.Stat.MaxPrice),
+			MinPrice:           CoverPrice(nft.Stat.MinPrice),
+			LastPrice:          CoverPrice(nft.Stat.LastPrice),
+			PastOwners:         CoverOwners(nft.Stat.PastOwners...),
+			CreateTime:         uint64(nft.Stat.CreateTime.Unix()),
+			StartHoldingTime:   uint64(nft.Stat.StartHoldingTime.Unix()),
+			LongestHoldingTime: uint64(nft.Stat.LongestHoldingTime.Seconds()),
+		},
+	}
+}
 func CoverNftToHttpDto(nfts ...entity.Nft) []*typs.Summary {
 	var result []*typs.Summary
 	for _, n := range nfts {

@@ -55,6 +55,7 @@ message Stat {
     }
     PriceInfo max_price = 4;
     PriceInfo min_price = 5;
+    PriceInfo last_price = 10;
     message OwnerStat {
         string address = 1;
         uint64 holding_time = 2;
