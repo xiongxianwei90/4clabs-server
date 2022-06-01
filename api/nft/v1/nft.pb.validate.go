@@ -35,6 +35,241 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on GetNftDetailRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetNftDetailRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNftDetailRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetNftDetailRequestMultiError, or nil if none found.
+func (m *GetNftDetailRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNftDetailRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ContractAddress
+
+	// no validation rules for TokenId
+
+	if len(errors) > 0 {
+		return GetNftDetailRequestMultiError(errors)
+	}
+	return nil
+}
+
+// GetNftDetailRequestMultiError is an error wrapping multiple validation
+// errors returned by GetNftDetailRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetNftDetailRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNftDetailRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNftDetailRequestMultiError) AllErrors() []error { return m }
+
+// GetNftDetailRequestValidationError is the validation error returned by
+// GetNftDetailRequest.Validate if the designated constraints aren't met.
+type GetNftDetailRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNftDetailRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNftDetailRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNftDetailRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNftDetailRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNftDetailRequestValidationError) ErrorName() string {
+	return "GetNftDetailRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetNftDetailRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNftDetailRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNftDetailRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNftDetailRequestValidationError{}
+
+// Validate checks the field values on GetNftDetailResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetNftDetailResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNftDetailResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetNftDetailResponseMultiError, or nil if none found.
+func (m *GetNftDetailResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNftDetailResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetDetail()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetNftDetailResponseValidationError{
+					field:  "Detail",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetNftDetailResponseValidationError{
+					field:  "Detail",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDetail()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetNftDetailResponseValidationError{
+				field:  "Detail",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetNftDetailResponseMultiError(errors)
+	}
+	return nil
+}
+
+// GetNftDetailResponseMultiError is an error wrapping multiple validation
+// errors returned by GetNftDetailResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetNftDetailResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNftDetailResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNftDetailResponseMultiError) AllErrors() []error { return m }
+
+// GetNftDetailResponseValidationError is the validation error returned by
+// GetNftDetailResponse.Validate if the designated constraints aren't met.
+type GetNftDetailResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNftDetailResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNftDetailResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNftDetailResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNftDetailResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNftDetailResponseValidationError) ErrorName() string {
+	return "GetNftDetailResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetNftDetailResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNftDetailResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNftDetailResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNftDetailResponseValidationError{}
+
 // Validate checks the field values on GetAddressNftsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

@@ -20,11 +20,13 @@ const _ = http.SupportPackageIsVersion1
 
 type NftHTTPServer interface {
 	GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error)
+	GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error)
 }
 
 func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/address/{address}/nfts", _Nft_GetAddressNfts0_HTTP_Handler(srv))
+	r.GET("/v1/nft/collection/{contract_address}/token/{token_id}", _Nft_GetNftDetail0_HTTP_Handler(srv))
 }
 
 func _Nft_GetAddressNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
@@ -49,8 +51,31 @@ func _Nft_GetAddressNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context)
 	}
 }
 
+func _Nft_GetNftDetail0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v1.GetNftDetailRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/api.service.v1.Nft/GetNftDetail")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetNftDetail(ctx, req.(*v1.GetNftDetailRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.GetNftDetailResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NftHTTPClient interface {
 	GetAddressNfts(ctx context.Context, req *v1.GetAddressNftsRequest, opts ...http.CallOption) (rsp *v1.GetAddressNftResponse, err error)
+	GetNftDetail(ctx context.Context, req *v1.GetNftDetailRequest, opts ...http.CallOption) (rsp *v1.GetNftDetailResponse, err error)
 }
 
 type NftHTTPClientImpl struct {
@@ -66,6 +91,19 @@ func (c *NftHTTPClientImpl) GetAddressNfts(ctx context.Context, in *v1.GetAddres
 	pattern := "/v1/address/{address}/nfts"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/api.service.v1.Nft/GetAddressNfts"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftHTTPClientImpl) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...http.CallOption) (*v1.GetNftDetailResponse, error) {
+	var out v1.GetNftDetailResponse
+	pattern := "/v1/nft/collection/{contract_address}/token/{token_id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/api.service.v1.Nft/GetNftDetail"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

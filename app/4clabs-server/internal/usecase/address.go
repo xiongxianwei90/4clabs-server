@@ -2,15 +2,15 @@ package usecase
 
 import (
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
-	"4clabs-server/app/4clabs-server/internal/domain/service"
+	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
 )
 
 type Address struct {
-	q service.Query
+	q ports.Query
 }
 
-func NewAddress(q service.Query) *Address {
+func NewAddress(q ports.Query) *Address {
 	return &Address{q: q}
 }
 

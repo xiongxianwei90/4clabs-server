@@ -13,6 +13,12 @@ message Rarity {
     int32 rank = 2;
     int32 total = 3;
 }
+
+message Detail {
+    Summary summary = 1;
+    Stat stat = 2;
+}
+
 message Summary {
     string blockchain = 1;
     string collection_name = 2;

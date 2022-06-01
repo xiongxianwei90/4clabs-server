@@ -15,4 +15,11 @@ service Nft {
             get: "/v1/address/{address}/nfts",
         };
     };
+
+    // nft详情页
+    rpc GetNftDetail(api.nft.v1.GetNftDetailRequest) returns (api.nft.v1.GetNftDetailResponse) {
+        option (google.api.http) = {
+            get: "/v1/nft/collection/{contract_address}/token/{token_id}",
+        };
+    }
 }

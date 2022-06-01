@@ -25,6 +25,8 @@ const _ = grpc.SupportPackageIsVersion7
 type NftClient interface {
 	// 地址下nft列表
 	GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsRequest, opts ...grpc.CallOption) (*v1.GetAddressNftResponse, error)
+	// nft详情页
+	GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...grpc.CallOption) (*v1.GetNftDetailResponse, error)
 }
 
 type nftClient struct {
@@ -44,12 +46,23 @@ func (c *nftClient) GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsReq
 	return out, nil
 }
 
+func (c *nftClient) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...grpc.CallOption) (*v1.GetNftDetailResponse, error) {
+	out := new(v1.GetNftDetailResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetNftDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NftServer is the server API for Nft service.
 // All implementations must embed UnimplementedNftServer
 // for forward compatibility
 type NftServer interface {
 	// 地址下nft列表
 	GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error)
+	// nft详情页
+	GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error)
 	mustEmbedUnimplementedNftServer()
 }
 
@@ -59,6 +72,9 @@ type UnimplementedNftServer struct {
 
 func (UnimplementedNftServer) GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAddressNfts not implemented")
+}
+func (UnimplementedNftServer) GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNftDetail not implemented")
 }
 func (UnimplementedNftServer) mustEmbedUnimplementedNftServer() {}
 
@@ -91,6 +107,24 @@ func _Nft_GetAddressNfts_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nft_GetNftDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetNftDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).GetNftDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/GetNftDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).GetNftDetail(ctx, req.(*v1.GetNftDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Nft_ServiceDesc is the grpc.ServiceDesc for Nft service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -101,6 +135,10 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAddressNfts",
 			Handler:    _Nft_GetAddressNfts_Handler,
+		},
+		{
+			MethodName: "GetNftDetail",
+			Handler:    _Nft_GetNftDetail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

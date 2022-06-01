@@ -60,9 +60,84 @@
           "Nft"
         ]
       }
+    },
+    "/v1/nft/collection/{contractAddress}/token/{tokenId}": {
+      "get": {
+        "summary": "nft详情页",
+        "operationId": "Nft_GetNftDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetNftDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "contractAddress",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
     }
   },
   "definitions": {
+    "StatOwnerStat": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "holdingTime": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "StatPriceInfo": {
+      "type": "object",
+      "properties": {
+        "txHash": {
+          "type": "string"
+        },
+        "priceToken": {
+          "type": "number",
+          "format": "float"
+        },
+        "tokenSymbol": {
+          "type": "string"
+        },
+        "tokenContractAddress": {
+          "type": "string"
+        },
+        "priceUsd": {
+          "type": "number",
+          "format": "float"
+        },
+        "time": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -122,6 +197,17 @@
         }
       }
     },
+    "v1Detail": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/v1Summary"
+        },
+        "stat": {
+          "$ref": "#/definitions/v1Stat"
+        }
+      }
+    },
     "v1GetAddressNftResponse": {
       "type": "object",
       "properties": {
@@ -133,6 +219,14 @@
           "items": {
             "$ref": "#/definitions/v1Summary"
           }
+        }
+      }
+    },
+    "v1GetNftDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1Detail"
         }
       }
     },
@@ -150,6 +244,47 @@
         "total": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "v1Stat": {
+      "type": "object",
+      "properties": {
+        "lastUpdated": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "saleNum7d": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "saleNumAll": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "maxPrice": {
+          "$ref": "#/definitions/StatPriceInfo"
+        },
+        "minPrice": {
+          "$ref": "#/definitions/StatPriceInfo"
+        },
+        "pastOwners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StatOwnerStat"
+          }
+        },
+        "createTime": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "startHoldingTime": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "longestHoldingTime": {
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
