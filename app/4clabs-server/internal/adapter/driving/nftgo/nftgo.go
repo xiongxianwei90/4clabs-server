@@ -129,10 +129,10 @@ func (s *Service) GetNftDetail(ctx context.Context, contractAddress, tokenId str
 func (s *Service) GetNftSummary(ctx context.Context, contractAddress, tokenId string) (entity.Nft, error) {
 	urlStr := fmt.Sprintf("https://api.nftgo.dev/eth/v1/nft/%s/%s/info", contractAddress, tokenId)
 	reader, err := s.baseGet(ctx, urlStr)
-	defer reader.Close()
 	if err != nil {
 		return entity.Nft{}, err
 	}
+	defer reader.Close()
 	nft := Nft{}
 	if err := json.NewDecoder(reader).Decode(&nft); err != nil {
 		return entity.Nft{}, errors.Wrapf(err, "address : %s, token : %s ", contractAddress, tokenId)
