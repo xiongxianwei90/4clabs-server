@@ -236,8 +236,11 @@ func (s *Service) baseGet(ctx context.Context, url string) (io.ReadCloser, error
 	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	req.Header.Set("X-API-KEY", s.apiKey)
 	res, err := http.DefaultClient.Do(req)
-	if res.StatusCode != http.StatusOK {
+	if err != nil {
 		return nil, errors.Wrapf(err, "url : %s", url)
+	}
+	if res.StatusCode != http.StatusOK {
+		return nil, errors.Wrapf(fmt.Errorf("status code is not ok"), "url : %s", url)
 	}
 	return res.Body, nil
 }
