@@ -16,6 +16,39 @@
     "application/json"
   ],
   "paths": {
+    "/v1/address/verify_sign": {
+      "post": {
+        "summary": "签名登录",
+        "operationId": "Nft_SignToLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VerifySignToLoginSighResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifySignToLoginSignRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/address/{address}/nfts": {
       "get": {
         "summary": "地址下nft列表",
@@ -54,6 +87,37 @@
             "required": false,
             "type": "integer",
             "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/address/{address}/sign_message": {
+      "get": {
+        "summary": "拉取地址对应的nonce",
+        "operationId": "Nft_FetchNonce",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FetchSignMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -208,6 +272,14 @@
         }
       }
     },
+    "v1FetchSignMessageResponse": {
+      "type": "object",
+      "properties": {
+        "signMessage": {
+          "type": "string"
+        }
+      }
+    },
     "v1GetAddressNftResponse": {
       "type": "object",
       "properties": {
@@ -345,6 +417,28 @@
           "type": "string"
         },
         "value": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VerifySignToLoginSighResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VerifySignToLoginSignRequest": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sign": {
           "type": "string"
         }
       }

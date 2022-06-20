@@ -17,6 +17,7 @@ message Server {
         string network = 1;
         string addr = 2;
         google.protobuf.Duration timeout = 3;
+        Jwt jwt = 4;
     }
     message GRPC {
         string network = 1;
@@ -27,13 +28,18 @@ message Server {
     GRPC grpc = 2;
 }
 
+message Jwt {
+    string key = 1;
+    google.protobuf.Duration timeout = 2;
+    google.protobuf.Duration min_refresh = 3;
+}
+
 message ThirdParty {
     message Nftgo {
         string api_key = 1;
     }
     Nftgo nftgo = 1;
 }
-
 
 
 message Data {

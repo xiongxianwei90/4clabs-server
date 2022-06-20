@@ -2,6 +2,7 @@ package main
 
 import (
 	"4clabs-server/app/4clabs-server/internal/conf"
+	"4clabs-server/pkg/auth"
 	"flag"
 	"fmt"
 	"os"
@@ -68,8 +69,13 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+	authUtitls := auth.NewJwtUtils(
+		bc.Server.Http.Jwt.Key,
+		bc.Server.Http.Jwt.Timeout.Seconds,
+		bc.Server.Http.Jwt.MinRefresh.Seconds,
+	)
 
-	app, cleanup, err := wireApp(&bc, logger)
+	app, cleanup, err := wireApp(&bc, logger, authUtitls)
 	if err != nil {
 		panic(err)
 	}

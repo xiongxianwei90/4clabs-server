@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.service.v1;
 
+import "api/auth/v1/auth.proto";
 import "api/nft/v1/nft.proto";
 import "third_party/google/api/annotations.proto";
 
@@ -9,6 +10,21 @@ option go_package = "4clabs-server/api/service/v1;v1";
 
 
 service Nft {
+    // 签名登录
+    rpc SignToLogin(api.auth.v1.VerifySignToLoginSignRequest) returns (api.auth.v1.VerifySignToLoginSighResponse) {
+        option (google.api.http) = {
+            post: "/v1/address/verify_sign",
+            body: "*"
+        };
+    }
+
+    // 拉取地址对应的nonce
+    rpc FetchNonce(api.auth.v1.FetchSignMessageRequest) returns (api.auth.v1.FetchSignMessageResponse) {
+        option (google.api.http) = {
+            get: "/v1/address/{address}/sign_message",
+        };
+    }
+
     // 地址下nft列表
     rpc GetAddressNfts(api.nft.v1.GetAddressNftsRequest) returns (api.nft.v1.GetAddressNftResponse) {
         option (google.api.http) = {

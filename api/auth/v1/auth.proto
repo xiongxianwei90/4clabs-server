@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package api.auth.v1;
+
+import "validate/validate.proto";
+
+option go_package = "4clabs-server/api/auth/v1;v1";
+
+message FetchSignMessageRequest {
+    string address = 1 [(validate.rules).string = {len: 42}];
+}
+message FetchSignMessageResponse {
+    string sign_message = 1;
+}
+
+message VerifySignToLoginSignRequest {
+    string address = 1 [(validate.rules).string = {len: 42}];
+    string message = 2 [(validate.rules).string = {min_len: 1}];
+    string sign = 3 [(validate.rules).string = {min_len: 1}];
+}
+message VerifySignToLoginSighResponse {
+    string token = 1;
+}

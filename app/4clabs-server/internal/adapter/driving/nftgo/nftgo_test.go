@@ -23,9 +23,9 @@ func TestGetSummary(t *testing.T) {
 
 func TestGetDetail(t *testing.T) {
 	s := Service{apiKey: "a12366dfa8e44fc99d7667765cf3608e"}
-	ss, err := s.GetNftDetail(context.TODO(), "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d", "22222")
+	ss, err := s.GetNftDetail(context.TODO(), "0x09233d553058c2f42ba751c87816a8e9fae7ef10", "5726")
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("err : %s", err)
 	}
 	t.Log(ss)
 }

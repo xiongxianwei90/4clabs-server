@@ -2,17 +2,22 @@ server:
   http:
     addr: 0.0.0.0:8000
     timeout: 1s
+    jwt:
+      key: basictid
+      timeout: 1209600s
+      min_refresh: 604800s
   grpc:
     addr: 0.0.0.0:9000
     timeout: 1s
-data:
-  database:
-    driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test
-  redis:
-    addr: 127.0.0.1:6379
-    read_timeout: 0.2s
-    write_timeout: 0.2s
 third_party:
   nftgo:
     api_key: a12366dfa8e44fc99d7667765cf3608e
+data:
+  database:
+    driver: mysql
+    source: dev:Zhengli_0220@tcp(master-pub.mysql.polardb.rds.aliyuncs.com:3306)/4clabs?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  redis:
+    addr: r-2zeq0pz2iv0m5ygqlfpd.redis.rds.aliyuncs.com:6379
+    password: Zhengli_0220
+    read_timeout: 0.2s
+    write_timeout: 0.2s

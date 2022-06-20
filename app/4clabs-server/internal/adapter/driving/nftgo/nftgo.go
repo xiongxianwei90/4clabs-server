@@ -240,7 +240,7 @@ func (s *Service) baseGet(ctx context.Context, url string) (io.ReadCloser, error
 		return nil, errors.Wrapf(err, "url : %s", url)
 	}
 	if res.StatusCode != http.StatusOK {
-		return nil, errors.Wrapf(fmt.Errorf("status code is not ok"), "url : %s", url)
+		return nil, errors.Wrapf(fmt.Errorf("status code %d is not ok", res.StatusCode), "url : %s", url)
 	}
 	return res.Body, nil
 }
