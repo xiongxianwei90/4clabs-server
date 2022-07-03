@@ -2,6 +2,10 @@ package entity
 
 import "time"
 
+type BaseNft struct {
+	ContractAddress string
+	TokenId         string
+}
 type Rarity struct {
 	Score float64 `json:"score"`
 	Rank  int     `json:"rank"`

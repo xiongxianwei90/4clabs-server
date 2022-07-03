@@ -7,6 +7,7 @@ import (
 	v1 "4clabs-server/api/service/v1"
 	ticketPb "4clabs-server/api/tickets/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/assembler"
+	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/usecase"
 	authUtils "4clabs-server/pkg/auth"
 	"context"
@@ -47,7 +48,14 @@ func (s *Service) ListComicWorks(ctx context.Context, req *nft.ListComicWorkRequ
 }
 
 func (s *Service) RegisterNft(ctx context.Context, req *nft.RegisterNftRequest) (*nft.RegisterNftResponse, error) {
-	if err := s.nftUc.Register(ctx, req.TokenId, req.ContractAddress, req.UserAddress); err != nil {
+	var nfts []entity.BaseNft
+	for _, n := range req.Nfts {
+		nfts = append(nfts, entity.BaseNft{
+			ContractAddress: n.ContractAddress,
+			TokenId:         n.TokenId,
+		})
+	}
+	if err := s.nftUc.Register(ctx, nfts, req.UserAddress); err != nil {
 		return nil, err
 	}
 	return &nft.RegisterNftResponse{}, nil
