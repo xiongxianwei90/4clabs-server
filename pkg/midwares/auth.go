@@ -20,7 +20,7 @@ func GetAuthMiddle(validator *auth.JwtUtils, contextUidSetter *auth.ContextUtils
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			if tr, ok := transport.FromServerContext(ctx); ok {
 				// 不需要鉴权
-				if _, ok := inPath[tr.Operation()]; ok {
+				if _, ok := inPath[tr.Operation()]; !ok {
 					return handler(ctx, req)
 				}
 				jwtToken := tr.RequestHeader().Get("Authorization")
