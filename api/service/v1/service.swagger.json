@@ -227,15 +227,15 @@
         ]
       }
     },
-    "/v1/nft/{address}/comic_works": {
+    "/v1/nft/registers": {
       "get": {
-        "summary": "commic works",
-        "operationId": "Nft_ListComicWorks",
+        "summary": "register nfts",
+        "operationId": "Nft_ListRegsiterNfts",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListComicWorkResponse"
+              "$ref": "#/definitions/v1ListRegisterNftResponse"
             }
           },
           "default": {
@@ -246,12 +246,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "address",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "baseListRequest.lastScore",
             "in": "query",
@@ -265,6 +259,12 @@
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -272,15 +272,15 @@
         ]
       }
     },
-    "/v1/nft/{address}/registers": {
+    "/v1/nft/{address}/comic_works": {
       "get": {
-        "summary": "register nfts",
-        "operationId": "Nft_ListRegsiterNfts",
+        "summary": "commic works",
+        "operationId": "Nft_ListComicWorks",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListRegisterNftResponse"
+              "$ref": "#/definitions/v1ListComicWorkResponse"
             }
           },
           "default": {

@@ -24,10 +24,20 @@ func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
 
 func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
 	rnft := query.Use(r.data.DB).RegisterNft
-	datas, err := rnft.WithContext(ctx).
-		Where(rnft.UserAddress.Eq(userAddress)).
-		Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
-		Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
+
+	var datas []*model.RegisterNft
+	var err error
+	if userAddress != "" {
+		datas, err = rnft.WithContext(ctx).
+			Where(rnft.UserAddress.Eq(userAddress)).
+			Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
+			Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
+	} else {
+		datas, err = rnft.WithContext(ctx).
+			Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
+			Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
+	}
+
 	if err != nil {
 		return nil, 0, 0, false, err
 	}

@@ -47,7 +47,7 @@ func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
 	r.GET("/v1/nft/{address}/comic_works", _Nft_ListComicWorks0_HTTP_Handler(srv))
 	r.POST("/v1/nft/comic/create", _Nft_CreateComic0_HTTP_Handler(srv))
 	r.POST("/v1/nft/register", _Nft_RegisterNft0_HTTP_Handler(srv))
-	r.GET("/v1/nft/{address}/registers", _Nft_ListRegsiterNfts0_HTTP_Handler(srv))
+	r.GET("/v1/nft/registers", _Nft_ListRegsiterNfts0_HTTP_Handler(srv))
 	r.GET("/v1/tickets/{address}/can_mint", _Nft_InTicketsWLRequest0_HTTP_Handler(srv))
 	r.POST("/v1/address/verify_sign", _Nft_SignToLogin0_HTTP_Handler(srv))
 	r.GET("/v1/address/{address}/sign_message", _Nft_FetchNonce0_HTTP_Handler(srv))
@@ -119,9 +119,6 @@ func _Nft_ListRegsiterNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Contex
 	return func(ctx http.Context) error {
 		var in v1.ListRegisterNftRequest
 		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftListRegsiterNfts)
@@ -344,7 +341,7 @@ func (c *NftHTTPClientImpl) ListComicWorks(ctx context.Context, in *v1.ListComic
 
 func (c *NftHTTPClientImpl) ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNftRequest, opts ...http.CallOption) (*v1.ListRegisterNftResponse, error) {
 	var out v1.ListRegisterNftResponse
-	pattern := "/v1/nft/{address}/registers"
+	pattern := "/v1/nft/registers"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftListRegsiterNfts))
 	opts = append(opts, http.PathTemplate(pattern))

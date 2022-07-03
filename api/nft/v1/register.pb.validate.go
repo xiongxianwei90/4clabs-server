@@ -316,6 +316,17 @@ func (m *ListRegisterNftRequest) validate(all bool) error {
 
 	var errors []error
 
+	if m.GetBaseListRequest() == nil {
+		err := ListRegisterNftRequestValidationError{
+			field:  "BaseListRequest",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
 		switch v := interface{}(m.GetBaseListRequest()).(type) {
 		case interface{ ValidateAll() error }:
