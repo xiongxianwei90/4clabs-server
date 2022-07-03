@@ -1,14 +1,14 @@
 server:
   http:
     addr: 0.0.0.0:8000
-    timeout: 1s
+    timeout: 20s
     jwt:
       key: basictid
       timeout: 1209600s
       min_refresh: 604800s
   grpc:
     addr: 0.0.0.0:9000
-    timeout: 1s
+    timeout: 20s
 third_party:
   nftgo:
     api_key: a12366dfa8e44fc99d7667765cf3608e
