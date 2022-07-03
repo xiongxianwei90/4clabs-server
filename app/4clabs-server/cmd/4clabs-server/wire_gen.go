@@ -22,7 +22,7 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUtils) (*kratos.App, func(), error) {
+func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUtils, contextUtils *auth.ContextUtils) (*kratos.App, func(), error) {
 	nftgoService := nftgo.NewService(bootstrap)
 	address := usecase.NewAddress(nftgoService)
 	dataData, cleanup, err := data.NewData(bootstrap, logger)
@@ -35,8 +35,10 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)
 	ticket := repo.NewTicket(dataData)
 	usecaseTicket := usecase.NewTicket(ticket)
-	serviceService := service.NewService(address, nft, usecaseAuth, usecaseTicket)
-	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger)
+	comic := repo.NewComic(dataData, nftgoService)
+	comics := usecase.NewComics(comic)
+	serviceService := service.NewService(address, nft, usecaseAuth, contextUtils, usecaseTicket, comics)
+	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger, contextUtils, jwtUtils)
 	grpcServer := server.NewGRPCServer(bootstrap, logger)
 	app := newApp(logger, httpServer, grpcServer)
 	return app, func() {

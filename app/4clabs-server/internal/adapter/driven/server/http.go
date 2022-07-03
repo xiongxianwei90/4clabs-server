@@ -4,15 +4,31 @@ import (
 	v1 "4clabs-server/api/service/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/driven/service"
 	"4clabs-server/app/4clabs-server/internal/conf"
+	"4clabs-server/pkg/auth"
+	middleware "4clabs-server/pkg/midwares"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 // NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, s *service.Service, logger log.Logger) *http.Server {
+func NewHTTPServer(
+	c *conf.Bootstrap,
+	s *service.Service,
+	logger log.Logger,
+	u *auth.ContextUtils,
+	authutils *auth.JwtUtils,
+) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
+			middleware.GetAuthMiddle(
+				authutils,
+				u,
+				map[string]struct{}{
+					"/v1/address/verify_sign":            {},
+					"/v1/address/{address}/sign_message": {},
+				},
+			),
 			recovery.Recovery(),
 		),
 	}

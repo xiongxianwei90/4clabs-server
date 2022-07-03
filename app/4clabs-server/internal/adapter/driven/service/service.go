@@ -28,7 +28,20 @@ func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Au
 }
 
 func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) (*nft.ComicCreateResponse, error) {
-	comics, nextScore, total, hasMore, err := s.comic.List(ctx, s.authUtils.GetAddress(ctx),
+	if err := s.comic.Create(ctx, entity.Comic{
+		Origin: entity.Nft{
+			ContractAddress: req.OriginNftContractAddress,
+			TokenId:         req.OriginNftTokenId,
+		},
+		MintLimit:    req.MintLimit,
+		MintPrice:    float64(req.MintPrice),
+		Name:         req.Name,
+		MetadataJson: req.MetadataJson,
+		UserAddress:  s.authUtils.GetAddress(ctx),
+	}); err != nil {
+		return nil, err
+	}
+	return &nft.ComicCreateResponse{}, nil
 }
 
 // commic works

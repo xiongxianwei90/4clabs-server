@@ -17,3 +17,6 @@ func NewComics(comic ports.Comic) *Comics {
 func (c *Comics) List(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error) {
 	return c.Comic.List(ctx, userAddress, limit, nextScore)
 }
+func (c *Comics) Create(ctx context.Context, comic entity.Comic) error {
+	return c.Comic.Create(ctx, comic)
+}

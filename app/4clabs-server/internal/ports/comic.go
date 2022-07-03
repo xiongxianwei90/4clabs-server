@@ -7,5 +7,5 @@ import (
 
 type Comic interface {
 	List(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error)
-    Create(ctx context.Context, comic entity.Comic)
+    Create(ctx context.Context, comic entity.Comic) error
 }
