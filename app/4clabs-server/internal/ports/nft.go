@@ -14,4 +14,5 @@ type Register interface {
 	Register(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) error
 	Registered(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) (bool, error)
 	UserRegistered(ctx context.Context, userAddress string) (bool, error)
+	ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error)
 }

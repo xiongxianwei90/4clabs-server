@@ -13,8 +13,8 @@ const TableNameTicketWl = "ticket_wls"
 // TicketWl mapped from table <ticket_wls>
 type TicketWl struct {
 	ID        int32     `gorm:"column:id;type:int(20) unsigned;primaryKey;autoIncrement:true" json:"id"`
-	Address   string    `gorm:"column:address;type:varchar(100);not null" json:"address"`
-	Level     int32     `gorm:"column:level;type:int(200) unsigned;not null" json:"level"`
+	Address   string    `gorm:"column:address;type:varchar(100);not null;uniqueIndex:uniq_idx_address,priority:1" json:"address"`
+	Level     int32     `gorm:"column:level;type:int(200) unsigned;not null;default:4" json:"level"`
 	CreatedAt time.Time `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
