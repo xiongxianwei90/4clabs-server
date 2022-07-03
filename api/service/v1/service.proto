@@ -4,12 +4,22 @@ package api.service.v1;
 
 import "api/auth/v1/auth.proto";
 import "api/nft/v1/nft.proto";
+import "api/tickets/v1/tickets.proto";
 import "third_party/google/api/annotations.proto";
+
 
 option go_package = "4clabs-server/api/service/v1;v1";
 
 
 service Nft {
+
+    // ticket WL
+    rpc InTicketsWLRequest(api.tickets.v1.CanMintRequest) returns (api.tickets.v1.CantMintResponse) {
+        option (google.api.http) = {
+            get: "/v1/tickets/{address}/can_mint",
+        };
+    }
+
     // 签名登录
     rpc SignToLogin(api.auth.v1.VerifySignToLoginSignRequest) returns (api.auth.v1.VerifySignToLoginSighResponse) {
         option (google.api.http) = {

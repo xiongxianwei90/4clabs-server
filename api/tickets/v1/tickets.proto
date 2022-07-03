@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package api.tickets.v1;
+
+option go_package = "4clabs-server/api/tickets/v1;v1";
+
+
+message CanMintRequest {
+    string address = 1;
+}
+
+message CantMintResponse {
+    bool in_wl = 1;
+    uint32 level = 3;
+}
