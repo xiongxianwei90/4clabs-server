@@ -22,7 +22,7 @@ func NewHTTPServer(
 ) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
-			validate.Validator(),
+			//validate.Validator(),
 			middleware.GetAuthMiddle(
 				authutils,
 				u,
