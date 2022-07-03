@@ -4,11 +4,27 @@ package api.nft.v1;
 
 import "api/base/v1/base.proto";
 import "api/nft/v1/typs.proto";
+import "validate/validate.proto";
 
 
 option go_package = "4clabs-server/api/nft/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.nft.v1";
+
+message ComicCreateRequest {
+    string origin_nft_contract_address = 1 [(validate.rules).string = {len: 42}];
+    string origin_nft_token_id = 6 [(validate.rules).string = {min_len: 1}];
+
+    // mint config
+    uint32 mint_limit = 2 [(validate.rules).uint32 = {gte: 1}];
+    float mint_price = 3 [(validate.rules).float = {gte: 0.0}];
+    string name = 4 [(validate.rules).string = {min_len: 1}];
+    string metadata_json = 5;
+    string minter_address = 7 [(validate.rules).string = {len: 42}];
+}
+message ComicCreateResponse {
+}
+
 
 message ListComicWorkRequest {
     api.base.v1.BaseListRequest base_list_request = 1;

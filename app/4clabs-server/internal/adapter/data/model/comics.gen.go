@@ -14,6 +14,7 @@ const TableNameComic = "comics"
 type Comic struct {
 	ID              int32     `gorm:"column:id;type:int(11) unsigned;primaryKey;autoIncrement:true" json:"id"`
 	TokenID         string    `gorm:"column:token_id;type:varchar(200);not null;index:idx_contract_address_token_id,priority:2" json:"token_id"`
+	Name            string    `gorm:"column:name;type:varchar(200);not null" json:"name"`
 	ContractAddress string    `gorm:"column:contract_address;type:varchar(200);not null;index:idx_contract_address_token_id,priority:1" json:"contract_address"`
 	UserAddress     string    `gorm:"column:user_address;type:varchar(200);not null;index:idx_user_address,priority:1" json:"user_address"`
 	MintLimit       int32     `gorm:"column:mint_limit;type:int(11);not null" json:"mint_limit"`

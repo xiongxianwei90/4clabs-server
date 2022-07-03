@@ -7,7 +7,9 @@ import (
 	v1 "4clabs-server/api/service/v1"
 	ticketPb "4clabs-server/api/tickets/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/assembler"
+	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/usecase"
+	authUtils "4clabs-server/pkg/auth"
 	"context"
 )
 
@@ -16,20 +18,57 @@ type Service struct {
 	addressUc *usecase.Address
 	nftUc     *usecase.Nft
 	auth      *usecase.Auth
+	authUtils *authUtils.ContextUtils
 	ticket    *usecase.Ticket
+	comic     *usecase.Comics
 }
 
-func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, ticket *usecase.Ticket) *Service {
-	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, ticket: ticket}
+func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, authUtils *authUtils.ContextUtils, ticket *usecase.Ticket, comic *usecase.Comics) *Service {
+	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, authUtils: authUtils, ticket: ticket, comic: comic}
+}
+
+func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) (*nft.ComicCreateResponse, error) {
+	if err := s.comic.Create(ctx, entity.Comic{
+		Origin: entity.Nft{
+			ContractAddress: req.OriginNftContractAddress,
+			TokenId:         req.OriginNftTokenId,
+		},
+		MintLimit:    req.MintLimit,
+		MintPrice:    float64(req.MintPrice),
+		Name:         req.Name,
+		MetadataJson: req.MetadataJson,
+		UserAddress:  s.authUtils.GetAddress(ctx),
+	}); err != nil {
+		return nil, err
+	}
+	return &nft.ComicCreateResponse{}, nil
 }
 
 // commic works
-func (s *Service) ListComicWorks(context.Context, *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
-	return nil, nil
+func (s *Service) ListComicWorks(ctx context.Context, req *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
+	comics, nextScore, total, hasMore, err := s.comic.List(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	if err != nil {
+		return nil, err
+	}
+	return &nft.ListComicWorkResponse{
+		BaseListResponse: &apibase.BaseListResponse{
+			LastScore: nextScore,
+			HasMore:   hasMore,
+			Total:     total,
+		},
+		ComicWorks: assembler.CoverComicToHttpDto(comics...),
+	}, nil
 }
 
 func (s *Service) RegisterNft(ctx context.Context, req *nft.RegisterNftRequest) (*nft.RegisterNftResponse, error) {
-	if err := s.nftUc.Register(ctx, req.TokenId, req.ContractAddress, req.UserAddress); err != nil {
+	var nfts []entity.BaseNft
+	for _, n := range req.Nfts {
+		nfts = append(nfts, entity.BaseNft{
+			ContractAddress: n.ContractAddress,
+			TokenId:         n.TokenId,
+		})
+	}
+	if err := s.nftUc.Register(ctx, nfts, req.UserAddress); err != nil {
 		return nil, err
 	}
 	return &nft.RegisterNftResponse{}, nil

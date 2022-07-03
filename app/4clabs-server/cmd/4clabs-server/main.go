@@ -75,7 +75,7 @@ func main() {
 		bc.Server.Http.Jwt.MinRefresh.Seconds,
 	)
 
-	app, cleanup, err := wireApp(&bc, logger, authUtitls)
+	app, cleanup, err := wireApp(&bc, logger, authUtitls, auth.NewUtils())
 	if err != nil {
 		panic(err)
 	}

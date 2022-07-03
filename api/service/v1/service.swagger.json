@@ -162,6 +162,38 @@
         ]
       }
     },
+    "/v1/nft/comic/create": {
+      "post": {
+        "operationId": "Nft_CreateComic",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ComicCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ComicCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/nft/register": {
       "post": {
         "summary": "register nft",
@@ -318,6 +350,17 @@
     }
   },
   "definitions": {
+    "RegisterNftRequestNft": {
+      "type": "object",
+      "properties": {
+        "contractAddress": {
+          "type": "string"
+        },
+        "tokenId": {
+          "type": "string"
+        }
+      }
+    },
     "StatOwnerStat": {
       "type": "object",
       "properties": {
@@ -427,6 +470,38 @@
         }
       }
     },
+    "v1ComicCreateRequest": {
+      "type": "object",
+      "properties": {
+        "originNftContractAddress": {
+          "type": "string"
+        },
+        "originNftTokenId": {
+          "type": "string"
+        },
+        "mintLimit": {
+          "type": "integer",
+          "format": "int64",
+          "title": "mint config"
+        },
+        "mintPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "name": {
+          "type": "string"
+        },
+        "metadataJson": {
+          "type": "string"
+        },
+        "minterAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ComicCreateResponse": {
+      "type": "object"
+    },
     "v1ComicWork": {
       "type": "object",
       "properties": {
@@ -445,11 +520,12 @@
         "name": {
           "type": "string"
         },
-        "imageUrl": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "metadataJson": {
+          "type": "string",
+          "title": "repeated string image_url = 5;"
+        },
+        "minterAddress": {
+          "type": "string"
         },
         "createdAtTimestamp": {
           "type": "integer",
@@ -549,11 +625,11 @@
         "userAddress": {
           "type": "string"
         },
-        "contractAddress": {
-          "type": "string"
-        },
-        "tokenId": {
-          "type": "string"
+        "nfts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RegisterNftRequestNft"
+          }
         }
       }
     },

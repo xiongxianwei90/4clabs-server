@@ -4,6 +4,7 @@ package api.nft.v1;
 
 import "api/base/v1/base.proto";
 import "api/nft/v1/typs.proto";
+import "validate/validate.proto";
 
 option go_package = "4clabs-server/api/nft/v1;v1";
 option java_multiple_files = true;
@@ -11,9 +12,12 @@ option java_package = "api.nft.v1";
 
 
 message RegisterNftRequest {
-    string user_address = 1;
-    string contract_address = 2;
-    string token_id = 3;
+    string user_address = 1 [(validate.rules).string = {len: 42}];
+    message Nft {
+        string contract_address = 2 [(validate.rules).string = {len: 42}];
+        string token_id = 3 [(validate.rules).string = {min_len: 1}];
+    }
+    repeated Nft nfts = 2 [(validate.rules).repeated = {min_items: 1}];
 }
 message RegisterNftResponse {}
 

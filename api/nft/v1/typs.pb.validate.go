@@ -92,6 +92,10 @@ func (m *ComicWork) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for MetadataJson
+
+	// no validation rules for MinterAddress
+
 	// no validation rules for CreatedAtTimestamp
 
 	if len(errors) > 0 {

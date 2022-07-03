@@ -85,21 +85,24 @@ func (r Register) UserRegistered(ctx context.Context, userAddress string) (bool,
 	return true, nil
 }
 
-func (r Register) Register(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) error {
-	ok, err := r.Registered(ctx, nftTokenId, nftContractAddress, userAddress)
-	if err != nil {
-		return err
-	}
-	if ok {
-		return nil
+func (r Register) Register(ctx context.Context, nfts []entity.BaseNft, userAddress string) error {
+	var needCreated []*model.RegisterNft
+	for _, n := range nfts {
+		ok, err := r.Registered(ctx, n.TokenId, n.ContractAddress, userAddress)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			needCreated = append(needCreated, &model.RegisterNft{
+				TokenID:         n.TokenId,
+				ContractAddress: n.ContractAddress,
+				UserAddress:     userAddress,
+			})
+		}
 	}
 	rNft := query.Use(r.data.DB).RegisterNft
-	if err := rNft.WithContext(ctx).Create(&model.RegisterNft{
-		TokenID:         nftTokenId,
-		ContractAddress: nftContractAddress,
-		UserAddress:     userAddress,
-	}); err != nil {
-		return errors.Wrapf(err, "token : %s, contract : %s, address : %s", nftTokenId, nftContractAddress, userAddress)
+	if err := rNft.WithContext(ctx).Create(needCreated...); err != nil {
+		return errors.Wrapf(err, "model : %#v, address : %s", nfts, userAddress)
 	}
 	return nil
 }

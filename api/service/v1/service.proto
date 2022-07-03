@@ -20,7 +20,12 @@ service Nft {
             get: "/v1/nft/{address}/comic_works",
         };
     }
-
+    rpc CreateComic(api.nft.v1.ComicCreateRequest) returns (api.nft.v1.ComicCreateResponse) {
+        option (google.api.http) = {
+            post: "/v1/nft/comic/create",
+            body: "*"
+        };
+    }
     // register nft
     rpc RegisterNft(api.nft.v1.RegisterNftRequest) returns (api.nft.v1.RegisterNftResponse) {
         option (google.api.http) = {

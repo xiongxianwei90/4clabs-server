@@ -29,6 +29,7 @@ func newComic(db *gorm.DB) comic {
 	_comic.ALL = field.NewField(tableName, "*")
 	_comic.ID = field.NewInt32(tableName, "id")
 	_comic.TokenID = field.NewString(tableName, "token_id")
+	_comic.Name = field.NewString(tableName, "name")
 	_comic.ContractAddress = field.NewString(tableName, "contract_address")
 	_comic.UserAddress = field.NewString(tableName, "user_address")
 	_comic.MintLimit = field.NewInt32(tableName, "mint_limit")
@@ -48,6 +49,7 @@ type comic struct {
 	ALL             field.Field
 	ID              field.Int32
 	TokenID         field.String
+	Name            field.String
 	ContractAddress field.String
 	UserAddress     field.String
 	MintLimit       field.Int32
@@ -73,6 +75,7 @@ func (c *comic) updateTableName(table string) *comic {
 	c.ALL = field.NewField(table, "*")
 	c.ID = field.NewInt32(table, "id")
 	c.TokenID = field.NewString(table, "token_id")
+	c.Name = field.NewString(table, "name")
 	c.ContractAddress = field.NewString(table, "contract_address")
 	c.UserAddress = field.NewString(table, "user_address")
 	c.MintLimit = field.NewInt32(table, "mint_limit")
@@ -102,9 +105,10 @@ func (c *comic) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *comic) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 9)
+	c.fieldMap = make(map[string]field.Expr, 10)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["token_id"] = c.TokenID
+	c.fieldMap["name"] = c.Name
 	c.fieldMap["contract_address"] = c.ContractAddress
 	c.fieldMap["user_address"] = c.UserAddress
 	c.fieldMap["mint_limit"] = c.MintLimit
