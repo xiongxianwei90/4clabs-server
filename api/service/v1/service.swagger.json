@@ -520,11 +520,9 @@
         "name": {
           "type": "string"
         },
-        "imageUrl": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "metadataJson": {
+          "type": "string",
+          "title": "repeated string image_url = 5;"
         },
         "minterAddress": {
           "type": "string"
