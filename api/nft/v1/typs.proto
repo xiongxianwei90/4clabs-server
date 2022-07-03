@@ -13,6 +13,7 @@ message ComicWork {
 
     string name = 4;
     repeated string image_url = 5;
+    string minter_address = 7;
     uint32 created_at_timestamp = 6;
 }
 

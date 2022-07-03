@@ -8,6 +8,7 @@ import (
 	ticketPb "4clabs-server/api/tickets/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/assembler"
 	"4clabs-server/app/4clabs-server/internal/usecase"
+	authUtils "4clabs-server/pkg/auth"
 	"context"
 )
 
@@ -16,16 +17,33 @@ type Service struct {
 	addressUc *usecase.Address
 	nftUc     *usecase.Nft
 	auth      *usecase.Auth
+	authUtils *authUtils.ContextUtils
 	ticket    *usecase.Ticket
+	comic     *usecase.Comics
 }
 
-func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, ticket *usecase.Ticket) *Service {
-	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, ticket: ticket}
+func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, authUtils *authUtils.ContextUtils, ticket *usecase.Ticket, comic *usecase.Comics) *Service {
+	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, authUtils: authUtils, ticket: ticket, comic: comic}
+}
+
+func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) (*nft.ComicCreateResponse, error) {
+	comics, nextScore, total, hasMore, err := s.comic.List(ctx, s.authUtils.GetAddress(ctx),
 }
 
 // commic works
-func (s *Service) ListComicWorks(context.Context, *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
-	return nil, nil
+func (s *Service) ListComicWorks(ctx context.Context, req *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
+	comics, nextScore, total, hasMore, err := s.comic.List(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	if err != nil {
+		return nil, err
+	}
+	return &nft.ListComicWorkResponse{
+		BaseListResponse: &apibase.BaseListResponse{
+			LastScore: nextScore,
+			HasMore:   hasMore,
+			Total:     total,
+		},
+		ComicWorks: assembler.CoverComicToHttpDto(comics...),
+	}, nil
 }
 
 func (s *Service) RegisterNft(ctx context.Context, req *nft.RegisterNftRequest) (*nft.RegisterNftResponse, error) {
