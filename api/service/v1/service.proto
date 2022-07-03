@@ -21,6 +21,13 @@ service Nft {
         };
     }
 
+    // register nft
+    rpc RegisterNft(api.nft.v1.RegisterNftRequest) returns (api.nft.v1.RegisterNftResponse) {
+        option (google.api.http) = {
+            post: "/v1/nft/register",
+            body: "*"
+        };
+    }
     // register nfts
     rpc ListRegsiterNfts(api.nft.v1.ListRegisterNftRequest) returns (api.nft.v1.ListRegisterNftResponse) {
         option (google.api.http) = {

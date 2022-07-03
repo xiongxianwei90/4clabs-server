@@ -28,6 +28,13 @@ func (s *Service) ListComicWorks(context.Context, *nft.ListComicWorkRequest) (*n
 	return nil, nil
 }
 
+func (s *Service) RegisterNft(ctx context.Context, req *nft.RegisterNftRequest) (*nft.RegisterNftResponse, error) {
+	if err := s.nftUc.Register(ctx, req.TokenId, req.ContractAddress, req.UserAddress); err != nil {
+		return nil, err
+	}
+	return &nft.RegisterNftResponse{}, nil
+}
+
 // register nfts
 func (s *Service) ListRegsiterNfts(ctx context.Context, req *nft.ListRegisterNftRequest) (*nft.ListRegisterNftResponse, error) {
 	nfts, nextScore, total, hasMore, err := s.nftUc.ListRegistedNfts(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)

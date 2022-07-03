@@ -162,6 +162,39 @@
         ]
       }
     },
+    "/v1/nft/register": {
+      "post": {
+        "summary": "register nft",
+        "operationId": "Nft_RegisterNft",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterNftResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterNftRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/nft/{address}/comic_works": {
       "get": {
         "summary": "commic works",
@@ -509,6 +542,23 @@
           "format": "int32"
         }
       }
+    },
+    "v1RegisterNftRequest": {
+      "type": "object",
+      "properties": {
+        "userAddress": {
+          "type": "string"
+        },
+        "contractAddress": {
+          "type": "string"
+        },
+        "tokenId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterNftResponse": {
+      "type": "object"
     },
     "v1Stat": {
       "type": "object",
