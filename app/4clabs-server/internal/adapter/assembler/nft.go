@@ -51,7 +51,7 @@ func CoverComicToHttpDto(nfts ...entity.Comic) []*typs.ComicWork {
 			MintLimit:          n.MintLimit,
 			MintPrice:          float32(n.MintPrice),
 			Name:               n.Name,
-			ImageUrl:           n.ImageUrls,
+			MetadataJson:       n.MetadataJson,
 			CreatedAtTimestamp: uint32(n.CreatedAt.Unix()),
 		})
 	}
