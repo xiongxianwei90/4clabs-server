@@ -23,6 +23,16 @@ func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Au
 	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, ticket: ticket}
 }
 
+// commic works
+func (s *Service) ListComicWorks(context.Context, *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
+	return nil, nil
+}
+
+// register nfts
+func (s *Service) ListRegsiterNfts(context.Context, *nft.ListRegisterNftRequest) (*nft.ListRegisterNftResponse, error) {
+	return nil, nil
+}
+
 // ticket WL
 func (s *Service) InTicketsWLRequest(ctx context.Context, req *ticketPb.CanMintRequest) (*ticketPb.CantMintResponse, error) {
 	res := &ticketPb.CantMintResponse{}
@@ -48,7 +58,7 @@ func (s *Service) GetNftDetail(ctx context.Context, req *nft.GetNftDetailRequest
 func (s *Service) SignToLogin(ctx context.Context, req *auth.VerifySignToLoginSignRequest) (*auth.VerifySignToLoginSighResponse, error) {
 	res := &auth.VerifySignToLoginSighResponse{}
 	var err error
-	if res.Token, err = s.auth.SignToLogin(ctx, req.Address, req.Sign, req.Message); err != nil {
+	if res.Token, res.Registered, err = s.auth.SignToLogin(ctx, req.Address, req.Sign, req.Message); err != nil {
 		return nil, err
 	}
 	return res, nil
