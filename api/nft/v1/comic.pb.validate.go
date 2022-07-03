@@ -113,16 +113,7 @@ func (m *ComicCreateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetImageUrl()) < 1 {
-		err := ComicCreateRequestValidationError{
-			field:  "ImageUrl",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for MetadataJson
 
 	if utf8.RuneCountInString(m.GetMinterAddress()) != 42 {
 		err := ComicCreateRequestValidationError{

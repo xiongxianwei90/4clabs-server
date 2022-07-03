@@ -7,4 +7,5 @@ var ProvderSet = wire.NewSet(
 	NewNft,
 	NewAuth,
 	NewTicket,
+	NewComics,
 )

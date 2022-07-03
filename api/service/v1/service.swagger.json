@@ -491,11 +491,8 @@
         "name": {
           "type": "string"
         },
-        "imageUrl": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "metadataJson": {
+          "type": "string"
         },
         "minterAddress": {
           "type": "string"
