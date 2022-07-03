@@ -36,7 +36,7 @@ service Nft {
     // register nfts
     rpc ListRegsiterNfts(api.nft.v1.ListRegisterNftRequest) returns (api.nft.v1.ListRegisterNftResponse) {
         option (google.api.http) = {
-            get: "/v1/nft/{address}/registers",
+            get: "/v1/nft/registers",
         };
     }
 

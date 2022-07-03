@@ -23,7 +23,7 @@ message RegisterNftResponse {}
 
 
 message ListRegisterNftRequest {
-    api.base.v1.BaseListRequest base_list_request = 1;
+    api.base.v1.BaseListRequest base_list_request = 1 [(validate.rules).message = {required: true}];
     string address = 2;
 }
 message ListRegisterNftResponse {
