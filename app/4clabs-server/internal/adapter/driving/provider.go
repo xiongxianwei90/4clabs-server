@@ -13,4 +13,8 @@ var ProviderSet = wire.NewSet(
 
 	wire.Bind(new(ports.Auth), new(*repo.User)),
 	repo.NewUser,
+
+	wire.Bind(new(ports.TicketRepo), new(*repo.Ticket)),
+	repo.NewTicket,
 )
+

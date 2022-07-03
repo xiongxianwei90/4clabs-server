@@ -32,7 +32,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 	}
 	user := repo.NewUser(dataData)
 	usecaseAuth := usecase.NewAuth(user, jwtUtils)
-	serviceService := service.NewService(address, nft, usecaseAuth)
+	ticket := repo.NewTicket(dataData)
+	usecaseTicket := usecase.NewTicket(ticket)
+	serviceService := service.NewService(address, nft, usecaseAuth, usecaseTicket)
 	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger)
 	grpcServer := server.NewGRPCServer(bootstrap, logger)
 	app := newApp(logger, httpServer, grpcServer)

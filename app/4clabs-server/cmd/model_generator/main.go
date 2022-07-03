@@ -19,6 +19,7 @@ func main() {
 	g.UseDB(db)
 
 	user := g.GenerateModel("users")
-	g.ApplyBasic(user)
+	ticketWls := g.GenerateModel("ticket_wls")
+	g.ApplyBasic(user, ticketWls)
 	g.Execute()
 }

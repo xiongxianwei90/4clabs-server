@@ -4,6 +4,7 @@ package api.nft.v1;
 
 option go_package = "4clabs-server/api/nft/v1;v1";
 
+
 message Trait {
     string type = 1;
     string value = 2;

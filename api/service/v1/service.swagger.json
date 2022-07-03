@@ -161,6 +161,37 @@
           "Nft"
         ]
       }
+    },
+    "/v1/tickets/{address}/can_mint": {
+      "get": {
+        "summary": "ticket WL",
+        "operationId": "Nft_InTicketsWLRequest",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CantMintResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
     }
   },
   "definitions": {
@@ -256,6 +287,18 @@
           "type": "boolean"
         },
         "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CantMintResponse": {
+      "type": "object",
+      "properties": {
+        "inWl": {
+          "type": "boolean"
+        },
+        "level": {
           "type": "integer",
           "format": "int64"
         }

@@ -5,6 +5,7 @@ import (
 	apibase "4clabs-server/api/base/v1"
 	nft "4clabs-server/api/nft/v1"
 	v1 "4clabs-server/api/service/v1"
+	ticketPb "4clabs-server/api/tickets/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/assembler"
 	"4clabs-server/app/4clabs-server/internal/usecase"
 	"context"
@@ -15,10 +16,23 @@ type Service struct {
 	addressUc *usecase.Address
 	nftUc     *usecase.Nft
 	auth      *usecase.Auth
+	ticket    *usecase.Ticket
 }
 
-func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth) *Service {
-	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth}
+func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, ticket *usecase.Ticket) *Service {
+	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, ticket: ticket}
+}
+
+// ticket WL
+func (s *Service) InTicketsWLRequest(ctx context.Context, req *ticketPb.CanMintRequest) (*ticketPb.CantMintResponse, error) {
+	res := &ticketPb.CantMintResponse{}
+	ok, level, err := s.ticket.Query(ctx, req.Address)
+	if err != nil {
+		return nil, err
+	}
+	res.Level = level
+	res.InWl = ok
+	return res, nil
 }
 
 func (s *Service) GetNftDetail(ctx context.Context, req *nft.GetNftDetailRequest) (*nft.GetNftDetailResponse, error) {
