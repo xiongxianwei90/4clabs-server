@@ -16,5 +16,8 @@ var ProviderSet = wire.NewSet(
 
 	wire.Bind(new(ports.TicketRepo), new(*repo.Ticket)),
 	repo.NewTicket,
+
+	wire.Bind(new(ports.Register), new(*repo.Register)),
+	repo.NewRegister,
 )
 

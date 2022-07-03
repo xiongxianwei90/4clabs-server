@@ -3,7 +3,9 @@ syntax = "proto3";
 package api.service.v1;
 
 import "api/auth/v1/auth.proto";
+import "api/nft/v1/comic.proto";
 import "api/nft/v1/nft.proto";
+import "api/nft/v1/register.proto";
 import "api/tickets/v1/tickets.proto";
 import "third_party/google/api/annotations.proto";
 
@@ -12,6 +14,19 @@ option go_package = "4clabs-server/api/service/v1;v1";
 
 
 service Nft {
+    // commic works
+    rpc ListComicWorks(api.nft.v1.ListComicWorkRequest) returns (api.nft.v1.ListComicWorkResponse) {
+        option (google.api.http) = {
+            get: "/v1/nft/{address}/comic_works",
+        };
+    }
+
+    // register nfts
+    rpc ListRegsiterNfts(api.nft.v1.ListRegisterNftRequest) returns (api.nft.v1.ListRegisterNftResponse) {
+        option (google.api.http) = {
+            get: "/v1/nft/{address}/registers",
+        };
+    }
 
     // ticket WL
     rpc InTicketsWLRequest(api.tickets.v1.CanMintRequest) returns (api.tickets.v1.CantMintResponse) {

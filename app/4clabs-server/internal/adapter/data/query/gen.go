@@ -13,38 +13,43 @@ import (
 
 func Use(db *gorm.DB) *Query {
 	return &Query{
-		db:       db,
-		TicketWl: newTicketWl(db),
-		User:     newUser(db),
+		db:          db,
+		RegisterNft: newRegisterNft(db),
+		TicketWl:    newTicketWl(db),
+		User:        newUser(db),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	TicketWl ticketWl
-	User     user
+	RegisterNft registerNft
+	TicketWl    ticketWl
+	User        user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:       db,
-		TicketWl: q.TicketWl.clone(db),
-		User:     q.User.clone(db),
+		db:          db,
+		RegisterNft: q.RegisterNft.clone(db),
+		TicketWl:    q.TicketWl.clone(db),
+		User:        q.User.clone(db),
 	}
 }
 
 type queryCtx struct {
-	TicketWl ticketWlDo
-	User     userDo
+	RegisterNft registerNftDo
+	TicketWl    ticketWlDo
+	User        userDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		TicketWl: *q.TicketWl.WithContext(ctx),
-		User:     *q.User.WithContext(ctx),
+		RegisterNft: *q.RegisterNft.WithContext(ctx),
+		TicketWl:    *q.TicketWl.WithContext(ctx),
+		User:        *q.User.WithContext(ctx),
 	}
 }
 

@@ -25,13 +25,14 @@ import (
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUtils) (*kratos.App, func(), error) {
 	nftgoService := nftgo.NewService(bootstrap)
 	address := usecase.NewAddress(nftgoService)
-	nft := usecase.NewNft(nftgoService)
 	dataData, cleanup, err := data.NewData(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}
+	register := repo.NewRegister(dataData)
+	nft := usecase.NewNft(nftgoService, register)
 	user := repo.NewUser(dataData)
-	usecaseAuth := usecase.NewAuth(user, jwtUtils)
+	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)
 	ticket := repo.NewTicket(dataData)
 	usecaseTicket := usecase.NewTicket(ticket)
 	serviceService := service.NewService(address, nft, usecaseAuth, usecaseTicket)

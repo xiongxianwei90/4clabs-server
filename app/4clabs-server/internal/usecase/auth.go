@@ -11,25 +11,35 @@ import (
 
 type Auth struct {
 	authRepo ports.Auth
+	register ports.Register
 	jwtUtils *auth.JwtUtils
 }
 
-func NewAuth(authRepo ports.Auth, jwtUtils *auth.JwtUtils) *Auth {
-	return &Auth{authRepo: authRepo, jwtUtils: jwtUtils}
+func NewAuth(authRepo ports.Auth, register ports.Register, jwtUtils *auth.JwtUtils) *Auth {
+	return &Auth{authRepo: authRepo, register: register, jwtUtils: jwtUtils}
 }
 
 func (a *Auth) GetSignMessage(ctx context.Context, address string) (msg string, err error) {
 	return a.getMsg(ctx, address)
 }
 
-func (a *Auth) SignToLogin(ctx context.Context, address, sign, message string) (token string, err error) {
+func (a *Auth) SignToLogin(ctx context.Context, address, sign, message string) (token string, registed bool, err error) {
 	if !geth.VerifySig(address, sign, []byte(message)) {
-		return "", apibase.ErrorSignVerifyFailed("签名验证失败")
+		return "", false, apibase.ErrorSignVerifyFailed("签名验证失败")
 	}
 	if err = a.authRepo.RefreshNonce(ctx, address); err != nil {
 		return
 	}
-	return a.jwtUtils.NewToken(address)
+
+	registed, err = a.register.UserRegistered(ctx, address)
+	if err != nil {
+		return
+	}
+	token, err = a.jwtUtils.NewToken(address)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func (a *Auth) getMsg(ctx context.Context, address string) (string, error) {

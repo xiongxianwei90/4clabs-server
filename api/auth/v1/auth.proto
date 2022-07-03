@@ -20,4 +20,5 @@ message VerifySignToLoginSignRequest {
 }
 message VerifySignToLoginSighResponse {
     string token = 1;
+    bool registered = 2;
 }

@@ -7,13 +7,20 @@ import (
 )
 
 type Nft struct {
-	q ports.Query
+	q        ports.Query
+	register ports.Register
 }
 
-func NewNft(q ports.Query) *Nft {
-	return &Nft{q: q}
+func NewNft(q ports.Query, register ports.Register) *Nft {
+	return &Nft{q: q, register: register}
 }
 
+func (n *Nft) Register(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) error {
+	return n.register.Register(ctx, nftTokenId, nftContractAddress, userAddress)
+}
+func (n *Nft) Registered(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) (bool, error) {
+	return n.register.Registered(ctx, nftTokenId, nftContractAddress, userAddress)
+}
 func (n *Nft) GetNftDetail(ctx context.Context, contractAddress, tokenId string) (entity.NftDetail, error) {
 	return n.q.GetNftDetail(ctx, contractAddress, tokenId)
 }

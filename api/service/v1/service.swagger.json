@@ -162,6 +162,96 @@
         ]
       }
     },
+    "/v1/nft/{address}/comic_works": {
+      "get": {
+        "summary": "commic works",
+        "operationId": "Nft_ListComicWorks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListComicWorkResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/nft/{address}/registers": {
+      "get": {
+        "summary": "register nfts",
+        "operationId": "Nft_ListRegsiterNfts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRegisterNftResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/tickets/{address}/can_mint": {
       "get": {
         "summary": "ticket WL",
@@ -304,6 +394,36 @@
         }
       }
     },
+    "v1ComicWork": {
+      "type": "object",
+      "properties": {
+        "originNft": {
+          "$ref": "#/definitions/v1Summary"
+        },
+        "mintLimit": {
+          "type": "integer",
+          "format": "int64",
+          "title": "mint config"
+        },
+        "mintPrice": {
+          "type": "number",
+          "format": "float"
+        },
+        "name": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAtTimestamp": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
     "v1Detail": {
       "type": "object",
       "properties": {
@@ -342,6 +462,34 @@
       "properties": {
         "detail": {
           "$ref": "#/definitions/v1Detail"
+        }
+      }
+    },
+    "v1ListComicWorkResponse": {
+      "type": "object",
+      "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
+        "comicWorks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ComicWork"
+          }
+        }
+      }
+    },
+    "v1ListRegisterNftResponse": {
+      "type": "object",
+      "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
+        "summaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Summary"
+          }
         }
       }
     },
@@ -450,6 +598,9 @@
         },
         "rarity": {
           "$ref": "#/definitions/v1Rarity"
+        },
+        "registered": {
+          "type": "boolean"
         }
       }
     },
@@ -469,6 +620,9 @@
       "properties": {
         "token": {
           "type": "string"
+        },
+        "registered": {
+          "type": "boolean"
         }
       }
     },

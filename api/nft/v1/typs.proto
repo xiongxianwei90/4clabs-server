@@ -4,6 +4,18 @@ package api.nft.v1;
 
 option go_package = "4clabs-server/api/nft/v1;v1";
 
+message ComicWork {
+    Summary  origin_nft = 1;
+
+    // mint config
+    uint32 mint_limit = 2;
+    float mint_price = 3;
+
+    string name = 4;
+    repeated string image_url = 5;
+    uint32 created_at_timestamp = 6;
+}
+
 
 message Trait {
     string type = 1;
@@ -33,6 +45,7 @@ message Summary {
     repeated string owner_addresses = 12;
     repeated Trait traits = 13;
     Rarity rarity = 11;
+    bool registered = 14;
 }
 
 message Rank {
