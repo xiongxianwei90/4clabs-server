@@ -13,9 +13,9 @@ const TableNameRegisterNft = "register_nfts"
 // RegisterNft mapped from table <register_nfts>
 type RegisterNft struct {
 	ID              int32     `gorm:"column:id;type:int(11) unsigned;primaryKey;autoIncrement:true" json:"id"`
-	TokenID         string    `gorm:"column:token_id;type:varchar(200);not null" json:"token_id"`
-	ContractAddress string    `gorm:"column:contract_address;type:varchar(200);not null" json:"contract_address"`
-	UserAddress     string    `gorm:"column:user_address;type:varchar(200);not null" json:"user_address"`
+	TokenID         string    `gorm:"column:token_id;type:varchar(200);not null;uniqueIndex:uniq_idx_token_id_contract_address_user_address,priority:1;uniqueIndex:uniq_idx_contract_address_token_id,priority:2" json:"token_id"`
+	ContractAddress string    `gorm:"column:contract_address;type:varchar(200);not null;uniqueIndex:uniq_idx_token_id_contract_address_user_address,priority:2;uniqueIndex:uniq_idx_contract_address_token_id,priority:1" json:"contract_address"`
+	UserAddress     string    `gorm:"column:user_address;type:varchar(200);not null;uniqueIndex:uniq_idx_token_id_contract_address_user_address,priority:3;index:idx_user_address,priority:1" json:"user_address"`
 	CreatedAt       time.Time `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt       time.Time `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }

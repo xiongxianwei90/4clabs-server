@@ -29,7 +29,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 	if err != nil {
 		return nil, nil, err
 	}
-	register := repo.NewRegister(dataData)
+	register := repo.NewRegister(nftgoService, dataData)
 	nft := usecase.NewNft(nftgoService, register)
 	user := repo.NewUser(dataData)
 	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)

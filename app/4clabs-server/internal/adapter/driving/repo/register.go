@@ -3,15 +3,75 @@ package repo
 import (
 	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
 	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/data"
+	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Register struct {
-	data *data.Data
+	nftgo *nftgo.Service
+	data  *data.Data
+}
+
+func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
+	return &Register{nftgo: nftgo, data: data}
+}
+
+func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
+	rnft := query.Use(r.data.DB).RegisterNft
+	datas, err := rnft.WithContext(ctx).
+		Where(rnft.UserAddress.Eq(userAddress)).
+		Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
+		Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+	total, err := rnft.WithContext(ctx).Where(rnft.UserAddress.Eq(userAddress)).Count()
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+
+	if len(datas) == 0 {
+		return nil, 0, 0, false, nil
+	}
+
+	hasMore := len(datas) > int(limit)
+	if hasMore {
+		datas = datas[:len(datas)-1]
+	}
+	lastScore := datas[len(datas)-1].CreatedAt.Unix()
+
+	var infos []struct {
+		ContractAddress string
+		TokenId         string
+	}
+	for _, d := range datas {
+		infos = append(infos, struct {
+			ContractAddress string
+			TokenId         string
+		}{ContractAddress: d.ContractAddress, TokenId: d.TokenID})
+	}
+
+	nfts, err := r.nftgo.BatchGetNftSummary(ctx, infos)
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+
+	var result []entity.Nft
+	for _, d := range datas {
+		for _, nft := range nfts {
+			if d.ContractAddress == nft.ContractAddress && d.TokenID == nft.TokenId {
+				result = append(result, nft)
+			}
+		}
+	}
+
+	return result, lastScore, uint32(total), hasMore, nil
 }
 
 func (r Register) UserRegistered(ctx context.Context, userAddress string) (bool, error) {
@@ -56,7 +116,3 @@ func (r Register) Registered(ctx context.Context, nftTokenId string, nftContract
 }
 
 var _ ports.Register = &Register{}
-
-func NewRegister(data *data.Data) *Register {
-	return &Register{data: data}
-}

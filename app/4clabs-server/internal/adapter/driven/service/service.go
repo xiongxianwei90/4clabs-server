@@ -29,8 +29,19 @@ func (s *Service) ListComicWorks(context.Context, *nft.ListComicWorkRequest) (*n
 }
 
 // register nfts
-func (s *Service) ListRegsiterNfts(context.Context, *nft.ListRegisterNftRequest) (*nft.ListRegisterNftResponse, error) {
-	return nil, nil
+func (s *Service) ListRegsiterNfts(ctx context.Context, req *nft.ListRegisterNftRequest) (*nft.ListRegisterNftResponse, error) {
+	nfts, nextScore, total, hasMore, err := s.nftUc.ListRegistedNfts(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	if err != nil {
+		return nil, err
+	}
+	return &nft.ListRegisterNftResponse{
+		BaseListResponse: &apibase.BaseListResponse{
+			LastScore: nextScore,
+			HasMore:   hasMore,
+			Total:     total,
+		},
+		Summaries: assembler.CoverNftToHttpDto(nfts...),
+	}, nil
 }
 
 // ticket WL
