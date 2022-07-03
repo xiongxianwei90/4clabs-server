@@ -27,6 +27,8 @@ const _ = grpc.SupportPackageIsVersion7
 type NftClient interface {
 	// commic works
 	ListComicWorks(ctx context.Context, in *v1.ListComicWorkRequest, opts ...grpc.CallOption) (*v1.ListComicWorkResponse, error)
+	// register nft
+	RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, opts ...grpc.CallOption) (*v1.RegisterNftResponse, error)
 	// register nfts
 	ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNftRequest, opts ...grpc.CallOption) (*v1.ListRegisterNftResponse, error)
 	// ticket WL
@@ -52,6 +54,15 @@ func NewNftClient(cc grpc.ClientConnInterface) NftClient {
 func (c *nftClient) ListComicWorks(ctx context.Context, in *v1.ListComicWorkRequest, opts ...grpc.CallOption) (*v1.ListComicWorkResponse, error) {
 	out := new(v1.ListComicWorkResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ListComicWorks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nftClient) RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, opts ...grpc.CallOption) (*v1.RegisterNftResponse, error) {
+	out := new(v1.RegisterNftResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/RegisterNft", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -118,6 +129,8 @@ func (c *nftClient) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest
 type NftServer interface {
 	// commic works
 	ListComicWorks(context.Context, *v1.ListComicWorkRequest) (*v1.ListComicWorkResponse, error)
+	// register nft
+	RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error)
 	// register nfts
 	ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error)
 	// ticket WL
@@ -139,6 +152,9 @@ type UnimplementedNftServer struct {
 
 func (UnimplementedNftServer) ListComicWorks(context.Context, *v1.ListComicWorkRequest) (*v1.ListComicWorkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListComicWorks not implemented")
+}
+func (UnimplementedNftServer) RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterNft not implemented")
 }
 func (UnimplementedNftServer) ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRegsiterNfts not implemented")
@@ -185,6 +201,24 @@ func _Nft_ListComicWorks_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NftServer).ListComicWorks(ctx, req.(*v1.ListComicWorkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Nft_RegisterNft_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.RegisterNftRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).RegisterNft(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/RegisterNft",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).RegisterNft(ctx, req.(*v1.RegisterNftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -307,6 +341,10 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListComicWorks",
 			Handler:    _Nft_ListComicWorks_Handler,
+		},
+		{
+			MethodName: "RegisterNft",
+			Handler:    _Nft_RegisterNft_Handler,
 		},
 		{
 			MethodName: "ListRegsiterNfts",

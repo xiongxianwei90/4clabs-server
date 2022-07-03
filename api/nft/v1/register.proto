@@ -10,6 +10,14 @@ option java_multiple_files = true;
 option java_package = "api.nft.v1";
 
 
+message RegisterNftRequest {
+    string user_address = 1;
+    string contract_address = 2;
+    string token_id = 3;
+}
+message RegisterNftResponse {}
+
+
 message ListRegisterNftRequest {
     api.base.v1.BaseListRequest base_list_request = 1;
     string address = 2;
