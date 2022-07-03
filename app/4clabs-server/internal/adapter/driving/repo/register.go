@@ -8,7 +8,6 @@ import (
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
-	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"time"
@@ -25,8 +24,9 @@ func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
 
 func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
 	if nextScore == 0 {
-		nextScore = math.MaxInt64
+		nextScore = time.Now().Unix()
 	}
+
 	rnft := query.Use(r.data.DB).RegisterNft
 
 	var datas []*model.RegisterNft
