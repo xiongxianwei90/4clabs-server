@@ -9,7 +9,6 @@ import (
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
 	"github.com/pkg/errors"
-	"math"
 	"time"
 )
 
@@ -22,7 +21,7 @@ type Comic struct {
 
 func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error) {
 	if nextScore == 0 {
-		nextScore = math.MaxInt64
+		nextScore = time.Now().Unix()
 	}
 	rnft := query.Use(c.data.DB).Comic
 	datas, err := rnft.WithContext(ctx).
