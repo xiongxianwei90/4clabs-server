@@ -119,7 +119,7 @@ func (r Register) Register(ctx context.Context, nfts []entity.BaseNft, userAddre
 
 func (r Register) Registered(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) (bool, error) {
 	rNft := query.Use(r.data.DB).RegisterNft
-	if _, err := rNft.WithContext(ctx).First(); err != nil {
+	if _, err := rNft.WithContext(ctx).Where(rNft.ContractAddress.Eq(nftContractAddress), rNft.TokenID.Eq(nftTokenId)).First(); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}

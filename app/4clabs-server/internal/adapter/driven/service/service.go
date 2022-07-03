@@ -37,7 +37,7 @@ func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) 
 		MintPrice:    float64(req.MintPrice),
 		Name:         req.Name,
 		MetadataJson: req.MetadataJson,
-		UserAddress:  s.authUtils.GetAddress(ctx),
+		UserAddress:  req.MinterAddress,
 	}); err != nil {
 		return nil, err
 	}
