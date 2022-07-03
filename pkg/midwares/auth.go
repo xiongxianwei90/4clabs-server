@@ -15,12 +15,12 @@ type Conf struct {
 	MaxTime    time.Duration
 }
 
-func GetAuthMiddle(validator *auth.JwtUtils, contextUidSetter *auth.ContextUtils, outPaths map[string]struct{}) middleware.Middleware {
+func GetAuthMiddle(validator *auth.JwtUtils, contextUidSetter *auth.ContextUtils, inPath map[string]struct{}) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			if tr, ok := transport.FromServerContext(ctx); ok {
 				// 不需要鉴权
-				if _, ok := outPaths[tr.Operation()]; ok {
+				if _, ok := inPath[tr.Operation()]; ok {
 					return handler(ctx, req)
 				}
 				jwtToken := tr.RequestHeader().Get("Authorization")
