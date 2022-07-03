@@ -25,8 +25,8 @@ func NewHTTPServer(
 				authutils,
 				u,
 				map[string]struct{}{
-					"/v1/address/verify_sign":            {},
-					"/v1/address/{address}/sign_message": {},
+					"/v1/nft/comic/create": {},
+					"/v1/nft/register":     {},
 				},
 			),
 			recovery.Recovery(),
