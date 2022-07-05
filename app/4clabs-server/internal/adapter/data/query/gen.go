@@ -15,6 +15,7 @@ func Use(db *gorm.DB) *Query {
 	return &Query{
 		db:          db,
 		Comic:       newComic(db),
+		Nft:         newNft(db),
 		RegisterNft: newRegisterNft(db),
 		TicketWl:    newTicketWl(db),
 		User:        newUser(db),
@@ -25,6 +26,7 @@ type Query struct {
 	db *gorm.DB
 
 	Comic       comic
+	Nft         nft
 	RegisterNft registerNft
 	TicketWl    ticketWl
 	User        user
@@ -36,6 +38,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:          db,
 		Comic:       q.Comic.clone(db),
+		Nft:         q.Nft.clone(db),
 		RegisterNft: q.RegisterNft.clone(db),
 		TicketWl:    q.TicketWl.clone(db),
 		User:        q.User.clone(db),
@@ -44,6 +47,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 
 type queryCtx struct {
 	Comic       comicDo
+	Nft         nftDo
 	RegisterNft registerNftDo
 	TicketWl    ticketWlDo
 	User        userDo
@@ -52,6 +56,7 @@ type queryCtx struct {
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
 		Comic:       *q.Comic.WithContext(ctx),
+		Nft:         *q.Nft.WithContext(ctx),
 		RegisterNft: *q.RegisterNft.WithContext(ctx),
 		TicketWl:    *q.TicketWl.WithContext(ctx),
 		User:        *q.User.WithContext(ctx),

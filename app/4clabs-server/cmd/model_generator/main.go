@@ -22,6 +22,7 @@ func main() {
 	ticketWls := g.GenerateModel("ticket_wls")
 	registerNfts := g.GenerateModel("register_nfts")
 	comics := g.GenerateModel("comics")
-	g.ApplyBasic(user, ticketWls, registerNfts, comics)
+	nfts := g.GenerateModel("nfts")
+	g.ApplyBasic(user, ticketWls, registerNfts, comics, nfts)
 	g.Execute()
 }
