@@ -153,17 +153,19 @@ func (s *Service) BatchGetNftSummary(ctx context.Context, infos []struct {
 	var result []entity.Nft
 	var ids []string
 	for n := range nfts {
+		result = append(result, n)
 		ids = append(ids, fmt.Sprintf("%s_%s", n.ContractAddress, n.TokenId))
 	}
 	images, err := s.cacheNfts.Image(ctx, ids...)
 	if err != nil {
 		return nil, err
 	}
-	for n := range nfts {
+	for idx, n := range result {
+		n := n
 		if im, ok := images[fmt.Sprintf("%s_%s", n.ContractAddress, n.TokenId)]; ok {
 			n.Image = im
 		}
-		result = append(result, n)
+		result[idx] = n
 	}
 	return result, nil
 }
