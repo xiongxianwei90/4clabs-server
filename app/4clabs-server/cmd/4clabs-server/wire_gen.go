@@ -11,6 +11,7 @@ import (
 	"4clabs-server/app/4clabs-server/internal/adapter/driven/service"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo"
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
 	"4clabs-server/app/4clabs-server/internal/conf"
 	"4clabs-server/app/4clabs-server/internal/data"
 	"4clabs-server/app/4clabs-server/internal/usecase"
@@ -23,21 +24,22 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUtils, contextUtils *auth.ContextUtils) (*kratos.App, func(), error) {
-	nftgoService := nftgo.NewService(bootstrap)
-	address := usecase.NewAddress(nftgoService)
 	dataData, cleanup, err := data.NewData(bootstrap, logger)
 	if err != nil {
 		return nil, nil, err
 	}
+	nftNft := nft.NewNft(dataData)
+	nftgoService := nftgo.NewService(bootstrap, nftNft)
+	address := usecase.NewAddress(nftgoService)
 	register := repo.NewRegister(nftgoService, dataData)
-	nft := usecase.NewNft(nftgoService, register)
+	usecaseNft := usecase.NewNft(nftgoService, register)
 	user := repo.NewUser(dataData)
 	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)
 	ticket := repo.NewTicket(dataData)
 	usecaseTicket := usecase.NewTicket(ticket)
 	comic := repo.NewComic(dataData, nftgoService)
 	comics := usecase.NewComics(comic)
-	serviceService := service.NewService(address, nft, usecaseAuth, contextUtils, usecaseTicket, comics)
+	serviceService := service.NewService(address, usecaseNft, usecaseAuth, contextUtils, usecaseTicket, comics)
 	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger, contextUtils, jwtUtils)
 	grpcServer := server.NewGRPCServer(bootstrap, logger)
 	app := newApp(logger, httpServer, grpcServer)

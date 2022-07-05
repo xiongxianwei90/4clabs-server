@@ -1,6 +1,7 @@
 package nftgo
 
 import (
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
 	"4clabs-server/app/4clabs-server/internal/conf"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
@@ -17,11 +18,12 @@ import (
 var _ ports.Query = &Service{}
 
 type Service struct {
-	apiKey string
+	apiKey    string
+	cacheNfts *nft.Nft
 }
 
-func NewService(bootstrap *conf.Bootstrap) *Service {
-	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey}
+func NewService(bootstrap *conf.Bootstrap, cacheNft *nft.Nft) *Service {
+	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey, cacheNfts: cacheNft}
 }
 
 type Nft struct {
@@ -149,7 +151,18 @@ func (s *Service) BatchGetNftSummary(ctx context.Context, infos []struct {
 	}
 	close(nfts)
 	var result []entity.Nft
+	var ids []string
 	for n := range nfts {
+		ids = append(ids, fmt.Sprintf("%s_%s", n.ContractAddress, n.TokenId))
+	}
+	images, err := s.cacheNfts.Image(ctx, ids...)
+	if err != nil {
+		return nil, err
+	}
+	for n := range nfts {
+		if im, ok := images[fmt.Sprintf("%s_%s", n.ContractAddress, n.TokenId)]; ok {
+			n.Image = im
+		}
 		result = append(result, n)
 	}
 	return result, nil
