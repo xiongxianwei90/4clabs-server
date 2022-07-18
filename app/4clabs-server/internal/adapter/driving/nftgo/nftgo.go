@@ -200,7 +200,7 @@ func (s *Service) GetAddressNfts(ctx context.Context, address string, limit uint
 	for _, a := range addressPortfolio.Assets {
 		result = append(result, s.coverNftToEntity(a.Nft)...)
 	}
-	return result, lastScore + int64(limit), uint32(addressPortfolio.Total), false, nil
+	return result, lastScore + int64(limit), uint32(addressPortfolio.Total), lastScore + int64(limit) < int64(addressPortfolio.Total), nil
 }
 
 func (s *Service) coverMetrics(detail NftMetrics) entity.NftStat {
