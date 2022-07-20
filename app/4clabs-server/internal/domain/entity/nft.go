@@ -60,3 +60,8 @@ type Nft struct {
 	Traits          []Traits
 	Rarity          Rarity
 }
+
+type ComicNft struct {
+	TokenId string
+	Comic   Comic
+}

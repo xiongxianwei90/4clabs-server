@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,77 +31,35 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on RegisterNftRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *RegisterNftRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on RegisterNftRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// RegisterNftRequestMultiError, or nil if none found.
-func (m *RegisterNftRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *RegisterNftRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetUserAddress()) != 42 {
-		err := RegisterNftRequestValidationError{
+		return RegisterNftRequestValidationError{
 			field:  "UserAddress",
 			reason: "value length must be 42 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 
 	}
 
 	if len(m.GetNfts()) < 1 {
-		err := RegisterNftRequestValidationError{
+		return RegisterNftRequestValidationError{
 			field:  "Nfts",
 			reason: "value must contain at least 1 item(s)",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetNfts() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, RegisterNftRequestValidationError{
-						field:  fmt.Sprintf("Nfts[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, RegisterNftRequestValidationError{
-						field:  fmt.Sprintf("Nfts[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RegisterNftRequestValidationError{
 					field:  fmt.Sprintf("Nfts[%v]", idx),
@@ -114,28 +71,8 @@ func (m *RegisterNftRequest) validate(all bool) error {
 
 	}
 
-	if len(errors) > 0 {
-		return RegisterNftRequestMultiError(errors)
-	}
 	return nil
 }
-
-// RegisterNftRequestMultiError is an error wrapping multiple validation errors
-// returned by RegisterNftRequest.ValidateAll() if the designated constraints
-// aren't met.
-type RegisterNftRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RegisterNftRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RegisterNftRequestMultiError) AllErrors() []error { return m }
 
 // RegisterNftRequestValidationError is the validation error returned by
 // RegisterNftRequest.Validate if the designated constraints aren't met.
@@ -195,48 +132,14 @@ var _ interface {
 
 // Validate checks the field values on RegisterNftResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *RegisterNftResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on RegisterNftResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// RegisterNftResponseMultiError, or nil if none found.
-func (m *RegisterNftResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *RegisterNftResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if len(errors) > 0 {
-		return RegisterNftResponseMultiError(errors)
-	}
 	return nil
 }
-
-// RegisterNftResponseMultiError is an error wrapping multiple validation
-// errors returned by RegisterNftResponse.ValidateAll() if the designated
-// constraints aren't met.
-type RegisterNftResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RegisterNftResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RegisterNftResponseMultiError) AllErrors() []error { return m }
 
 // RegisterNftResponseValidationError is the validation error returned by
 // RegisterNftResponse.Validate if the designated constraints aren't met.
@@ -296,57 +199,20 @@ var _ interface {
 
 // Validate checks the field values on ListRegisterNftRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *ListRegisterNftRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListRegisterNftRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListRegisterNftRequestMultiError, or nil if none found.
-func (m *ListRegisterNftRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListRegisterNftRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetBaseListRequest() == nil {
-		err := ListRegisterNftRequestValidationError{
+		return ListRegisterNftRequestValidationError{
 			field:  "BaseListRequest",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetBaseListRequest()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListRegisterNftRequestValidationError{
-					field:  "BaseListRequest",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListRegisterNftRequestValidationError{
-					field:  "BaseListRequest",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetBaseListRequest()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetBaseListRequest()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ListRegisterNftRequestValidationError{
 				field:  "BaseListRequest",
@@ -358,28 +224,8 @@ func (m *ListRegisterNftRequest) validate(all bool) error {
 
 	// no validation rules for Address
 
-	if len(errors) > 0 {
-		return ListRegisterNftRequestMultiError(errors)
-	}
 	return nil
 }
-
-// ListRegisterNftRequestMultiError is an error wrapping multiple validation
-// errors returned by ListRegisterNftRequest.ValidateAll() if the designated
-// constraints aren't met.
-type ListRegisterNftRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListRegisterNftRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListRegisterNftRequestMultiError) AllErrors() []error { return m }
 
 // ListRegisterNftRequestValidationError is the validation error returned by
 // ListRegisterNftRequest.Validate if the designated constraints aren't met.
@@ -439,46 +285,13 @@ var _ interface {
 
 // Validate checks the field values on ListRegisterNftResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *ListRegisterNftResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ListRegisterNftResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ListRegisterNftResponseMultiError, or nil if none found.
-func (m *ListRegisterNftResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ListRegisterNftResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetBaseListResponse()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListRegisterNftResponseValidationError{
-					field:  "BaseListResponse",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ListRegisterNftResponseValidationError{
-					field:  "BaseListResponse",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetBaseListResponse()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetBaseListResponse()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ListRegisterNftResponseValidationError{
 				field:  "BaseListResponse",
@@ -491,26 +304,7 @@ func (m *ListRegisterNftResponse) validate(all bool) error {
 	for idx, item := range m.GetSummaries() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ListRegisterNftResponseValidationError{
-						field:  fmt.Sprintf("Summaries[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ListRegisterNftResponseValidationError{
-						field:  fmt.Sprintf("Summaries[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ListRegisterNftResponseValidationError{
 					field:  fmt.Sprintf("Summaries[%v]", idx),
@@ -522,28 +316,8 @@ func (m *ListRegisterNftResponse) validate(all bool) error {
 
 	}
 
-	if len(errors) > 0 {
-		return ListRegisterNftResponseMultiError(errors)
-	}
 	return nil
 }
-
-// ListRegisterNftResponseMultiError is an error wrapping multiple validation
-// errors returned by ListRegisterNftResponse.ValidateAll() if the designated
-// constraints aren't met.
-type ListRegisterNftResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ListRegisterNftResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ListRegisterNftResponseMultiError) AllErrors() []error { return m }
 
 // ListRegisterNftResponseValidationError is the validation error returned by
 // ListRegisterNftResponse.Validate if the designated constraints aren't met.
@@ -603,71 +377,29 @@ var _ interface {
 
 // Validate checks the field values on RegisterNftRequest_Nft with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *RegisterNftRequest_Nft) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on RegisterNftRequest_Nft with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// RegisterNftRequest_NftMultiError, or nil if none found.
-func (m *RegisterNftRequest_Nft) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *RegisterNftRequest_Nft) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetContractAddress()) != 42 {
-		err := RegisterNftRequest_NftValidationError{
+		return RegisterNftRequest_NftValidationError{
 			field:  "ContractAddress",
 			reason: "value length must be 42 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 
 	}
 
 	if utf8.RuneCountInString(m.GetTokenId()) < 1 {
-		err := RegisterNftRequest_NftValidationError{
+		return RegisterNftRequest_NftValidationError{
 			field:  "TokenId",
 			reason: "value length must be at least 1 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if len(errors) > 0 {
-		return RegisterNftRequest_NftMultiError(errors)
-	}
 	return nil
 }
-
-// RegisterNftRequest_NftMultiError is an error wrapping multiple validation
-// errors returned by RegisterNftRequest_Nft.ValidateAll() if the designated
-// constraints aren't met.
-type RegisterNftRequest_NftMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RegisterNftRequest_NftMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RegisterNftRequest_NftMultiError) AllErrors() []error { return m }
 
 // RegisterNftRequest_NftValidationError is the validation error returned by
 // RegisterNftRequest_Nft.Validate if the designated constraints aren't met.

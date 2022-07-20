@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,65 +31,26 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on FetchSignMessageRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *FetchSignMessageRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on FetchSignMessageRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// FetchSignMessageRequestMultiError, or nil if none found.
-func (m *FetchSignMessageRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *FetchSignMessageRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetAddress()) != 42 {
-		err := FetchSignMessageRequestValidationError{
+		return FetchSignMessageRequestValidationError{
 			field:  "Address",
 			reason: "value length must be 42 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 
 	}
 
-	if len(errors) > 0 {
-		return FetchSignMessageRequestMultiError(errors)
-	}
 	return nil
 }
-
-// FetchSignMessageRequestMultiError is an error wrapping multiple validation
-// errors returned by FetchSignMessageRequest.ValidateAll() if the designated
-// constraints aren't met.
-type FetchSignMessageRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m FetchSignMessageRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m FetchSignMessageRequestMultiError) AllErrors() []error { return m }
 
 // FetchSignMessageRequestValidationError is the validation error returned by
 // FetchSignMessageRequest.Validate if the designated constraints aren't met.
@@ -150,50 +110,16 @@ var _ interface {
 
 // Validate checks the field values on FetchSignMessageResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *FetchSignMessageResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on FetchSignMessageResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// FetchSignMessageResponseMultiError, or nil if none found.
-func (m *FetchSignMessageResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *FetchSignMessageResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for SignMessage
 
-	if len(errors) > 0 {
-		return FetchSignMessageResponseMultiError(errors)
-	}
 	return nil
 }
-
-// FetchSignMessageResponseMultiError is an error wrapping multiple validation
-// errors returned by FetchSignMessageResponse.ValidateAll() if the designated
-// constraints aren't met.
-type FetchSignMessageResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m FetchSignMessageResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m FetchSignMessageResponseMultiError) AllErrors() []error { return m }
 
 // FetchSignMessageResponseValidationError is the validation error returned by
 // FetchSignMessageResponse.Validate if the designated constraints aren't met.
@@ -253,82 +179,36 @@ var _ interface {
 
 // Validate checks the field values on VerifySignToLoginSignRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *VerifySignToLoginSignRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on VerifySignToLoginSignRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// VerifySignToLoginSignRequestMultiError, or nil if none found.
-func (m *VerifySignToLoginSignRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *VerifySignToLoginSignRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetAddress()) != 42 {
-		err := VerifySignToLoginSignRequestValidationError{
+		return VerifySignToLoginSignRequestValidationError{
 			field:  "Address",
 			reason: "value length must be 42 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 
 	}
 
 	if utf8.RuneCountInString(m.GetMessage()) < 1 {
-		err := VerifySignToLoginSignRequestValidationError{
+		return VerifySignToLoginSignRequestValidationError{
 			field:  "Message",
 			reason: "value length must be at least 1 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetSign()) < 1 {
-		err := VerifySignToLoginSignRequestValidationError{
+		return VerifySignToLoginSignRequestValidationError{
 			field:  "Sign",
 			reason: "value length must be at least 1 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if len(errors) > 0 {
-		return VerifySignToLoginSignRequestMultiError(errors)
-	}
 	return nil
 }
-
-// VerifySignToLoginSignRequestMultiError is an error wrapping multiple
-// validation errors returned by VerifySignToLoginSignRequest.ValidateAll() if
-// the designated constraints aren't met.
-type VerifySignToLoginSignRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m VerifySignToLoginSignRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m VerifySignToLoginSignRequestMultiError) AllErrors() []error { return m }
 
 // VerifySignToLoginSignRequestValidationError is the validation error returned
 // by VerifySignToLoginSignRequest.Validate if the designated constraints
@@ -389,52 +269,18 @@ var _ interface {
 
 // Validate checks the field values on VerifySignToLoginSighResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *VerifySignToLoginSighResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on VerifySignToLoginSighResponse with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// VerifySignToLoginSighResponseMultiError, or nil if none found.
-func (m *VerifySignToLoginSighResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *VerifySignToLoginSighResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Token
 
 	// no validation rules for Registered
 
-	if len(errors) > 0 {
-		return VerifySignToLoginSighResponseMultiError(errors)
-	}
 	return nil
 }
-
-// VerifySignToLoginSighResponseMultiError is an error wrapping multiple
-// validation errors returned by VerifySignToLoginSighResponse.ValidateAll()
-// if the designated constraints aren't met.
-type VerifySignToLoginSighResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m VerifySignToLoginSighResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m VerifySignToLoginSighResponseMultiError) AllErrors() []error { return m }
 
 // VerifySignToLoginSighResponseValidationError is the validation error
 // returned by VerifySignToLoginSighResponse.Validate if the designated

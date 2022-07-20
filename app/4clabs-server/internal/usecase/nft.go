@@ -8,11 +8,12 @@ import (
 
 type Nft struct {
 	q        ports.Query
+	trade    ports.Trade
 	register ports.Register
 }
 
-func NewNft(q ports.Query, register ports.Register) *Nft {
-	return &Nft{q: q, register: register}
+func NewNft(q ports.Query, trade ports.Trade, register ports.Register) *Nft {
+	return &Nft{q: q, trade: trade, register: register}
 }
 
 func (n *Nft) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
@@ -26,4 +27,10 @@ func (n *Nft) Registered(ctx context.Context, nftTokenId string, nftContractAddr
 }
 func (n *Nft) GetNftDetail(ctx context.Context, contractAddress, tokenId string) (entity.NftDetail, error) {
 	return n.q.GetNftDetail(ctx, contractAddress, tokenId)
+}
+func (n *Nft) GetComicNftList(ctx context.Context, limit uint32, nextScore int64) ([]entity.ComicNft, int64, uint32, bool, error) {
+	return n.q.GetComicNfts(ctx, limit, nextScore)
+}
+func (n *Nft) NftPurchase(ctx context.Context, tokenId string, buyerAddress string) error {
+	return n.trade.NftPurchase(ctx, tokenId, buyerAddress)
 }

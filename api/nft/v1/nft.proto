@@ -16,8 +16,6 @@ message GetNftDetailResponse {
     api.nft.v1.Detail detail = 1;
 }
 
-
-
 message GetAddressNftsRequest {
     api.base.v1.BaseListRequest base_list_request = 1;
     string address = 2;

@@ -18,6 +18,10 @@ message ComicWork {
     uint32 created_at_timestamp = 6;
 }
 
+message ComicNft {
+    string token_id = 1;
+    ComicWork summary = 2;
+}
 
 message Trait {
     string type = 1;

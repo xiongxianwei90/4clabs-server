@@ -88,3 +88,21 @@ func CoverNftToHttpDto(nfts ...entity.Nft) []*typs.Summary {
 	}
 	return result
 }
+
+func CoverComicNftToHttpDto(nfts ...entity.ComicNft) []*typs.ComicNft {
+	var result []*typs.ComicNft
+	for _, n := range nfts {
+		result = append(result, &typs.ComicNft{
+			TokenId: n.TokenId,
+			Summary: &typs.ComicWork{
+				OriginNft:          CoverNftToHttpDto(n.Comic.Origin)[0],
+				MintLimit:          n.Comic.MintLimit,
+				MintPrice:          float32(n.Comic.MintPrice),
+				Name:               n.Comic.Name,
+				MetadataJson:       n.Comic.MetadataJson,
+				CreatedAtTimestamp: uint32(n.Comic.CreatedAt.Unix()),
+			},
+		})
+	}
+	return result
+}

@@ -4,6 +4,7 @@ import (
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/trade"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"github.com/google/wire"
 )
@@ -23,6 +24,9 @@ var ProviderSet = wire.NewSet(
 
 	wire.Bind(new(ports.Comic), new(*repo.Comic)),
 	repo.NewComic,
+
+	wire.Bind(new(ports.Trade), new(*trade.Trade)),
+	trade.NewTrade,
 
 	nft.NewNft,
 )

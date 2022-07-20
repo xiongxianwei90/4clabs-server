@@ -36,9 +36,14 @@ message Jwt {
 
 message ThirdParty {
     message Nftgo {
-        string api_key = 1;
+      string api_key = 1;
     }
     Nftgo nftgo = 1;
+    message Contract{
+      string address = 1;
+      string rawurl = 2;
+    }
+    Contract contract = 2;
 }
 
 

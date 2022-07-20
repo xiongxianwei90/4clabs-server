@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,55 +31,20 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on CanMintRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *CanMintRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CanMintRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in CanMintRequestMultiError,
-// or nil if none found.
-func (m *CanMintRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CanMintRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for Address
 
-	if len(errors) > 0 {
-		return CanMintRequestMultiError(errors)
-	}
 	return nil
 }
-
-// CanMintRequestMultiError is an error wrapping multiple validation errors
-// returned by CanMintRequest.ValidateAll() if the designated constraints
-// aren't met.
-type CanMintRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CanMintRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CanMintRequestMultiError) AllErrors() []error { return m }
 
 // CanMintRequestValidationError is the validation error returned by
 // CanMintRequest.Validate if the designated constraints aren't met.
@@ -137,53 +101,19 @@ var _ interface {
 } = CanMintRequestValidationError{}
 
 // Validate checks the field values on CantMintResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
 func (m *CantMintResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on CantMintResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CantMintResponseMultiError, or nil if none found.
-func (m *CantMintResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *CantMintResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for InWl
 
 	// no validation rules for Level
 
-	if len(errors) > 0 {
-		return CantMintResponseMultiError(errors)
-	}
 	return nil
 }
-
-// CantMintResponseMultiError is an error wrapping multiple validation errors
-// returned by CantMintResponse.ValidateAll() if the designated constraints
-// aren't met.
-type CantMintResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m CantMintResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m CantMintResponseMultiError) AllErrors() []error { return m }
 
 // CantMintResponseValidationError is the validation error returned by
 // CantMintResponse.Validate if the designated constraints aren't met.

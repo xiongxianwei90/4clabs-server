@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,51 +31,16 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on ComicWork with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *ComicWork) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ComicWork with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ComicWorkMultiError, or nil
-// if none found.
-func (m *ComicWork) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ComicWork) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetOriginNft()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ComicWorkValidationError{
-					field:  "OriginNft",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ComicWorkValidationError{
-					field:  "OriginNft",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOriginNft()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOriginNft()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ComicWorkValidationError{
 				field:  "OriginNft",
@@ -98,27 +62,8 @@ func (m *ComicWork) validate(all bool) error {
 
 	// no validation rules for CreatedAtTimestamp
 
-	if len(errors) > 0 {
-		return ComicWorkMultiError(errors)
-	}
 	return nil
 }
-
-// ComicWorkMultiError is an error wrapping multiple validation errors returned
-// by ComicWork.ValidateAll() if the designated constraints aren't met.
-type ComicWorkMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ComicWorkMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ComicWorkMultiError) AllErrors() []error { return m }
 
 // ComicWorkValidationError is the validation error returned by
 // ComicWork.Validate if the designated constraints aren't met.
@@ -174,52 +119,95 @@ var _ interface {
 	ErrorName() string
 } = ComicWorkValidationError{}
 
-// Validate checks the field values on Trait with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Trait) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Trait with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in TraitMultiError, or nil if none found.
-func (m *Trait) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Trait) validate(all bool) error {
+// Validate checks the field values on ComicNft with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ComicNft) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
+	// no validation rules for TokenId
+
+	if v, ok := interface{}(m.GetSummary()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ComicNftValidationError{
+				field:  "Summary",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ComicNftValidationError is the validation error returned by
+// ComicNft.Validate if the designated constraints aren't met.
+type ComicNftValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ComicNftValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ComicNftValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ComicNftValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ComicNftValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ComicNftValidationError) ErrorName() string { return "ComicNftValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ComicNftValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sComicNft.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ComicNftValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ComicNftValidationError{}
+
+// Validate checks the field values on Trait with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Trait) Validate() error {
+	if m == nil {
+		return nil
+	}
 
 	// no validation rules for Type
 
 	// no validation rules for Value
 
-	if len(errors) > 0 {
-		return TraitMultiError(errors)
-	}
 	return nil
 }
-
-// TraitMultiError is an error wrapping multiple validation errors returned by
-// Trait.ValidateAll() if the designated constraints aren't met.
-type TraitMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m TraitMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m TraitMultiError) AllErrors() []error { return m }
 
 // TraitValidationError is the validation error returned by Trait.Validate if
 // the designated constraints aren't met.
@@ -276,25 +264,11 @@ var _ interface {
 } = TraitValidationError{}
 
 // Validate checks the field values on Rarity with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Rarity) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Rarity with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in RarityMultiError, or nil if none found.
-func (m *Rarity) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Rarity) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Score
 
@@ -302,27 +276,8 @@ func (m *Rarity) validate(all bool) error {
 
 	// no validation rules for Total
 
-	if len(errors) > 0 {
-		return RarityMultiError(errors)
-	}
 	return nil
 }
-
-// RarityMultiError is an error wrapping multiple validation errors returned by
-// Rarity.ValidateAll() if the designated constraints aren't met.
-type RarityMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RarityMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RarityMultiError) AllErrors() []error { return m }
 
 // RarityValidationError is the validation error returned by Rarity.Validate if
 // the designated constraints aren't met.
@@ -379,46 +334,13 @@ var _ interface {
 } = RarityValidationError{}
 
 // Validate checks the field values on Detail with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Detail) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Detail with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in DetailMultiError, or nil if none found.
-func (m *Detail) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Detail) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetSummary()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DetailValidationError{
-					field:  "Summary",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, DetailValidationError{
-					field:  "Summary",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSummary()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetSummary()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DetailValidationError{
 				field:  "Summary",
@@ -428,26 +350,7 @@ func (m *Detail) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetStat()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DetailValidationError{
-					field:  "Stat",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, DetailValidationError{
-					field:  "Stat",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetStat()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetStat()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DetailValidationError{
 				field:  "Stat",
@@ -457,27 +360,8 @@ func (m *Detail) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return DetailMultiError(errors)
-	}
 	return nil
 }
-
-// DetailMultiError is an error wrapping multiple validation errors returned by
-// Detail.ValidateAll() if the designated constraints aren't met.
-type DetailMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DetailMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DetailMultiError) AllErrors() []error { return m }
 
 // DetailValidationError is the validation error returned by Detail.Validate if
 // the designated constraints aren't met.
@@ -534,25 +418,11 @@ var _ interface {
 } = DetailValidationError{}
 
 // Validate checks the field values on Summary with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Summary) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Summary with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in SummaryMultiError, or nil if none found.
-func (m *Summary) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Summary) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Blockchain
 
@@ -575,26 +445,7 @@ func (m *Summary) validate(all bool) error {
 	for idx, item := range m.GetTraits() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SummaryValidationError{
-						field:  fmt.Sprintf("Traits[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, SummaryValidationError{
-						field:  fmt.Sprintf("Traits[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SummaryValidationError{
 					field:  fmt.Sprintf("Traits[%v]", idx),
@@ -606,26 +457,7 @@ func (m *Summary) validate(all bool) error {
 
 	}
 
-	if all {
-		switch v := interface{}(m.GetRarity()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SummaryValidationError{
-					field:  "Rarity",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SummaryValidationError{
-					field:  "Rarity",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetRarity()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetRarity()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SummaryValidationError{
 				field:  "Rarity",
@@ -637,27 +469,8 @@ func (m *Summary) validate(all bool) error {
 
 	// no validation rules for Registered
 
-	if len(errors) > 0 {
-		return SummaryMultiError(errors)
-	}
 	return nil
 }
-
-// SummaryMultiError is an error wrapping multiple validation errors returned
-// by Summary.ValidateAll() if the designated constraints aren't met.
-type SummaryMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SummaryMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SummaryMultiError) AllErrors() []error { return m }
 
 // SummaryValidationError is the validation error returned by Summary.Validate
 // if the designated constraints aren't met.
@@ -714,25 +527,11 @@ var _ interface {
 } = SummaryValidationError{}
 
 // Validate checks the field values on Rank with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
+// definition for this message. If any rules are violated, an error is returned.
 func (m *Rank) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Rank with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in RankMultiError, or nil if none found.
-func (m *Rank) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Rank) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Score
 
@@ -742,27 +541,8 @@ func (m *Rank) validate(all bool) error {
 
 	// no validation rules for LastUpdated
 
-	if len(errors) > 0 {
-		return RankMultiError(errors)
-	}
 	return nil
 }
-
-// RankMultiError is an error wrapping multiple validation errors returned by
-// Rank.ValidateAll() if the designated constraints aren't met.
-type RankMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RankMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RankMultiError) AllErrors() []error { return m }
 
 // RankValidationError is the validation error returned by Rank.Validate if the
 // designated constraints aren't met.
@@ -819,25 +599,11 @@ var _ interface {
 } = RankValidationError{}
 
 // Validate checks the field values on Stat with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
+// definition for this message. If any rules are violated, an error is returned.
 func (m *Stat) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Stat with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in StatMultiError, or nil if none found.
-func (m *Stat) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Stat) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for LastUpdated
 
@@ -845,26 +611,7 @@ func (m *Stat) validate(all bool) error {
 
 	// no validation rules for SaleNumAll
 
-	if all {
-		switch v := interface{}(m.GetMaxPrice()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "MaxPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "MaxPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetMaxPrice()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetMaxPrice()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StatValidationError{
 				field:  "MaxPrice",
@@ -874,26 +621,7 @@ func (m *Stat) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetMinPrice()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "MinPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "MinPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetMinPrice()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetMinPrice()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StatValidationError{
 				field:  "MinPrice",
@@ -903,26 +631,7 @@ func (m *Stat) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetLastPrice()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "LastPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, StatValidationError{
-					field:  "LastPrice",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetLastPrice()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetLastPrice()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StatValidationError{
 				field:  "LastPrice",
@@ -935,26 +644,7 @@ func (m *Stat) validate(all bool) error {
 	for idx, item := range m.GetPastOwners() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StatValidationError{
-						field:  fmt.Sprintf("PastOwners[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, StatValidationError{
-						field:  fmt.Sprintf("PastOwners[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return StatValidationError{
 					field:  fmt.Sprintf("PastOwners[%v]", idx),
@@ -972,27 +662,8 @@ func (m *Stat) validate(all bool) error {
 
 	// no validation rules for LongestHoldingTime
 
-	if len(errors) > 0 {
-		return StatMultiError(errors)
-	}
 	return nil
 }
-
-// StatMultiError is an error wrapping multiple validation errors returned by
-// Stat.ValidateAll() if the designated constraints aren't met.
-type StatMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m StatMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m StatMultiError) AllErrors() []error { return m }
 
 // StatValidationError is the validation error returned by Stat.Validate if the
 // designated constraints aren't met.
@@ -1049,26 +720,12 @@ var _ interface {
 } = StatValidationError{}
 
 // Validate checks the field values on Stat_PriceInfo with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *Stat_PriceInfo) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Stat_PriceInfo with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in Stat_PriceInfoMultiError,
-// or nil if none found.
-func (m *Stat_PriceInfo) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Stat_PriceInfo) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for TxHash
 
@@ -1082,28 +739,8 @@ func (m *Stat_PriceInfo) validate(all bool) error {
 
 	// no validation rules for Time
 
-	if len(errors) > 0 {
-		return Stat_PriceInfoMultiError(errors)
-	}
 	return nil
 }
-
-// Stat_PriceInfoMultiError is an error wrapping multiple validation errors
-// returned by Stat_PriceInfo.ValidateAll() if the designated constraints
-// aren't met.
-type Stat_PriceInfoMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Stat_PriceInfoMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Stat_PriceInfoMultiError) AllErrors() []error { return m }
 
 // Stat_PriceInfoValidationError is the validation error returned by
 // Stat_PriceInfo.Validate if the designated constraints aren't met.
@@ -1160,53 +797,19 @@ var _ interface {
 } = Stat_PriceInfoValidationError{}
 
 // Validate checks the field values on Stat_OwnerStat with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *Stat_OwnerStat) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Stat_OwnerStat with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in Stat_OwnerStatMultiError,
-// or nil if none found.
-func (m *Stat_OwnerStat) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Stat_OwnerStat) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Address
 
 	// no validation rules for HoldingTime
 
-	if len(errors) > 0 {
-		return Stat_OwnerStatMultiError(errors)
-	}
 	return nil
 }
-
-// Stat_OwnerStatMultiError is an error wrapping multiple validation errors
-// returned by Stat_OwnerStat.ValidateAll() if the designated constraints
-// aren't met.
-type Stat_OwnerStatMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Stat_OwnerStatMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Stat_OwnerStatMultiError) AllErrors() []error { return m }
 
 // Stat_OwnerStatValidationError is the validation error returned by
 // Stat_OwnerStat.Validate if the designated constraints aren't met.
