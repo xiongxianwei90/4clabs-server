@@ -50,6 +50,8 @@ func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextS
 		ContractAddress string
 		TokenId         string
 	}
+
+	comicMap := make(map[string]entity.Nft)
 	for _, d := range datas {
 		infos = append(infos, struct {
 			ContractAddress string
@@ -61,22 +63,21 @@ func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextS
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
-
+	for _, item := range nfts {
+		comicMap[item.TokenId] = item
+	}
 	var result []entity.Comic
 	for _, d := range datas {
-		for _, nft := range nfts {
-			if d.ContractAddress == nft.ContractAddress && d.TokenID == nft.TokenId {
-				result = append(result, entity.Comic{
-					Origin:       nft,
-					MintLimit:    uint32(d.MintLimit),
-					MintPrice:    d.MintPrice,
-					Name:         d.Name,
-					MetadataJson: d.Medata,
-					CreatedAt:    d.CreatedAt,
-					UserAddress:  d.UserAddress,
-				})
-			}
-		}
+		nft := comicMap[d.TokenID]
+		result = append(result, entity.Comic{
+			Origin:       nft,
+			MintLimit:    uint32(d.MintLimit),
+			MintPrice:    d.MintPrice,
+			Name:         d.Name,
+			CreatedAt:    d.CreatedAt,
+			UserAddress:  d.UserAddress,
+			MetadataJson: d.Medata,
+		})
 	}
 
 	return result, lastScore, uint32(total), hasMore, nil
