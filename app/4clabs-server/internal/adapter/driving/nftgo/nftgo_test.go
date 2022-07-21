@@ -46,7 +46,8 @@ func TestComicNftAllUpdate(t *testing.T) {
 		"span.id", tracing.SpanID(),
 	)
 	dataData, _, err := data.NewData(&bc, logger)
-	err = ComicNftAllUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address)
+	err = ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, true)
+	err = ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, true)
 	if err != nil {
 		t.Fail()
 	}

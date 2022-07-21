@@ -30,13 +30,13 @@ var (
 
 // IComicWorksComicWorks is an auto generated low-level Go binding around an user-defined struct.
 type IComicWorksComicWorks struct {
-	Name            string
-	ImageURIs       []string
-	Limit           *big.Int
-	Price           *big.Int
-	Author          common.Address
-	BasedOnContract common.Address
-	BasedOnTokenId  *big.Int
+	Name            string         `json:"name"`
+	ImageURIs       []string       `json:"imageURIs"`
+	Limit           *big.Int       `json:"limit"`
+	Price           *big.Int       `json:"price"`
+	Author          common.Address `json:"author"`
+	BasedOnContract common.Address `json:"basedOnContract"`
+	BasedOnTokenId  *big.Int       `json:"basedOnTokenId"`
 }
 
 // ForClabsMetaData contains all meta data concerning the ForClabs contract.

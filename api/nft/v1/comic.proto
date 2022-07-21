@@ -19,8 +19,8 @@ message ComicCreateRequest {
     uint32 mint_limit = 2 [(validate.rules).uint32 = {gte: 1}];
     float mint_price = 3 [(validate.rules).float = {gte: 0.0}];
     string name = 4 [(validate.rules).string = {min_len: 1}];
-    string metadata_json = 5;
     string minter_address = 7 [(validate.rules).string = {len: 42}];
+    repeated string image_urls = 8;
 }
 message ComicCreateResponse {
 }

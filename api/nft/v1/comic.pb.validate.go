@@ -77,8 +77,6 @@ func (m *ComicCreateRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for MetadataJson
-
 	if utf8.RuneCountInString(m.GetMinterAddress()) != 42 {
 		return ComicCreateRequestValidationError{
 			field:  "MinterAddress",

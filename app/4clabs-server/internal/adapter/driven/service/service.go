@@ -33,11 +33,11 @@ func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) 
 			ContractAddress: req.OriginNftContractAddress,
 			TokenId:         req.OriginNftTokenId,
 		},
-		MintLimit:    req.MintLimit,
-		MintPrice:    float64(req.MintPrice),
-		Name:         req.Name,
-		MetadataJson: req.MetadataJson,
-		UserAddress:  req.MinterAddress,
+		MintLimit:   req.MintLimit,
+		MintPrice:   float64(req.MintPrice),
+		Name:        req.Name,
+		UserAddress: req.MinterAddress,
+		ImageUris:   req.ImageUrls,
 	}); err != nil {
 		return nil, err
 	}

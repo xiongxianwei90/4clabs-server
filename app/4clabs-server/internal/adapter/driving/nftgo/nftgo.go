@@ -16,6 +16,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -24,13 +25,13 @@ var _ ports.Query = &Service{}
 type Service struct {
 	apiKey          string
 	cacheNfts       *nft.Nft
-	contractAddress string
-	rawurl          string
+	ContractAddress string
+	Rawurl          string
 	data            *data.Data
 }
 
 func NewService(bootstrap *conf.Bootstrap, cacheNft *nft.Nft, data *data.Data) *Service {
-	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey, cacheNfts: cacheNft, contractAddress: bootstrap.ThirdParty.Contract.Address, rawurl: bootstrap.ThirdParty.Contract.Rawurl, data: data}
+	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey, cacheNfts: cacheNft, ContractAddress: bootstrap.ThirdParty.Contract.Address, Rawurl: bootstrap.ThirdParty.Contract.Rawurl, data: data}
 }
 
 type Nft struct {
@@ -302,15 +303,6 @@ func (s *Service) baseGet(ctx context.Context, url string) (io.ReadCloser, error
 
 func (s *Service) GetComicNfts(ctx context.Context, limit uint32, lastScore int64) ([]entity.ComicNft, int64, uint32, bool, error) {
 	var comicNfts []entity.ComicNft
-	//client, err := ethclient.Dial(s.rawurl)
-	//if err != nil {
-	//	return nil, 0, 0, false, err
-	//}
-	//contractAddress := common.HexToAddress(s.contractAddress)
-	//instance, err := forClabs.NewForClabs(contractAddress, client)
-	//if err != nil {
-	//	return nil, 0, 0, false, err
-	//}
 
 	rnft := query.Use(s.data.DB).ComicsNft
 	query := rnft.WithContext(ctx).
@@ -349,16 +341,18 @@ func (s *Service) GetComicNfts(ctx context.Context, limit uint32, lastScore int6
 
 	for tokenId, item := range datas {
 		id := strconv.FormatInt(int64(item.ID), 10)
+		imageUris := item.Comic.ImageURIs
+		print(imageUris)
 		comicNfts = append(comicNfts, entity.ComicNft{
 			TokenId: id,
 			Comic: entity.Comic{
-				Origin:       originNfts[worksComic[tokenId].TokenID],
-				MintLimit:    uint32(item.Comic.MintLimit),
-				MintPrice:    item.Comic.MintPrice,
-				Name:         item.Comic.Name,
-				MetadataJson: item.Comic.Medata,
-				CreatedAt:    item.Comic.CreatedAt,
-				UserAddress:  item.Comic.UserAddress,
+				Origin:      originNfts[worksComic[tokenId].TokenID],
+				MintLimit:   uint32(item.Comic.MintLimit),
+				MintPrice:   item.Comic.MintPrice,
+				Name:        item.Comic.Name,
+				CreatedAt:   item.Comic.CreatedAt,
+				UserAddress: item.Comic.UserAddress,
+				ImageUris:   strings.Split(item.Comic.ImageURIs, ","),
 			},
 		})
 	}

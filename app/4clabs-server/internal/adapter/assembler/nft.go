@@ -51,8 +51,9 @@ func CoverComicToHttpDto(nfts ...entity.Comic) []*typs.ComicWork {
 			MintLimit:          n.MintLimit,
 			MintPrice:          float32(n.MintPrice),
 			Name:               n.Name,
-			MetadataJson:       n.MetadataJson,
 			CreatedAtTimestamp: uint32(n.CreatedAt.Unix()),
+			MinterAddress:      n.UserAddress,
+			ImageUrl:           n.ImageUris,
 		})
 	}
 	return result
@@ -99,8 +100,9 @@ func CoverComicNftToHttpDto(nfts ...entity.ComicNft) []*typs.ComicNft {
 				MintLimit:          n.Comic.MintLimit,
 				MintPrice:          float32(n.Comic.MintPrice),
 				Name:               n.Comic.Name,
-				MetadataJson:       n.Comic.MetadataJson,
 				CreatedAtTimestamp: uint32(n.Comic.CreatedAt.Unix()),
+				MinterAddress:      n.Comic.UserAddress,
+				ImageUrl:           n.Comic.ImageUris,
 			},
 		})
 	}

@@ -1,14 +1,13 @@
 package repo
 
 import (
-	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
 	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/data"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
-	"github.com/pkg/errors"
+	"strings"
 	"time"
 )
 
@@ -50,6 +49,8 @@ func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextS
 		ContractAddress string
 		TokenId         string
 	}
+
+	comicMap := make(map[string]entity.Nft)
 	for _, d := range datas {
 		infos = append(infos, struct {
 			ContractAddress string
@@ -61,39 +62,42 @@ func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextS
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
-
+	for _, item := range nfts {
+		comicMap[item.TokenId] = item
+	}
 	var result []entity.Comic
 	for _, d := range datas {
-		for _, nft := range nfts {
-			if d.ContractAddress == nft.ContractAddress && d.TokenID == nft.TokenId {
-				result = append(result, entity.Comic{
-					Origin:       nft,
-					MintLimit:    uint32(d.MintLimit),
-					MintPrice:    d.MintPrice,
-					Name:         d.Name,
-					MetadataJson: d.Medata,
-					CreatedAt:    d.CreatedAt,
-					UserAddress:  d.UserAddress,
-				})
-			}
-		}
+		nft := comicMap[d.TokenID]
+		imageUris := strings.Split(d.ImageURIs, ",")
+		result = append(result, entity.Comic{
+			Origin:      nft,
+			MintLimit:   uint32(d.MintLimit),
+			MintPrice:   d.MintPrice,
+			Name:        d.Name,
+			CreatedAt:   d.CreatedAt,
+			UserAddress: d.UserAddress,
+			ImageUris:   imageUris,
+		})
 	}
 
 	return result, lastScore, uint32(total), hasMore, nil
 }
 
 func (c Comic) Create(ctx context.Context, comic entity.Comic) error {
-	db := query.Use(c.data.DB).Comic
-	if err := db.WithContext(ctx).Create(&model.Comic{
-		TokenID:         comic.Origin.TokenId,
-		ContractAddress: comic.Origin.ContractAddress,
-		UserAddress:     comic.UserAddress,
-		MintLimit:       int32(comic.MintLimit),
-		MintPrice:       comic.MintPrice,
-		Medata:          comic.MetadataJson,
-	}); err != nil {
-		return errors.Wrapf(err, "model : %#v", comic)
-	}
+	//db := query.Use(c.data.DB).Comic
+	//if err := db.WithContext(ctx).Create(&model.Comic{
+	//	TokenID:         comic.Origin.TokenId,
+	//	Name:            comic.Name,
+	//	ContractAddress: comic.Origin.ContractAddress,
+	//	UserAddress:     comic.UserAddress,
+	//	MintLimit:       int32(comic.MintLimit),
+	//	MintPrice:       comic.MintPrice,
+	//	ImageURIs:       strings.Join(comic.ImageUris, ","),
+	//}); err != nil {
+	//	return errors.Wrapf(err, "model : %#v", comic)
+	//}
+	nftgo.ComicUpdate(ctx, c.data.DB, c.nftgo.Rawurl, c.nftgo.ContractAddress, true)
+	nftgo.ComicNftUpdate(ctx, c.data.DB, c.nftgo.Rawurl, c.nftgo.ContractAddress, true)
 	return nil
 }
 
