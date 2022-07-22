@@ -3,44 +3,39 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
-	"os"
-
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
-// go build -ldflags "-X main.Version=x.y.z"
-var (
-	// Name is the name of the compiled software.
-	Name = "4clabs-contract-service"
-	// Version is the version of the compiled software.
-	Version string
-	// flagconf is the config flag.
-	flagconf string
-
-	environment = os.Getenv("environment")
-	id, _       = os.Hostname()
-)
-
-func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server) *kratos.App {
-	return kratos.New(
-		kratos.ID(id),
-		kratos.Name(Name),
-		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
-		kratos.Logger(logger),
-		kratos.Server(
-			hs,
-			gs,
-		),
-	)
-}
+//// go build -ldflags "-X main.Version=x.y.z"
+//var (
+//	// Name is the name of the compiled software.
+//	Name = "4clabs-contract-service"
+//	// Version is the version of the compiled software.
+//	Version string
+//	// flagconf is the config flag.
+//	flagconf string
+//
+//	environment = os.Getenv("environment")
+//	id, _       = os.Hostname()
+//)
+//
+//func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server) *kratos.App {
+//	return kratos.New(
+//		kratos.ID(id),
+//		kratos.Name(Name),
+//		kratos.Version(Version),
+//		kratos.Metadata(map[string]string{}),
+//		kratos.Logger(logger),
+//		kratos.Server(
+//			hs,
+//			gs,
+//		),
+//	)
+//}
 
 func main() {
 	//flag.Parse()
@@ -85,16 +80,24 @@ func main() {
 	//if err := app.Run(); err != nil {
 	//	panic(err)
 	//}
-
 	client, err := ethclient.Dial("wss://rinkeby.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	contractAddress := common.HexToAddress("0x78cebaf8498a34451e50dcda7f0ee568db89ae39")
+	contractAddress := common.HexToAddress("0xE71b4b58D34364552C455847E1AFCAE88b29eF9F")
 	query := ethereum.FilterQuery{
 		Addresses: []common.Address{contractAddress},
 	}
+
+	//instance, err := forClabs.NewForClabs(contractAddress, client)
+
+	header, err := client.HeaderByNumber(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("最新区块", header.Number.String())
 
 	logs := make(chan types.Log)
 	sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)

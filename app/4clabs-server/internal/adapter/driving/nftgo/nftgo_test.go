@@ -14,7 +14,7 @@ import (
 )
 
 func TestComicNftAllUpdate(t *testing.T) {
-	var environment = "local"
+	var environment = "production"
 	c := config.New(
 		config.WithSource(
 			file.NewSource(fmt.Sprintf("/Users/xiongwei/GolandProjects/4clabs-server/app/4clabs-server/configs/config.%s.yaml", environment)),
@@ -46,8 +46,8 @@ func TestComicNftAllUpdate(t *testing.T) {
 		"span.id", tracing.SpanID(),
 	)
 	dataData, _, err := data.NewData(&bc, logger)
-	err = ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, true)
-	err = ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, true)
+	err = ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
+	//err = ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
 	if err != nil {
 		t.Fail()
 	}

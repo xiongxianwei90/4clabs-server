@@ -13,8 +13,8 @@ third_party:
   nftgo:
     api_key: a12366dfa8e44fc99d7667765cf3608e
   contract:
-    address: 0x78cebaf8498a34451e50dcda7f0ee568db89ae39
-    rawurl: wss://rinkeby.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb
+    address: 0x2659f6208b53C691c8969c5F06A776f37be65e5a
+    rawurl: wss://mainnet.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb
 
 data:
   database:
