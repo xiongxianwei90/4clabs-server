@@ -72,17 +72,18 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limi
 	}
 
 	nfts, err := r.nftgo.BatchGetNftSummary(ctx, infos)
+	nftMap := make(map[string]entity.Nft)
+
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
-
+	for _, item := range nfts {
+		nftMap[item.TokenId] = item
+	}
 	var result []*entity.Nft
 	for _, d := range datas {
-		for _, nft := range nfts {
-			if d.ContractAddress == nft.ContractAddress && d.TokenID == nft.TokenId {
-				result = append(result, &nft)
-			}
-		}
+		nft := nftMap[d.TokenID]
+		result = append(result, &nft)
 	}
 
 	return result, lastScore, uint32(total), hasMore, nil
