@@ -34,9 +34,9 @@ func newComic(db *gorm.DB) comic {
 	_comic.UserAddress = field.NewString(tableName, "user_address")
 	_comic.MintLimit = field.NewInt32(tableName, "mint_limit")
 	_comic.MintPrice = field.NewFloat64(tableName, "mint_price")
-	_comic.Medata = field.NewString(tableName, "medata")
 	_comic.CreatedAt = field.NewTime(tableName, "created_at")
 	_comic.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_comic.ImageURIs = field.NewString(tableName, "imageURIs")
 
 	_comic.fillFieldMap()
 
@@ -54,9 +54,9 @@ type comic struct {
 	UserAddress     field.String
 	MintLimit       field.Int32
 	MintPrice       field.Float64
-	Medata          field.String
 	CreatedAt       field.Time
 	UpdatedAt       field.Time
+	ImageURIs       field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -80,9 +80,9 @@ func (c *comic) updateTableName(table string) *comic {
 	c.UserAddress = field.NewString(table, "user_address")
 	c.MintLimit = field.NewInt32(table, "mint_limit")
 	c.MintPrice = field.NewFloat64(table, "mint_price")
-	c.Medata = field.NewString(table, "medata")
 	c.CreatedAt = field.NewTime(table, "created_at")
 	c.UpdatedAt = field.NewTime(table, "updated_at")
+	c.ImageURIs = field.NewString(table, "imageURIs")
 
 	c.fillFieldMap()
 
@@ -113,9 +113,9 @@ func (c *comic) fillFieldMap() {
 	c.fieldMap["user_address"] = c.UserAddress
 	c.fieldMap["mint_limit"] = c.MintLimit
 	c.fieldMap["mint_price"] = c.MintPrice
-	c.fieldMap["medata"] = c.Medata
 	c.fieldMap["created_at"] = c.CreatedAt
 	c.fieldMap["updated_at"] = c.UpdatedAt
+	c.fieldMap["imageURIs"] = c.ImageURIs
 }
 
 func (c comic) clone(db *gorm.DB) comic {

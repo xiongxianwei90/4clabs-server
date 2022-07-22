@@ -1,8 +1,11 @@
 package nftgo
 
 import (
+	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
+	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
 	"4clabs-server/app/4clabs-server/internal/conf"
+	"4clabs-server/app/4clabs-server/internal/data"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
@@ -12,18 +15,23 @@ import (
 	"golang.org/x/sync/errgroup"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
 var _ ports.Query = &Service{}
 
 type Service struct {
-	apiKey    string
-	cacheNfts *nft.Nft
+	apiKey          string
+	cacheNfts       *nft.Nft
+	ContractAddress string
+	Rawurl          string
+	data            *data.Data
 }
 
-func NewService(bootstrap *conf.Bootstrap, cacheNft *nft.Nft) *Service {
-	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey, cacheNfts: cacheNft}
+func NewService(bootstrap *conf.Bootstrap, cacheNft *nft.Nft, data *data.Data) *Service {
+	return &Service{apiKey: bootstrap.ThirdParty.Nftgo.ApiKey, cacheNfts: cacheNft, ContractAddress: bootstrap.ThirdParty.Contract.Address, Rawurl: bootstrap.ThirdParty.Contract.Rawurl, data: data}
 }
 
 type Nft struct {
@@ -181,10 +189,10 @@ func (s *Service) GetNftSummary(ctx context.Context, contractAddress, tokenId st
 	if err := json.NewDecoder(reader).Decode(&nft); err != nil {
 		return entity.Nft{}, errors.Wrapf(err, "address : %s, token : %s ", contractAddress, tokenId)
 	}
-	return s.coverNftToEntity(nft)[0], nil
+	return *s.coverNftToEntity(nft)[0], nil
 }
 
-func (s *Service) GetAddressNfts(ctx context.Context, address string, limit uint32, lastScore int64) ([]entity.Nft, int64, uint32, bool, error) {
+func (s *Service) GetAddressNfts(ctx context.Context, address string, limit uint32, lastScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
 	urlStr := fmt.Sprintf("https://api.nftgo.dev/eth/v1/address/%s/portfolio?offset=%d&limit=%d", address, lastScore, limit)
 	reader, err := s.baseGet(ctx, urlStr)
 	if reader == nil {
@@ -200,9 +208,24 @@ func (s *Service) GetAddressNfts(ctx context.Context, address string, limit uint
 		return nil, 0, 0, false, errors.Wrapf(err, "address : %s", address)
 	}
 
-	var result []entity.Nft
+	var result []*entity.Nft
+	registerMap := make(map[string]bool)
+	var tokenIds []string
 	for _, a := range addressPortfolio.Assets {
 		result = append(result, s.coverNftToEntity(a.Nft)...)
+		tokenIds = append(tokenIds, a.Nft.TokenId)
+	}
+	rnft := query.Use(s.data.DB).RegisterNft
+
+	var registerData []*model.RegisterNft
+	registerData, err = rnft.WithContext(ctx).Where(rnft.TokenID.In(tokenIds...)).Find()
+	if registerData != nil {
+		for _, data := range registerData {
+			registerMap[data.TokenID] = true
+		}
+		for _, nftItem := range result {
+			nftItem.Registered = registerMap[nftItem.TokenId]
+		}
 	}
 	return result, lastScore + int64(limit), uint32(addressPortfolio.Total), lastScore+int64(limit) < int64(addressPortfolio.Total), nil
 }
@@ -249,8 +272,8 @@ func (s *Service) coverMetrics(detail NftMetrics) entity.NftStat {
 		LongestHoldingTime: time.Duration(detail.LongestHoldingTime),
 	}
 }
-func (s *Service) coverNftToEntity(nfts ...Nft) []entity.Nft {
-	var result []entity.Nft
+func (s *Service) coverNftToEntity(nfts ...Nft) []*entity.Nft {
+	var result []*entity.Nft
 	for _, nft := range nfts {
 		var ts []entity.Traits
 		for _, t := range nft.Traits {
@@ -259,7 +282,7 @@ func (s *Service) coverNftToEntity(nfts ...Nft) []entity.Nft {
 				Value: t.Value,
 			})
 		}
-		result = append(result, entity.Nft{
+		result = append(result, &entity.Nft{
 			Blockchain:      nft.Blockchain,
 			CollectionName:  nft.CollectionName,
 			CollectionSlug:  nft.CollectionSlug,
@@ -291,4 +314,63 @@ func (s *Service) baseGet(ctx context.Context, url string) (io.ReadCloser, error
 		return nil, errors.Wrapf(fmt.Errorf("status code %d is not ok", res.StatusCode), "url : %s", url)
 	}
 	return res.Body, nil
+}
+
+func (s *Service) GetComicNfts(ctx context.Context, limit uint32, lastScore int64) ([]entity.ComicNft, int64, uint32, bool, error) {
+	var comicNfts []entity.ComicNft
+
+	rnft := query.Use(s.data.DB).ComicsNft
+	query := rnft.WithContext(ctx).
+		Where(rnft.Owner.EqCol(rnft.Author))
+	datas, err := query.
+		Offset(int(lastScore)).
+		Limit(int(limit)).Preload(rnft.Comic).Find()
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+	totalSupply, err := query.Count()
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+
+	var infos []struct {
+		ContractAddress string
+		TokenId         string
+	}
+	worksComic := make(map[int]*model.Comic)
+
+	for index, d := range datas {
+		infos = append(infos, struct {
+			ContractAddress string
+			TokenId         string
+		}{ContractAddress: d.Comic.ContractAddress, TokenId: d.Comic.TokenID})
+		worksComic[index] = &d.Comic
+	}
+
+	origins, err := s.BatchGetNftSummary(ctx, infos)
+	originNfts := make(map[string]entity.Nft)
+
+	for _, item := range origins {
+		originNfts[item.TokenId] = item
+	}
+
+	for tokenId, item := range datas {
+		id := strconv.FormatInt(int64(item.ID), 10)
+		imageUris := item.Comic.ImageURIs
+		print(imageUris)
+		comicNfts = append(comicNfts, entity.ComicNft{
+			TokenId: id,
+			Comic: entity.Comic{
+				Origin:      originNfts[worksComic[tokenId].TokenID],
+				MintLimit:   uint32(item.Comic.MintLimit),
+				MintPrice:   item.Comic.MintPrice,
+				Name:        item.Comic.Name,
+				CreatedAt:   item.Comic.CreatedAt,
+				UserAddress: item.Comic.UserAddress,
+				ImageUris:   strings.Split(item.Comic.ImageURIs, ","),
+			},
+		})
+	}
+	nextLastScore := int64(limit) + lastScore
+	return comicNfts, nextLastScore, uint32(totalSupply), nextLastScore < totalSupply, nil
 }

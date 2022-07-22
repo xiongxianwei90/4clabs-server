@@ -12,12 +12,15 @@ message ComicWork {
     float mint_price = 3;
 
     string name = 4;
-    //    repeated string image_url = 5;
-    string metadata_json = 5;
-    string minter_address = 7;
-    uint32 created_at_timestamp = 6;
+    uint32 created_at_timestamp = 5;
+    string minter_address = 6;
+    repeated string image_url = 7;
 }
 
+message ComicNft {
+    string token_id = 1;
+    ComicWork summary = 2;
+}
 
 message Trait {
     string type = 1;

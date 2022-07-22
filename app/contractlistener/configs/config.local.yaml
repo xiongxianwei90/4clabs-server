@@ -1,0 +1,26 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 20s
+    jwt:
+      key: basictid
+      timeout: 1209600s
+      min_refresh: 604800s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 20s
+third_party:
+  nftgo:
+    api_key: a12366dfa8e44fc99d7667765cf3608e
+  contract:
+    address: 0xE71b4b58D34364552C455847E1AFCAE88b29eF9F
+    rawurl: wss://rinkeby.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb
+data:
+  database:
+    driver: mysql
+    source: dev:Zhengli_0220@tcp(rm-2ze69093m45mv5730ao.mysql.rds.aliyuncs.com:3306)/forclabs?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  redis:
+    addr: r-2zeq0pz2iv0m5ygqlfpd.redis.rds.aliyuncs.com:6379
+    password: Zhengli_0220
+    read_timeout: 0.2s
+    write_timeout: 0.2s

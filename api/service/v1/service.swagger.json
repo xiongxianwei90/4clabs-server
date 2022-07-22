@@ -194,6 +194,78 @@
         ]
       }
     },
+    "/v1/nft/comic_nft": {
+      "get": {
+        "summary": "二创NFT列表",
+        "operationId": "Nft_GetComicNftList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListComicNftResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/nft/comic_nft/purchase": {
+      "post": {
+        "summary": "register nft",
+        "operationId": "Nft_NftPurchase",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PurchaseComicNftResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1PurchaseComicNftRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/nft/register": {
       "post": {
         "summary": "register nft",
@@ -402,14 +474,11 @@
     "protobufAny": {
       "type": "object",
       "properties": {
-        "typeUrl": {
+        "@type": {
           "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
         }
-      }
+      },
+      "additionalProperties": {}
     },
     "rpcStatus": {
       "type": "object",
@@ -502,6 +571,17 @@
     "v1ComicCreateResponse": {
       "type": "object"
     },
+    "v1ComicNft": {
+      "type": "object",
+      "properties": {
+        "tokenId": {
+          "type": "string"
+        },
+        "summary": {
+          "$ref": "#/definitions/v1ComicWork"
+        }
+      }
+    },
     "v1ComicWork": {
       "type": "object",
       "properties": {
@@ -574,6 +654,20 @@
         }
       }
     },
+    "v1ListComicNftResponse": {
+      "type": "object",
+      "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
+        "comicNft": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ComicNft"
+          }
+        }
+      }
+    },
     "v1ListComicWorkResponse": {
       "type": "object",
       "properties": {
@@ -601,6 +695,20 @@
           }
         }
       }
+    },
+    "v1PurchaseComicNftRequest": {
+      "type": "object",
+      "properties": {
+        "tokenId": {
+          "type": "string"
+        },
+        "buyerAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "v1PurchaseComicNftResponse": {
+      "type": "object"
     },
     "v1Rarity": {
       "type": "object",

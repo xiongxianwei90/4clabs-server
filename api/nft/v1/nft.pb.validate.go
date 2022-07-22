@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,57 +31,22 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on GetNftDetailRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetNftDetailRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetNftDetailRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetNftDetailRequestMultiError, or nil if none found.
-func (m *GetNftDetailRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetNftDetailRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for ContractAddress
 
 	// no validation rules for TokenId
 
-	if len(errors) > 0 {
-		return GetNftDetailRequestMultiError(errors)
-	}
 	return nil
 }
-
-// GetNftDetailRequestMultiError is an error wrapping multiple validation
-// errors returned by GetNftDetailRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetNftDetailRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetNftDetailRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetNftDetailRequestMultiError) AllErrors() []error { return m }
 
 // GetNftDetailRequestValidationError is the validation error returned by
 // GetNftDetailRequest.Validate if the designated constraints aren't met.
@@ -142,46 +106,13 @@ var _ interface {
 
 // Validate checks the field values on GetNftDetailResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetNftDetailResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetNftDetailResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetNftDetailResponseMultiError, or nil if none found.
-func (m *GetNftDetailResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetNftDetailResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetDetail()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetNftDetailResponseValidationError{
-					field:  "Detail",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetNftDetailResponseValidationError{
-					field:  "Detail",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDetail()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetDetail()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetNftDetailResponseValidationError{
 				field:  "Detail",
@@ -191,28 +122,8 @@ func (m *GetNftDetailResponse) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return GetNftDetailResponseMultiError(errors)
-	}
 	return nil
 }
-
-// GetNftDetailResponseMultiError is an error wrapping multiple validation
-// errors returned by GetNftDetailResponse.ValidateAll() if the designated
-// constraints aren't met.
-type GetNftDetailResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetNftDetailResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetNftDetailResponseMultiError) AllErrors() []error { return m }
 
 // GetNftDetailResponseValidationError is the validation error returned by
 // GetNftDetailResponse.Validate if the designated constraints aren't met.
@@ -272,46 +183,13 @@ var _ interface {
 
 // Validate checks the field values on GetAddressNftsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetAddressNftsRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetAddressNftsRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetAddressNftsRequestMultiError, or nil if none found.
-func (m *GetAddressNftsRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetAddressNftsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetBaseListRequest()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetAddressNftsRequestValidationError{
-					field:  "BaseListRequest",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetAddressNftsRequestValidationError{
-					field:  "BaseListRequest",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetBaseListRequest()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetBaseListRequest()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAddressNftsRequestValidationError{
 				field:  "BaseListRequest",
@@ -323,28 +201,8 @@ func (m *GetAddressNftsRequest) validate(all bool) error {
 
 	// no validation rules for Address
 
-	if len(errors) > 0 {
-		return GetAddressNftsRequestMultiError(errors)
-	}
 	return nil
 }
-
-// GetAddressNftsRequestMultiError is an error wrapping multiple validation
-// errors returned by GetAddressNftsRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetAddressNftsRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetAddressNftsRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetAddressNftsRequestMultiError) AllErrors() []error { return m }
 
 // GetAddressNftsRequestValidationError is the validation error returned by
 // GetAddressNftsRequest.Validate if the designated constraints aren't met.
@@ -404,46 +262,13 @@ var _ interface {
 
 // Validate checks the field values on GetAddressNftResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetAddressNftResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetAddressNftResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetAddressNftResponseMultiError, or nil if none found.
-func (m *GetAddressNftResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetAddressNftResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetBaseListResponse()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetAddressNftResponseValidationError{
-					field:  "BaseListResponse",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetAddressNftResponseValidationError{
-					field:  "BaseListResponse",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetBaseListResponse()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetBaseListResponse()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAddressNftResponseValidationError{
 				field:  "BaseListResponse",
@@ -456,26 +281,7 @@ func (m *GetAddressNftResponse) validate(all bool) error {
 	for idx, item := range m.GetSummaries() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetAddressNftResponseValidationError{
-						field:  fmt.Sprintf("Summaries[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, GetAddressNftResponseValidationError{
-						field:  fmt.Sprintf("Summaries[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetAddressNftResponseValidationError{
 					field:  fmt.Sprintf("Summaries[%v]", idx),
@@ -487,28 +293,8 @@ func (m *GetAddressNftResponse) validate(all bool) error {
 
 	}
 
-	if len(errors) > 0 {
-		return GetAddressNftResponseMultiError(errors)
-	}
 	return nil
 }
-
-// GetAddressNftResponseMultiError is an error wrapping multiple validation
-// errors returned by GetAddressNftResponse.ValidateAll() if the designated
-// constraints aren't met.
-type GetAddressNftResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetAddressNftResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetAddressNftResponseMultiError) AllErrors() []error { return m }
 
 // GetAddressNftResponseValidationError is the validation error returned by
 // GetAddressNftResponse.Validate if the designated constraints aren't met.

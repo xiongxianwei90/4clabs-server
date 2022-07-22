@@ -7,6 +7,7 @@ import "api/nft/v1/comic.proto";
 import "api/nft/v1/nft.proto";
 import "api/nft/v1/register.proto";
 import "api/tickets/v1/tickets.proto";
+import "api/nft/v1/comic_nft.proto";
 import "third_party/google/api/annotations.proto";
 
 
@@ -73,6 +74,20 @@ service Nft {
     rpc GetNftDetail(api.nft.v1.GetNftDetailRequest) returns (api.nft.v1.GetNftDetailResponse) {
         option (google.api.http) = {
             get: "/v1/nft/collection/{contract_address}/token/{token_id}",
+        };
+    }
+    // 二创NFT列表
+    rpc GetComicNftList(api.nft.v1.ListComicNftRequest) returns (api.nft.v1.ListComicNftResponse) {
+        option (google.api.http) = {
+            get: "/v1/nft/comic_nft",
+        };
+    }
+
+    // register nft
+    rpc NftPurchase(api.nft.v1.PurchaseComicNftRequest) returns (api.nft.v1.PurchaseComicNftResponse) {
+        option (google.api.http) = {
+            post: "/v1/nft/comic_nft/purchase",
+            body: "*"
         };
     }
 }

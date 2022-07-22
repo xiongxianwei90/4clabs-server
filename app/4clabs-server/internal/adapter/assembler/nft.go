@@ -28,7 +28,7 @@ func CoverNftDetailToHttpDto(nft entity.NftDetail) *typs.Detail {
 	}
 
 	return &typs.Detail{
-		Summary: CoverNftToHttpDto(nft.Summary)[0],
+		Summary: CoverNftToHttpDto(&nft.Summary)[0],
 		Stat: &typs.Stat{
 			LastUpdated:        nft.Stat.LastUpdated,
 			SaleNum_7D:         nft.Stat.SaleNum7d,
@@ -47,17 +47,18 @@ func CoverComicToHttpDto(nfts ...entity.Comic) []*typs.ComicWork {
 	var result []*typs.ComicWork
 	for _, n := range nfts {
 		result = append(result, &typs.ComicWork{
-			OriginNft:          CoverNftToHttpDto(n.Origin)[0],
+			OriginNft:          CoverNftToHttpDto(&n.Origin)[0],
 			MintLimit:          n.MintLimit,
 			MintPrice:          float32(n.MintPrice),
 			Name:               n.Name,
-			MetadataJson:       n.MetadataJson,
 			CreatedAtTimestamp: uint32(n.CreatedAt.Unix()),
+			MinterAddress:      n.UserAddress,
+			ImageUrl:           n.ImageUris,
 		})
 	}
 	return result
 }
-func CoverNftToHttpDto(nfts ...entity.Nft) []*typs.Summary {
+func CoverNftToHttpDto(nfts ...*entity.Nft) []*typs.Summary {
 	var result []*typs.Summary
 	for _, n := range nfts {
 		var ts []*typs.Trait
@@ -83,6 +84,26 @@ func CoverNftToHttpDto(nfts ...entity.Nft) []*typs.Summary {
 				Score: float32(n.Rarity.Score),
 				Rank:  int32(n.Rarity.Rank),
 				Total: int32(n.Rarity.Total),
+			},
+			Registered: n.Registered,
+		})
+	}
+	return result
+}
+
+func CoverComicNftToHttpDto(nfts ...entity.ComicNft) []*typs.ComicNft {
+	var result []*typs.ComicNft
+	for _, n := range nfts {
+		result = append(result, &typs.ComicNft{
+			TokenId: n.TokenId,
+			Summary: &typs.ComicWork{
+				OriginNft:          CoverNftToHttpDto(&n.Comic.Origin)[0],
+				MintLimit:          n.Comic.MintLimit,
+				MintPrice:          float32(n.Comic.MintPrice),
+				Name:               n.Comic.Name,
+				CreatedAtTimestamp: uint32(n.Comic.CreatedAt.Unix()),
+				MinterAddress:      n.Comic.UserAddress,
+				ImageUrl:           n.Comic.ImageUris,
 			},
 		})
 	}

@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,57 +31,22 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on BaseListRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
 func (m *BaseListRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on BaseListRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// BaseListRequestMultiError, or nil if none found.
-func (m *BaseListRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *BaseListRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for LastScore
 
 	// no validation rules for Limit
 
-	if len(errors) > 0 {
-		return BaseListRequestMultiError(errors)
-	}
 	return nil
 }
-
-// BaseListRequestMultiError is an error wrapping multiple validation errors
-// returned by BaseListRequest.ValidateAll() if the designated constraints
-// aren't met.
-type BaseListRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m BaseListRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m BaseListRequestMultiError) AllErrors() []error { return m }
 
 // BaseListRequestValidationError is the validation error returned by
 // BaseListRequest.Validate if the designated constraints aren't met.
@@ -139,26 +103,12 @@ var _ interface {
 } = BaseListRequestValidationError{}
 
 // Validate checks the field values on BaseListResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
 func (m *BaseListResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on BaseListResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// BaseListResponseMultiError, or nil if none found.
-func (m *BaseListResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *BaseListResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for LastScore
 
@@ -166,28 +116,8 @@ func (m *BaseListResponse) validate(all bool) error {
 
 	// no validation rules for Total
 
-	if len(errors) > 0 {
-		return BaseListResponseMultiError(errors)
-	}
 	return nil
 }
-
-// BaseListResponseMultiError is an error wrapping multiple validation errors
-// returned by BaseListResponse.ValidateAll() if the designated constraints
-// aren't met.
-type BaseListResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m BaseListResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m BaseListResponseMultiError) AllErrors() []error { return m }
 
 // BaseListResponseValidationError is the validation error returned by
 // BaseListResponse.Validate if the designated constraints aren't met.

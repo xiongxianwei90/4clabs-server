@@ -33,11 +33,11 @@ func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) 
 			ContractAddress: req.OriginNftContractAddress,
 			TokenId:         req.OriginNftTokenId,
 		},
-		MintLimit:    req.MintLimit,
-		MintPrice:    float64(req.MintPrice),
-		Name:         req.Name,
-		MetadataJson: req.MetadataJson,
-		UserAddress:  req.MinterAddress,
+		MintLimit:   req.MintLimit,
+		MintPrice:   float64(req.MintPrice),
+		Name:        req.Name,
+		UserAddress: req.MinterAddress,
+		ImageUris:   req.ImageUrls,
 	}); err != nil {
 		return nil, err
 	}
@@ -57,6 +57,21 @@ func (s *Service) ListComicWorks(ctx context.Context, req *nft.ListComicWorkRequ
 			Total:     total,
 		},
 		ComicWorks: assembler.CoverComicToHttpDto(comics...),
+	}, nil
+}
+
+func (s *Service) GetComicNftList(ctx context.Context, req *nft.ListComicNftRequest) (*nft.ListComicNftResponse, error) {
+	comicNfts, nextScore, total, hasMore, err := s.nftUc.GetComicNftList(ctx, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	if err != nil {
+		return nil, err
+	}
+	return &nft.ListComicNftResponse{
+		BaseListResponse: &apibase.BaseListResponse{
+			LastScore: nextScore,
+			HasMore:   hasMore,
+			Total:     total,
+		},
+		ComicNft: assembler.CoverComicNftToHttpDto(comicNfts...),
 	}, nil
 }
 
@@ -142,4 +157,9 @@ func (s *Service) GetAddressNfts(ctx context.Context, req *nft.GetAddressNftsReq
 		Summaries: assembler.CoverNftToHttpDto(nfts...),
 	}
 	return res, nil
+}
+
+func (s *Service) NftPurchase(ctx context.Context, req *nft.PurchaseComicNftRequest) (*nft.PurchaseComicNftResponse, error) {
+	err := s.nftUc.NftPurchase(ctx, req.TokenId, req.BuyerAddress)
+	return &nft.PurchaseComicNftResponse{}, err
 }

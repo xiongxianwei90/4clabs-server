@@ -12,6 +12,7 @@ import (
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/trade"
 	"4clabs-server/app/4clabs-server/internal/conf"
 	"4clabs-server/app/4clabs-server/internal/data"
 	"4clabs-server/app/4clabs-server/internal/usecase"
@@ -29,10 +30,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 		return nil, nil, err
 	}
 	nftNft := nft.NewNft(dataData)
-	nftgoService := nftgo.NewService(bootstrap, nftNft)
+	nftgoService := nftgo.NewService(bootstrap, nftNft, dataData)
 	address := usecase.NewAddress(nftgoService)
+	tradeTrade := trade.NewTrade(dataData, nftgoService)
 	register := repo.NewRegister(nftgoService, dataData)
-	usecaseNft := usecase.NewNft(nftgoService, register)
+	usecaseNft := usecase.NewNft(nftgoService, tradeTrade, register)
 	user := repo.NewUser(dataData)
 	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)
 	ticket := repo.NewTicket(dataData)
