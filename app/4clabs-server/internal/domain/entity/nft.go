@@ -59,6 +59,7 @@ type Nft struct {
 	OwnerAddresses  []string
 	Traits          []Traits
 	Rarity          Rarity
+	Registered      bool
 }
 
 type ComicNft struct {

@@ -22,7 +22,7 @@ func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
 	return &Register{nftgo: nftgo, data: data}
 }
 
-func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
+func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
 	if nextScore == 0 {
 		nextScore = time.Now().Unix()
 	}
@@ -76,11 +76,11 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limi
 		return nil, 0, 0, false, err
 	}
 
-	var result []entity.Nft
+	var result []*entity.Nft
 	for _, d := range datas {
 		for _, nft := range nfts {
 			if d.ContractAddress == nft.ContractAddress && d.TokenID == nft.TokenId {
-				result = append(result, nft)
+				result = append(result, &nft)
 			}
 		}
 	}

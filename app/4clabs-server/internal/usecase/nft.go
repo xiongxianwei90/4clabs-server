@@ -16,7 +16,7 @@ func NewNft(q ports.Query, trade ports.Trade, register ports.Register) *Nft {
 	return &Nft{q: q, trade: trade, register: register}
 }
 
-func (n *Nft) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Nft, int64, uint32, bool, error) {
+func (n *Nft) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
 	return n.register.ListRegistedNfts(ctx, userAddress, limit, nextScore)
 }
 func (n *Nft) Register(ctx context.Context, nfts []entity.BaseNft, userAddress string) error {
