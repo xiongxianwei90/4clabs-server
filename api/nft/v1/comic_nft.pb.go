@@ -216,6 +216,116 @@ func (*PurchaseComicNftResponse) Descriptor() ([]byte, []int) {
 	return file_api_nft_v1_comic_nft_proto_rawDescGZIP(), []int{3}
 }
 
+type ListComicNftByComicRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ComicId         string              `protobuf:"bytes,1,opt,name=comic_id,json=comicId,proto3" json:"comic_id,omitempty"`
+	BaseListRequest *v1.BaseListRequest `protobuf:"bytes,2,opt,name=base_list_request,json=baseListRequest,proto3" json:"base_list_request,omitempty"`
+}
+
+func (x *ListComicNftByComicRequest) Reset() {
+	*x = ListComicNftByComicRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nft_v1_comic_nft_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListComicNftByComicRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListComicNftByComicRequest) ProtoMessage() {}
+
+func (x *ListComicNftByComicRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nft_v1_comic_nft_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListComicNftByComicRequest.ProtoReflect.Descriptor instead.
+func (*ListComicNftByComicRequest) Descriptor() ([]byte, []int) {
+	return file_api_nft_v1_comic_nft_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListComicNftByComicRequest) GetComicId() string {
+	if x != nil {
+		return x.ComicId
+	}
+	return ""
+}
+
+func (x *ListComicNftByComicRequest) GetBaseListRequest() *v1.BaseListRequest {
+	if x != nil {
+		return x.BaseListRequest
+	}
+	return nil
+}
+
+type ListComicNftByComicResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BaseListResponse *v1.BaseListResponse `protobuf:"bytes,1,opt,name=base_list_response,json=baseListResponse,proto3" json:"base_list_response,omitempty"`
+	ComicNft         []*ComicNft          `protobuf:"bytes,2,rep,name=comic_nft,json=comicNft,proto3" json:"comic_nft,omitempty"`
+}
+
+func (x *ListComicNftByComicResponse) Reset() {
+	*x = ListComicNftByComicResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nft_v1_comic_nft_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListComicNftByComicResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListComicNftByComicResponse) ProtoMessage() {}
+
+func (x *ListComicNftByComicResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nft_v1_comic_nft_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListComicNftByComicResponse.ProtoReflect.Descriptor instead.
+func (*ListComicNftByComicResponse) Descriptor() ([]byte, []int) {
+	return file_api_nft_v1_comic_nft_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListComicNftByComicResponse) GetBaseListResponse() *v1.BaseListResponse {
+	if x != nil {
+		return x.BaseListResponse
+	}
+	return nil
+}
+
+func (x *ListComicNftByComicResponse) GetComicNft() []*ComicNft {
+	if x != nil {
+		return x.ComicNft
+	}
+	return nil
+}
+
 var File_api_nft_v1_comic_nft_proto protoreflect.FileDescriptor
 
 var file_api_nft_v1_comic_nft_proto_rawDesc = []byte{
@@ -247,10 +357,29 @@ var file_api_nft_v1_comic_nft_proto_rawDesc = []byte{
 	0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
 	0x62, 0x75, 0x79, 0x65, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x1a, 0x0a, 0x18,
 	0x50, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x4e, 0x66, 0x74,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2b, 0x0a, 0x0a, 0x61, 0x70, 0x69, 0x2e,
-	0x6e, 0x66, 0x74, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x1b, 0x34, 0x63, 0x6c, 0x61, 0x62, 0x73,
-	0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6e, 0x66, 0x74, 0x2f,
-	0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x81, 0x01, 0x0a, 0x1a, 0x4c, 0x69, 0x73,
+	0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x4e, 0x66, 0x74, 0x42, 0x79, 0x43, 0x6f, 0x6d, 0x69, 0x63,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x63, 0x6f, 0x6d, 0x69, 0x63,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6d, 0x69, 0x63,
+	0x49, 0x64, 0x12, 0x48, 0x0a, 0x11, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f,
+	0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x61, 0x73, 0x65,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0f, 0x62, 0x61, 0x73,
+	0x65, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x9d, 0x01, 0x0a,
+	0x1b, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x4e, 0x66, 0x74, 0x42, 0x79, 0x43,
+	0x6f, 0x6d, 0x69, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4b, 0x0a, 0x12,
+	0x62, 0x61, 0x73, 0x65, 0x5f, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x73, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x10, 0x62, 0x61, 0x73, 0x65, 0x4c, 0x69, 0x73,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x09, 0x63, 0x6f, 0x6d,
+	0x69, 0x63, 0x5f, 0x6e, 0x66, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x6e, 0x66, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x4e,
+	0x66, 0x74, 0x52, 0x08, 0x63, 0x6f, 0x6d, 0x69, 0x63, 0x4e, 0x66, 0x74, 0x42, 0x2b, 0x0a, 0x0a,
+	0x61, 0x70, 0x69, 0x2e, 0x6e, 0x66, 0x74, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x1b, 0x34, 0x63,
+	0x6c, 0x61, 0x62, 0x73, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x6e, 0x66, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -265,25 +394,30 @@ func file_api_nft_v1_comic_nft_proto_rawDescGZIP() []byte {
 	return file_api_nft_v1_comic_nft_proto_rawDescData
 }
 
-var file_api_nft_v1_comic_nft_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_nft_v1_comic_nft_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_api_nft_v1_comic_nft_proto_goTypes = []interface{}{
-	(*ListComicNftRequest)(nil),      // 0: api.nft.v1.ListComicNftRequest
-	(*ListComicNftResponse)(nil),     // 1: api.nft.v1.ListComicNftResponse
-	(*PurchaseComicNftRequest)(nil),  // 2: api.nft.v1.PurchaseComicNftRequest
-	(*PurchaseComicNftResponse)(nil), // 3: api.nft.v1.PurchaseComicNftResponse
-	(*v1.BaseListRequest)(nil),       // 4: api.base.v1.BaseListRequest
-	(*v1.BaseListResponse)(nil),      // 5: api.base.v1.BaseListResponse
-	(*ComicNft)(nil),                 // 6: api.nft.v1.ComicNft
+	(*ListComicNftRequest)(nil),         // 0: api.nft.v1.ListComicNftRequest
+	(*ListComicNftResponse)(nil),        // 1: api.nft.v1.ListComicNftResponse
+	(*PurchaseComicNftRequest)(nil),     // 2: api.nft.v1.PurchaseComicNftRequest
+	(*PurchaseComicNftResponse)(nil),    // 3: api.nft.v1.PurchaseComicNftResponse
+	(*ListComicNftByComicRequest)(nil),  // 4: api.nft.v1.ListComicNftByComicRequest
+	(*ListComicNftByComicResponse)(nil), // 5: api.nft.v1.ListComicNftByComicResponse
+	(*v1.BaseListRequest)(nil),          // 6: api.base.v1.BaseListRequest
+	(*v1.BaseListResponse)(nil),         // 7: api.base.v1.BaseListResponse
+	(*ComicNft)(nil),                    // 8: api.nft.v1.ComicNft
 }
 var file_api_nft_v1_comic_nft_proto_depIdxs = []int32{
-	4, // 0: api.nft.v1.ListComicNftRequest.base_list_request:type_name -> api.base.v1.BaseListRequest
-	5, // 1: api.nft.v1.ListComicNftResponse.base_list_response:type_name -> api.base.v1.BaseListResponse
-	6, // 2: api.nft.v1.ListComicNftResponse.comic_nft:type_name -> api.nft.v1.ComicNft
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	6, // 0: api.nft.v1.ListComicNftRequest.base_list_request:type_name -> api.base.v1.BaseListRequest
+	7, // 1: api.nft.v1.ListComicNftResponse.base_list_response:type_name -> api.base.v1.BaseListResponse
+	8, // 2: api.nft.v1.ListComicNftResponse.comic_nft:type_name -> api.nft.v1.ComicNft
+	6, // 3: api.nft.v1.ListComicNftByComicRequest.base_list_request:type_name -> api.base.v1.BaseListRequest
+	7, // 4: api.nft.v1.ListComicNftByComicResponse.base_list_response:type_name -> api.base.v1.BaseListResponse
+	8, // 5: api.nft.v1.ListComicNftByComicResponse.comic_nft:type_name -> api.nft.v1.ComicNft
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_api_nft_v1_comic_nft_proto_init() }
@@ -341,6 +475,30 @@ func file_api_nft_v1_comic_nft_proto_init() {
 				return nil
 			}
 		}
+		file_api_nft_v1_comic_nft_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListComicNftByComicRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_nft_v1_comic_nft_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListComicNftByComicResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -348,7 +506,7 @@ func file_api_nft_v1_comic_nft_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_nft_v1_comic_nft_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

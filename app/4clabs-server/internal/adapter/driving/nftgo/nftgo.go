@@ -15,8 +15,6 @@ import (
 	"golang.org/x/sync/errgroup"
 	"io"
 	"net/http"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -314,63 +312,4 @@ func (s *Service) baseGet(ctx context.Context, url string) (io.ReadCloser, error
 		return nil, errors.Wrapf(fmt.Errorf("status code %d is not ok", res.StatusCode), "url : %s", url)
 	}
 	return res.Body, nil
-}
-
-func (s *Service) GetComicNfts(ctx context.Context, limit uint32, lastScore int64) ([]entity.ComicNft, int64, uint32, bool, error) {
-	var comicNfts []entity.ComicNft
-
-	rnft := query.Use(s.data.DB).ComicsNft
-	query := rnft.WithContext(ctx).
-		Where(rnft.Owner.EqCol(rnft.Author))
-	datas, err := query.
-		Offset(int(lastScore)).
-		Limit(int(limit)).Preload(rnft.Comic).Find()
-	if err != nil {
-		return nil, 0, 0, false, err
-	}
-	totalSupply, err := query.Count()
-	if err != nil {
-		return nil, 0, 0, false, err
-	}
-
-	var infos []struct {
-		ContractAddress string
-		TokenId         string
-	}
-	worksComic := make(map[int]*model.Comic)
-
-	for index, d := range datas {
-		infos = append(infos, struct {
-			ContractAddress string
-			TokenId         string
-		}{ContractAddress: d.Comic.ContractAddress, TokenId: d.Comic.TokenID})
-		worksComic[index] = &d.Comic
-	}
-
-	origins, err := s.BatchGetNftSummary(ctx, infos)
-	originNfts := make(map[string]entity.Nft)
-
-	for _, item := range origins {
-		originNfts[item.TokenId] = item
-	}
-
-	for tokenId, item := range datas {
-		id := strconv.FormatInt(int64(item.ID), 10)
-		imageUris := item.Comic.ImageURIs
-		print(imageUris)
-		comicNfts = append(comicNfts, entity.ComicNft{
-			TokenId: id,
-			Comic: entity.Comic{
-				Origin:      originNfts[worksComic[tokenId].TokenID],
-				MintLimit:   uint32(item.Comic.MintLimit),
-				MintPrice:   item.Comic.MintPrice,
-				Name:        item.Comic.Name,
-				CreatedAt:   item.Comic.CreatedAt,
-				UserAddress: item.Comic.UserAddress,
-				ImageUris:   strings.Split(item.Comic.ImageURIs, ","),
-			},
-		})
-	}
-	nextLastScore := int64(limit) + lastScore
-	return comicNfts, nextLastScore, uint32(totalSupply), nextLastScore < totalSupply, nil
 }

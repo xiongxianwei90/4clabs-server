@@ -14,7 +14,7 @@ import (
 )
 
 func TestComicNftAllUpdate(t *testing.T) {
-	var environment = "production"
+	var environment = "local"
 	c := config.New(
 		config.WithSource(
 			file.NewSource(fmt.Sprintf("/Users/xiongwei/GolandProjects/4clabs-server/app/4clabs-server/configs/config.%s.yaml", environment)),

@@ -44,6 +44,8 @@ type NftClient interface {
 	GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...grpc.CallOption) (*v1.GetNftDetailResponse, error)
 	// 二创NFT列表
 	GetComicNftList(ctx context.Context, in *v1.ListComicNftRequest, opts ...grpc.CallOption) (*v1.ListComicNftResponse, error)
+	// 获取comic 下所有token
+	GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v1.ListComicNftByComicResponse, error)
 	// register nft
 	NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v1.PurchaseComicNftResponse, error)
 }
@@ -146,6 +148,15 @@ func (c *nftClient) GetComicNftList(ctx context.Context, in *v1.ListComicNftRequ
 	return out, nil
 }
 
+func (c *nftClient) GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v1.ListComicNftByComicResponse, error) {
+	out := new(v1.ListComicNftByComicResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetComicNftById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nftClient) NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v1.PurchaseComicNftResponse, error) {
 	out := new(v1.PurchaseComicNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/NftPurchase", in, out, opts...)
@@ -178,6 +189,8 @@ type NftServer interface {
 	GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error)
 	// 二创NFT列表
 	GetComicNftList(context.Context, *v1.ListComicNftRequest) (*v1.ListComicNftResponse, error)
+	// 获取comic 下所有token
+	GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error)
 	// register nft
 	NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error)
 	mustEmbedUnimplementedNftServer()
@@ -216,6 +229,9 @@ func (UnimplementedNftServer) GetNftDetail(context.Context, *v1.GetNftDetailRequ
 }
 func (UnimplementedNftServer) GetComicNftList(context.Context, *v1.ListComicNftRequest) (*v1.ListComicNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetComicNftList not implemented")
+}
+func (UnimplementedNftServer) GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetComicNftById not implemented")
 }
 func (UnimplementedNftServer) NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NftPurchase not implemented")
@@ -413,6 +429,24 @@ func _Nft_GetComicNftList_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nft_GetComicNftById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.ListComicNftByComicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).GetComicNftById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/GetComicNftById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).GetComicNftById(ctx, req.(*v1.ListComicNftByComicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Nft_NftPurchase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.PurchaseComicNftRequest)
 	if err := dec(in); err != nil {
@@ -477,6 +511,10 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetComicNftList",
 			Handler:    _Nft_GetComicNftList_Handler,
+		},
+		{
+			MethodName: "GetComicNftById",
+			Handler:    _Nft_GetComicNftById_Handler,
 		},
 		{
 			MethodName: "NftPurchase",

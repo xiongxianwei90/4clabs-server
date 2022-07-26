@@ -125,44 +125,7 @@
         ]
       }
     },
-    "/v1/nft/collection/{contractAddress}/token/{tokenId}": {
-      "get": {
-        "summary": "nft详情页",
-        "operationId": "Nft_GetNftDetail",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetNftDetailResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "contractAddress",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "tokenId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Nft"
-        ]
-      }
-    },
-    "/v1/nft/comic/create": {
+    "/v1/comic/create": {
       "post": {
         "operationId": "Nft_CreateComic",
         "responses": {
@@ -194,7 +157,7 @@
         ]
       }
     },
-    "/v1/nft/comic_nft": {
+    "/v1/comic/nft/list": {
       "get": {
         "summary": "二创NFT列表",
         "operationId": "Nft_GetComicNftList",
@@ -233,7 +196,7 @@
         ]
       }
     },
-    "/v1/nft/comic_nft/purchase": {
+    "/v1/comic/nft/purchase": {
       "post": {
         "summary": "register nft",
         "operationId": "Nft_NftPurchase",
@@ -259,6 +222,74 @@
             "schema": {
               "$ref": "#/definitions/v1PurchaseComicNftRequest"
             }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/comic/{comicId}/nft/list": {
+      "get": {
+        "summary": "获取comic 下所有token",
+        "operationId": "Nft_GetComicNftById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListComicNftByComicResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "comicId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/nft/collection/{contractAddress}/token/{tokenId}": {
+      "get": {
+        "summary": "nft详情页",
+        "operationId": "Nft_GetNftDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetNftDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "contractAddress",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -344,7 +375,38 @@
         ]
       }
     },
-    "/v1/nft/{address}/comic_works": {
+    "/v1/tickets/{address}/can_mint": {
+      "get": {
+        "summary": "ticket WL",
+        "operationId": "Nft_InTicketsWLRequest",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CantMintResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/{address}/comic/list": {
       "get": {
         "summary": "commic works",
         "operationId": "Nft_ListComicWorks",
@@ -382,37 +444,6 @@
             "required": false,
             "type": "integer",
             "format": "int64"
-          }
-        ],
-        "tags": [
-          "Nft"
-        ]
-      }
-    },
-    "/v1/tickets/{address}/can_mint": {
-      "get": {
-        "summary": "ticket WL",
-        "operationId": "Nft_InTicketsWLRequest",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CantMintResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "address",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -560,11 +591,14 @@
         "name": {
           "type": "string"
         },
-        "metadataJson": {
-          "type": "string"
-        },
         "minterAddress": {
           "type": "string"
+        },
+        "imageUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -575,6 +609,9 @@
       "type": "object",
       "properties": {
         "tokenId": {
+          "type": "string"
+        },
+        "owner": {
           "type": "string"
         },
         "summary": {
@@ -588,6 +625,9 @@
         "originNft": {
           "$ref": "#/definitions/v1Summary"
         },
+        "comicId": {
+          "type": "string"
+        },
         "mintLimit": {
           "type": "integer",
           "format": "int64",
@@ -600,16 +640,18 @@
         "name": {
           "type": "string"
         },
-        "metadataJson": {
-          "type": "string",
-          "title": "repeated string image_url = 5;"
+        "createdAtTimestamp": {
+          "type": "integer",
+          "format": "int64"
         },
         "minterAddress": {
           "type": "string"
         },
-        "createdAtTimestamp": {
-          "type": "integer",
-          "format": "int64"
+        "imageUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -651,6 +693,17 @@
       "properties": {
         "detail": {
           "$ref": "#/definitions/v1Detail"
+        }
+      }
+    },
+    "v1ListComicNftByComicResponse": {
+      "type": "object",
+      "properties": {
+        "comicNft": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ComicNft"
+          }
         }
       }
     },

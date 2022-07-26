@@ -6,20 +6,21 @@ option go_package = "4clabs-server/api/nft/v1;v1";
 
 message ComicWork {
     Summary  origin_nft = 1;
-
+    string comic_id = 2;
     // mint config
-    uint32 mint_limit = 2;
-    float mint_price = 3;
+    uint32 mint_limit = 3;
+    float mint_price = 4;
 
-    string name = 4;
-    uint32 created_at_timestamp = 5;
-    string minter_address = 6;
-    repeated string image_url = 7;
+    string name = 5;
+    uint32 created_at_timestamp = 6;
+    string minter_address = 7;
+    repeated string image_url = 8;
 }
 
 message ComicNft {
     string token_id = 1;
-    ComicWork summary = 2;
+    string owner = 2;
+    ComicWork summary = 3;
 }
 
 message Trait {

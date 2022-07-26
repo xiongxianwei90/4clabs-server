@@ -339,3 +339,175 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PurchaseComicNftResponseValidationError{}
+
+// Validate checks the field values on ListComicNftByComicRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListComicNftByComicRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for ComicId
+
+	if v, ok := interface{}(m.GetBaseListRequest()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListComicNftByComicRequestValidationError{
+				field:  "BaseListRequest",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListComicNftByComicRequestValidationError is the validation error returned
+// by ListComicNftByComicRequest.Validate if the designated constraints aren't met.
+type ListComicNftByComicRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListComicNftByComicRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListComicNftByComicRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListComicNftByComicRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListComicNftByComicRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListComicNftByComicRequestValidationError) ErrorName() string {
+	return "ListComicNftByComicRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListComicNftByComicRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListComicNftByComicRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListComicNftByComicRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListComicNftByComicRequestValidationError{}
+
+// Validate checks the field values on ListComicNftByComicResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListComicNftByComicResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetBaseListResponse()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListComicNftByComicResponseValidationError{
+				field:  "BaseListResponse",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetComicNft() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListComicNftByComicResponseValidationError{
+					field:  fmt.Sprintf("ComicNft[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListComicNftByComicResponseValidationError is the validation error returned
+// by ListComicNftByComicResponse.Validate if the designated constraints
+// aren't met.
+type ListComicNftByComicResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListComicNftByComicResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListComicNftByComicResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListComicNftByComicResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListComicNftByComicResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListComicNftByComicResponseValidationError) ErrorName() string {
+	return "ListComicNftByComicResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListComicNftByComicResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListComicNftByComicResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListComicNftByComicResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListComicNftByComicResponseValidationError{}

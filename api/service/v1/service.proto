@@ -18,12 +18,12 @@ service Nft {
     // commic works
     rpc ListComicWorks(api.nft.v1.ListComicWorkRequest) returns (api.nft.v1.ListComicWorkResponse) {
         option (google.api.http) = {
-            get: "/v1/nft/{address}/comic_works",
+            get: "/v1/{address}/comic/list",
         };
     }
     rpc CreateComic(api.nft.v1.ComicCreateRequest) returns (api.nft.v1.ComicCreateResponse) {
         option (google.api.http) = {
-            post: "/v1/nft/comic/create",
+            post: "/v1/comic/create",
             body: "*"
         };
     }
@@ -79,14 +79,21 @@ service Nft {
     // 二创NFT列表
     rpc GetComicNftList(api.nft.v1.ListComicNftRequest) returns (api.nft.v1.ListComicNftResponse) {
         option (google.api.http) = {
-            get: "/v1/nft/comic_nft",
+            get: "/v1/comic/nft/list",
+        };
+    }
+
+    // 获取comic 下所有token
+    rpc GetComicNftById(api.nft.v1.ListComicNftByComicRequest) returns (api.nft.v1.ListComicNftByComicResponse) {
+        option (google.api.http) = {
+            get: "/v1/comic/{comic_id}/nft/list",
         };
     }
 
     // register nft
     rpc NftPurchase(api.nft.v1.PurchaseComicNftRequest) returns (api.nft.v1.PurchaseComicNftResponse) {
         option (google.api.http) = {
-            post: "/v1/nft/comic_nft/purchase",
+            post: "/v1/comic/nft/purchase",
             body: "*"
         };
     }

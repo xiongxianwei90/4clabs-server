@@ -64,5 +64,6 @@ type Nft struct {
 
 type ComicNft struct {
 	TokenId string
+	Owner   string
 	Comic   Comic
 }

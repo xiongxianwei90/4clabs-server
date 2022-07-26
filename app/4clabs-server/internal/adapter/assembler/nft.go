@@ -48,6 +48,7 @@ func CoverComicToHttpDto(nfts ...entity.Comic) []*typs.ComicWork {
 	for _, n := range nfts {
 		result = append(result, &typs.ComicWork{
 			OriginNft:          CoverNftToHttpDto(&n.Origin)[0],
+			ComicId:            n.ComicId,
 			MintLimit:          n.MintLimit,
 			MintPrice:          float32(n.MintPrice),
 			Name:               n.Name,
@@ -86,25 +87,6 @@ func CoverNftToHttpDto(nfts ...*entity.Nft) []*typs.Summary {
 				Total: int32(n.Rarity.Total),
 			},
 			Registered: n.Registered,
-		})
-	}
-	return result
-}
-
-func CoverComicNftToHttpDto(nfts ...entity.ComicNft) []*typs.ComicNft {
-	var result []*typs.ComicNft
-	for _, n := range nfts {
-		result = append(result, &typs.ComicNft{
-			TokenId: n.TokenId,
-			Summary: &typs.ComicWork{
-				OriginNft:          CoverNftToHttpDto(&n.Comic.Origin)[0],
-				MintLimit:          n.Comic.MintLimit,
-				MintPrice:          float32(n.Comic.MintPrice),
-				Name:               n.Comic.Name,
-				CreatedAtTimestamp: uint32(n.Comic.CreatedAt.Unix()),
-				MinterAddress:      n.Comic.UserAddress,
-				ImageUrl:           n.Comic.ImageUris,
-			},
 		})
 	}
 	return result

@@ -50,6 +50,8 @@ func (m *ComicWork) Validate() error {
 		}
 	}
 
+	// no validation rules for ComicId
+
 	// no validation rules for MintLimit
 
 	// no validation rules for MintPrice
@@ -125,6 +127,8 @@ func (m *ComicNft) Validate() error {
 	}
 
 	// no validation rules for TokenId
+
+	// no validation rules for Owner
 
 	if v, ok := interface{}(m.GetSummary()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
