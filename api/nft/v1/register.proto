@@ -12,21 +12,22 @@ option java_package = "api.nft.v1";
 
 
 message RegisterNftRequest {
-    string user_address = 1 [(validate.rules).string = {len: 42}];
-    message Nft {
-        string contract_address = 2 [(validate.rules).string = {len: 42}];
-        string token_id = 3 [(validate.rules).string = {min_len: 1}];
-    }
-    repeated Nft nfts = 2 [(validate.rules).repeated = {min_items: 1}];
+  string user_address = 1 [(validate.rules).string = {len: 42}];
+  message Nft {
+    string contract_address = 2 [(validate.rules).string = {len: 42}];
+    string token_id = 3 [(validate.rules).string = {min_len: 1}];
+  }
+  repeated Nft nfts = 2 [(validate.rules).repeated = {min_items: 1}];
 }
 message RegisterNftResponse {}
 
-
 message ListRegisterNftRequest {
-    api.base.v1.BaseListRequest base_list_request = 1 [(validate.rules).message = {required: true}];
-    string address = 2;
+  api.base.v1.BaseListRequest base_list_request = 1 [(validate.rules).message = {required: true}];
+  string address = 2;
+  Sort sort = 3;
 }
+
 message ListRegisterNftResponse {
-    api.base.v1.BaseListResponse base_list_response = 1;
-    repeated api.nft.v1.Summary summaries = 2;
+  api.base.v1.BaseListResponse base_list_response = 1;
+  repeated api.nft.v1.Summary summaries = 2;
 }

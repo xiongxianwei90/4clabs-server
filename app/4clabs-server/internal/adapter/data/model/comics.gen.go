@@ -19,9 +19,9 @@ type Comic struct {
 	UserAddress     string    `gorm:"column:user_address;type:varchar(200);not null;index:idx_user_address,priority:1" json:"user_address"`
 	MintLimit       int32     `gorm:"column:mint_limit;type:int(11);not null" json:"mint_limit"`
 	MintPrice       float64   `gorm:"column:mint_price;type:double;not null" json:"mint_price"`
+	ImageURIs       string    `gorm:"column:imageURIs;type:varchar(1000)" json:"imageURIs"`
 	CreatedAt       time.Time `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt       time.Time `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
-	ImageURIs       string    `gorm:"column:imageURIs;type:varchar(1000)" json:"imageURIs"`
 }
 
 // TableName Comic's table name

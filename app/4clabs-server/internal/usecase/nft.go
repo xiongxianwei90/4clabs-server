@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"4clabs-server/api/nft/v1"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
@@ -15,8 +16,8 @@ func NewNft(q ports.Query, register ports.Register) *Nft {
 	return &Nft{q: q, register: register}
 }
 
-func (n *Nft) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
-	return n.register.ListRegistedNfts(ctx, userAddress, limit, nextScore)
+func (n *Nft) ListRegistedNfts(ctx context.Context, userAddress string, sort *v1.Sort, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
+	return n.register.ListRegistedNfts(ctx, userAddress, sort, limit, nextScore)
 }
 func (n *Nft) Register(ctx context.Context, nfts []entity.BaseNft, userAddress string) error {
 	return n.register.Register(ctx, nfts, userAddress)

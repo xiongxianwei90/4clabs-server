@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"4clabs-server/api/nft/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
 	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
@@ -10,7 +11,6 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Register struct {
@@ -22,30 +22,36 @@ func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
 	return &Register{nftgo: nftgo, data: data}
 }
 
-func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
-	if nextScore == 0 {
-		nextScore = time.Now().Unix()
-	}
+func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort *v1.Sort, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
 
 	rnft := query.Use(r.data.DB).RegisterNft
 
 	var datas []*model.RegisterNft
+	query := rnft.WithContext(ctx).Offset(int(nextScore)).Limit(int(limit))
+
 	var err error
 	if userAddress != "" {
-		datas, err = rnft.WithContext(ctx).
-			Where(rnft.UserAddress.Eq(userAddress)).
-			Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
-			Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
-	} else {
-		datas, err = rnft.WithContext(ctx).
-			Where(rnft.CreatedAt.Lt(time.Unix(nextScore, 0))).
-			Order(rnft.CreatedAt.Desc()).Limit(int(limit + 1)).Find()
+		query = query.
+			Where(rnft.UserAddress.Eq(userAddress))
 	}
 
+	total, err := query.Count()
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
-	total, err := rnft.WithContext(ctx).Where(rnft.UserAddress.Eq(userAddress)).Count()
+
+	if sort != nil {
+		if sort.ByPrice == 2 {
+			query = query.Order(rnft.Price.Desc())
+		} else {
+			query = query.Order(rnft.Price)
+		}
+	} else {
+		query.Order(rnft.CreatedAt.Desc())
+	}
+
+	datas, err = query.Find()
+
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
@@ -53,12 +59,6 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limi
 	if len(datas) == 0 {
 		return nil, 0, 0, false, nil
 	}
-
-	hasMore := len(datas) > int(limit)
-	if hasMore {
-		datas = datas[:len(datas)-1]
-	}
-	lastScore := datas[len(datas)-1].CreatedAt.Unix()
 
 	var infos []struct {
 		ContractAddress string
@@ -86,7 +86,7 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, limi
 		result = append(result, &nft)
 	}
 
-	return result, lastScore, uint32(total), hasMore, nil
+	return result, nextScore + int64(limit), uint32(total), nextScore+int64(limit) < total, nil
 }
 
 func (r Register) UserRegistered(ctx context.Context, userAddress string) (bool, error) {

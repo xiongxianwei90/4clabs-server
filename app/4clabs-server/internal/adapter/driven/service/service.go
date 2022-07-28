@@ -91,7 +91,7 @@ func (s *Service) RegisterNft(ctx context.Context, req *nft.RegisterNftRequest) 
 
 // register nfts
 func (s *Service) ListRegsiterNfts(ctx context.Context, req *nft.ListRegisterNftRequest) (*nft.ListRegisterNftResponse, error) {
-	nfts, nextScore, total, hasMore, err := s.nftUc.ListRegistedNfts(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	nfts, nextScore, total, hasMore, err := s.nftUc.ListRegistedNfts(ctx, req.Address, req.Sort, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
 	if err != nil {
 		return nil, err
 	}

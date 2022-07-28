@@ -5,84 +5,94 @@ package api.nft.v1;
 option go_package = "4clabs-server/api/nft/v1;v1";
 
 message ComicWork {
-    Summary  origin_nft = 1;
-    string comic_id = 2;
-    // mint config
-    uint32 mint_limit = 3;
-    float mint_price = 4;
+  Summary  origin_nft = 1;
+  string comic_id = 2;
+  // mint config
+  uint32 mint_limit = 3;
+  float mint_price = 4;
 
-    string name = 5;
-    uint32 created_at_timestamp = 6;
-    string minter_address = 7;
-    repeated string image_url = 8;
+  string name = 5;
+  uint32 created_at_timestamp = 6;
+  string minter_address = 7;
+  repeated string image_url = 8;
 }
 
 message ComicNft {
-    string token_id = 1;
-    string owner = 2;
-    ComicWork summary = 3;
+  string token_id = 1;
+  string owner = 2;
+  ComicWork summary = 3;
 }
 
 message Trait {
-    string type = 1;
-    string value = 2;
+  string type = 1;
+  string value = 2;
 }
 message Rarity {
-    float score = 1;
-    int32 rank = 2;
-    int32 total = 3;
+  float score = 1;
+  int32 rank = 2;
+  int32 total = 3;
 }
 
 message Detail {
-    Summary summary = 1;
-    Stat stat = 2;
+  Summary summary = 1;
+  Stat stat = 2;
 }
 
 message Summary {
-    string blockchain = 1;
-    string collection_name = 2;
-    string collection_slug = 3;
-    string contract_address = 4;
-    string token_id = 5;
-    string name = 6;
-    string description = 7;
-    string image = 8;
-    string animation_url = 9;
-    repeated string owner_addresses = 12;
-    repeated Trait traits = 13;
-    Rarity rarity = 11;
-    bool registered = 14;
+  string blockchain = 1;
+  string collection_name = 2;
+  string collection_slug = 3;
+  string contract_address = 4;
+  string token_id = 5;
+  string name = 6;
+  string description = 7;
+  string image = 8;
+  string animation_url = 9;
+  repeated string owner_addresses = 12;
+  repeated Trait traits = 13;
+  Rarity rarity = 11;
+  bool registered = 14;
 }
 
 message Rank {
-    float score = 1;
-    uint32 rank = 2;
-    uint32 total = 3;
-    uint64 last_updated = 4;
+  float score = 1;
+  uint32 rank = 2;
+  uint32 total = 3;
+  uint64 last_updated = 4;
 }
 
 message Stat {
-    uint64 last_updated = 1;
-    uint64 sale_num_7d = 2;
-    uint64 sale_num_all = 3;
-    message PriceInfo {
-        string tx_hash = 1;
-        float price_token = 2;
-        string token_symbol = 3;
-        string  token_contract_address = 4;
-        float price_usd = 5;
-        uint64 time = 6;
-    }
-    PriceInfo max_price = 4;
-    PriceInfo min_price = 5;
-    PriceInfo last_price = 10;
-    message OwnerStat {
-        string address = 1;
-        uint64 holding_time = 2;
-    }
-    repeated OwnerStat past_owners = 6;
+  uint64 last_updated = 1;
+  uint64 sale_num_7d = 2;
+  uint64 sale_num_all = 3;
+  message PriceInfo {
+    string tx_hash = 1;
+    float price_token = 2;
+    string token_symbol = 3;
+    string token_contract_address = 4;
+    float price_usd = 5;
+    uint64 time = 6;
+  }
+  PriceInfo max_price = 4;
+  PriceInfo min_price = 5;
+  PriceInfo last_price = 10;
+  message OwnerStat {
+    string address = 1;
+    uint64 holding_time = 2;
+  }
+  repeated OwnerStat past_owners = 6;
 
-    uint64 create_time = 7;
-    uint64 start_holding_time = 8;
-    uint64 longest_holding_time = 9;
+  uint64 create_time = 7;
+  uint64 start_holding_time = 8;
+  uint64 longest_holding_time = 9;
+}
+
+message Sort {
+  SortByPrice byPrice = 1;
+}
+
+enum SortByPrice{
+  SORT_BY_PRICE_UNSPECIFIED = 0;
+  SORT_BY_PRICE_ASCENDING = 1;
+  SORT_BY_PRICE_DESCENDING = 2;
 }

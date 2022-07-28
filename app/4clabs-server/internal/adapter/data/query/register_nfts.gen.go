@@ -33,6 +33,7 @@ func newRegisterNft(db *gorm.DB) registerNft {
 	_registerNft.UserAddress = field.NewString(tableName, "user_address")
 	_registerNft.CreatedAt = field.NewTime(tableName, "created_at")
 	_registerNft.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_registerNft.Price = field.NewFloat64(tableName, "price")
 
 	_registerNft.fillFieldMap()
 
@@ -49,6 +50,7 @@ type registerNft struct {
 	UserAddress     field.String
 	CreatedAt       field.Time
 	UpdatedAt       field.Time
+	Price           field.Float64
 
 	fieldMap map[string]field.Expr
 }
@@ -71,6 +73,7 @@ func (r *registerNft) updateTableName(table string) *registerNft {
 	r.UserAddress = field.NewString(table, "user_address")
 	r.CreatedAt = field.NewTime(table, "created_at")
 	r.UpdatedAt = field.NewTime(table, "updated_at")
+	r.Price = field.NewFloat64(table, "price")
 
 	r.fillFieldMap()
 
@@ -95,13 +98,14 @@ func (r *registerNft) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (r *registerNft) fillFieldMap() {
-	r.fieldMap = make(map[string]field.Expr, 6)
+	r.fieldMap = make(map[string]field.Expr, 7)
 	r.fieldMap["id"] = r.ID
 	r.fieldMap["token_id"] = r.TokenID
 	r.fieldMap["contract_address"] = r.ContractAddress
 	r.fieldMap["user_address"] = r.UserAddress
 	r.fieldMap["created_at"] = r.CreatedAt
 	r.fieldMap["updated_at"] = r.UpdatedAt
+	r.fieldMap["price"] = r.Price
 }
 
 func (r registerNft) clone(db *gorm.DB) registerNft {

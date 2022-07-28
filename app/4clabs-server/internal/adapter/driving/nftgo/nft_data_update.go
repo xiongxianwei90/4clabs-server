@@ -14,6 +14,15 @@ import (
 	"strings"
 )
 
+func RegisterNftUpdate(ctx context.Context, db *gorm.DB, tokenId string, contractAddress string, price float64) error {
+	registerNft := query.Use(db).RegisterNft
+	registerNft.WithContext(ctx).
+		Where(registerNft.TokenID.Eq(tokenId)).
+		Where(registerNft.ContractAddress.Eq(contractAddress)).
+		Update(registerNft.Price, price)
+	return nil
+}
+
 func ComicNftUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAddress string, isIncrement bool) error {
 	client, err := ethclient.Dial(rawurl)
 	if err != nil {
@@ -29,8 +38,8 @@ func ComicNftUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAdd
 		return err
 	}
 
-	rnft := query.Use(db).ComicsNft
-	totalDb, err := rnft.WithContext(ctx).Count()
+	comicsNfts := query.Use(db).ComicsNft
+	totalDb, err := comicsNfts.WithContext(ctx).Count()
 
 	var start = total.Int64() - 1
 	var end int64 = 0
@@ -51,13 +60,13 @@ func ComicNftUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAdd
 			break
 		}
 
-		query := rnft.WithContext(ctx).
-			Where(rnft.ID.Eq(int32(i)))
+		query := comicsNfts.WithContext(ctx).
+			Where(comicsNfts.ID.Eq(int32(i)))
 		_, err = query.First()
 		if err == nil {
 			query.Updates(map[string]interface{}{"owner": owner.String(), "comics_id": comicId, "author": comicWorks.Author.String()})
 		} else {
-			rnft.WithContext(ctx).Create(&model.ComicsNft{
+			comicsNfts.WithContext(ctx).Create(&model.ComicsNft{
 				ID:       int32(i + 1),
 				ComicsID: fmt.Sprint(int(comicId)),
 				Owner:    owner.String(),
@@ -79,8 +88,8 @@ func ComicUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAddres
 		return err
 	}
 
-	rnft := query.Use(db).Comic
-	totalDb, err := rnft.WithContext(ctx).Count()
+	comics := query.Use(db).Comic
+	totalDb, err := comics.WithContext(ctx).Count()
 	if err != nil {
 		return err
 	}
@@ -106,8 +115,8 @@ func ComicUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAddres
 			break
 		}
 
-		query := rnft.WithContext(ctx).
-			Where(rnft.ID.Eq(int32(i + 1)))
+		query := comics.WithContext(ctx).
+			Where(comics.ID.Eq(int32(i + 1)))
 		_, err = query.First()
 
 		price, _ := WeiToEth(comicWorks.Price)
@@ -117,7 +126,7 @@ func ComicUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAddres
 		if err == nil {
 			query.Updates(newData)
 		} else {
-			rnft.WithContext(ctx).Create(&model.Comic{
+			comics.WithContext(ctx).Create(&model.Comic{
 				ID:              int32(i + 1),
 				TokenID:         comicWorks.BasedOnTokenId.String(),
 				Name:            comicWorks.Name,

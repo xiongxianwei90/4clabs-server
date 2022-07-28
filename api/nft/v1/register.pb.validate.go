@@ -224,6 +224,16 @@ func (m *ListRegisterNftRequest) Validate() error {
 
 	// no validation rules for Address
 
+	if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListRegisterNftRequestValidationError{
+				field:  "Sort",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

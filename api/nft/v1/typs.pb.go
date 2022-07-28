@@ -20,6 +20,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type SortByPrice int32
+
+const (
+	SortByPrice_SORT_BY_PRICE_UNSPECIFIED SortByPrice = 0
+	SortByPrice_SORT_BY_PRICE_ASCENDING   SortByPrice = 1
+	SortByPrice_SORT_BY_PRICE_DESCENDING  SortByPrice = 2
+)
+
+// Enum value maps for SortByPrice.
+var (
+	SortByPrice_name = map[int32]string{
+		0: "SORT_BY_PRICE_UNSPECIFIED",
+		1: "SORT_BY_PRICE_ASCENDING",
+		2: "SORT_BY_PRICE_DESCENDING",
+	}
+	SortByPrice_value = map[string]int32{
+		"SORT_BY_PRICE_UNSPECIFIED": 0,
+		"SORT_BY_PRICE_ASCENDING":   1,
+		"SORT_BY_PRICE_DESCENDING":  2,
+	}
+)
+
+func (x SortByPrice) Enum() *SortByPrice {
+	p := new(SortByPrice)
+	*p = x
+	return p
+}
+
+func (x SortByPrice) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SortByPrice) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_nft_v1_typs_proto_enumTypes[0].Descriptor()
+}
+
+func (SortByPrice) Type() protoreflect.EnumType {
+	return &file_api_nft_v1_typs_proto_enumTypes[0]
+}
+
+func (x SortByPrice) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SortByPrice.Descriptor instead.
+func (SortByPrice) EnumDescriptor() ([]byte, []int) {
+	return file_api_nft_v1_typs_proto_rawDescGZIP(), []int{0}
+}
+
 type ComicWork struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -693,6 +742,53 @@ func (x *Stat) GetLongestHoldingTime() uint64 {
 	return 0
 }
 
+type Sort struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ByPrice SortByPrice `protobuf:"varint,1,opt,name=byPrice,proto3,enum=api.nft.v1.SortByPrice" json:"byPrice,omitempty"`
+}
+
+func (x *Sort) Reset() {
+	*x = Sort{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nft_v1_typs_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Sort) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Sort) ProtoMessage() {}
+
+func (x *Sort) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nft_v1_typs_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Sort.ProtoReflect.Descriptor instead.
+func (*Sort) Descriptor() ([]byte, []int) {
+	return file_api_nft_v1_typs_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Sort) GetByPrice() SortByPrice {
+	if x != nil {
+		return x.ByPrice
+	}
+	return SortByPrice_SORT_BY_PRICE_UNSPECIFIED
+}
+
 type Stat_PriceInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -709,7 +805,7 @@ type Stat_PriceInfo struct {
 func (x *Stat_PriceInfo) Reset() {
 	*x = Stat_PriceInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_nft_v1_typs_proto_msgTypes[8]
+		mi := &file_api_nft_v1_typs_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -722,7 +818,7 @@ func (x *Stat_PriceInfo) String() string {
 func (*Stat_PriceInfo) ProtoMessage() {}
 
 func (x *Stat_PriceInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nft_v1_typs_proto_msgTypes[8]
+	mi := &file_api_nft_v1_typs_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -792,7 +888,7 @@ type Stat_OwnerStat struct {
 func (x *Stat_OwnerStat) Reset() {
 	*x = Stat_OwnerStat{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_nft_v1_typs_proto_msgTypes[9]
+		mi := &file_api_nft_v1_typs_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -805,7 +901,7 @@ func (x *Stat_OwnerStat) String() string {
 func (*Stat_OwnerStat) ProtoMessage() {}
 
 func (x *Stat_OwnerStat) ProtoReflect() protoreflect.Message {
-	mi := &file_api_nft_v1_typs_proto_msgTypes[9]
+	mi := &file_api_nft_v1_typs_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -962,9 +1058,20 @@ var file_api_nft_v1_typs_proto_rawDesc = []byte{
 	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64,
 	0x72, 0x65, 0x73, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x68, 0x6f, 0x6c, 0x64, 0x69, 0x6e, 0x67, 0x5f,
 	0x74, 0x69, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x68, 0x6f, 0x6c, 0x64,
-	0x69, 0x6e, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x42, 0x1d, 0x5a, 0x1b, 0x34, 0x63, 0x6c, 0x61, 0x62,
-	0x73, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6e, 0x66, 0x74,
-	0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x6e, 0x67, 0x54, 0x69, 0x6d, 0x65, 0x22, 0x39, 0x0a, 0x04, 0x53, 0x6f, 0x72, 0x74, 0x12,
+	0x31, 0x0a, 0x07, 0x62, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x17, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x6e, 0x66, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x6f,
+	0x72, 0x74, 0x42, 0x79, 0x50, 0x72, 0x69, 0x63, 0x65, 0x52, 0x07, 0x62, 0x79, 0x50, 0x72, 0x69,
+	0x63, 0x65, 0x2a, 0x67, 0x0a, 0x0b, 0x53, 0x6f, 0x72, 0x74, 0x42, 0x79, 0x50, 0x72, 0x69, 0x63,
+	0x65, 0x12, 0x1d, 0x0a, 0x19, 0x53, 0x4f, 0x52, 0x54, 0x5f, 0x42, 0x59, 0x5f, 0x50, 0x52, 0x49,
+	0x43, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
+	0x12, 0x1b, 0x0a, 0x17, 0x53, 0x4f, 0x52, 0x54, 0x5f, 0x42, 0x59, 0x5f, 0x50, 0x52, 0x49, 0x43,
+	0x45, 0x5f, 0x41, 0x53, 0x43, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x1c, 0x0a,
+	0x18, 0x53, 0x4f, 0x52, 0x54, 0x5f, 0x42, 0x59, 0x5f, 0x50, 0x52, 0x49, 0x43, 0x45, 0x5f, 0x44,
+	0x45, 0x53, 0x43, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x42, 0x1d, 0x5a, 0x1b, 0x34,
+	0x63, 0x6c, 0x61, 0x62, 0x73, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x6e, 0x66, 0x74, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -979,35 +1086,39 @@ func file_api_nft_v1_typs_proto_rawDescGZIP() []byte {
 	return file_api_nft_v1_typs_proto_rawDescData
 }
 
-var file_api_nft_v1_typs_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_api_nft_v1_typs_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_nft_v1_typs_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_api_nft_v1_typs_proto_goTypes = []interface{}{
-	(*ComicWork)(nil),      // 0: api.nft.v1.ComicWork
-	(*ComicNft)(nil),       // 1: api.nft.v1.ComicNft
-	(*Trait)(nil),          // 2: api.nft.v1.Trait
-	(*Rarity)(nil),         // 3: api.nft.v1.Rarity
-	(*Detail)(nil),         // 4: api.nft.v1.Detail
-	(*Summary)(nil),        // 5: api.nft.v1.Summary
-	(*Rank)(nil),           // 6: api.nft.v1.Rank
-	(*Stat)(nil),           // 7: api.nft.v1.Stat
-	(*Stat_PriceInfo)(nil), // 8: api.nft.v1.Stat.PriceInfo
-	(*Stat_OwnerStat)(nil), // 9: api.nft.v1.Stat.OwnerStat
+	(SortByPrice)(0),       // 0: api.nft.v1.SortByPrice
+	(*ComicWork)(nil),      // 1: api.nft.v1.ComicWork
+	(*ComicNft)(nil),       // 2: api.nft.v1.ComicNft
+	(*Trait)(nil),          // 3: api.nft.v1.Trait
+	(*Rarity)(nil),         // 4: api.nft.v1.Rarity
+	(*Detail)(nil),         // 5: api.nft.v1.Detail
+	(*Summary)(nil),        // 6: api.nft.v1.Summary
+	(*Rank)(nil),           // 7: api.nft.v1.Rank
+	(*Stat)(nil),           // 8: api.nft.v1.Stat
+	(*Sort)(nil),           // 9: api.nft.v1.Sort
+	(*Stat_PriceInfo)(nil), // 10: api.nft.v1.Stat.PriceInfo
+	(*Stat_OwnerStat)(nil), // 11: api.nft.v1.Stat.OwnerStat
 }
 var file_api_nft_v1_typs_proto_depIdxs = []int32{
-	5,  // 0: api.nft.v1.ComicWork.origin_nft:type_name -> api.nft.v1.Summary
-	0,  // 1: api.nft.v1.ComicNft.summary:type_name -> api.nft.v1.ComicWork
-	5,  // 2: api.nft.v1.Detail.summary:type_name -> api.nft.v1.Summary
-	7,  // 3: api.nft.v1.Detail.stat:type_name -> api.nft.v1.Stat
-	2,  // 4: api.nft.v1.Summary.traits:type_name -> api.nft.v1.Trait
-	3,  // 5: api.nft.v1.Summary.rarity:type_name -> api.nft.v1.Rarity
-	8,  // 6: api.nft.v1.Stat.max_price:type_name -> api.nft.v1.Stat.PriceInfo
-	8,  // 7: api.nft.v1.Stat.min_price:type_name -> api.nft.v1.Stat.PriceInfo
-	8,  // 8: api.nft.v1.Stat.last_price:type_name -> api.nft.v1.Stat.PriceInfo
-	9,  // 9: api.nft.v1.Stat.past_owners:type_name -> api.nft.v1.Stat.OwnerStat
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	6,  // 0: api.nft.v1.ComicWork.origin_nft:type_name -> api.nft.v1.Summary
+	1,  // 1: api.nft.v1.ComicNft.summary:type_name -> api.nft.v1.ComicWork
+	6,  // 2: api.nft.v1.Detail.summary:type_name -> api.nft.v1.Summary
+	8,  // 3: api.nft.v1.Detail.stat:type_name -> api.nft.v1.Stat
+	3,  // 4: api.nft.v1.Summary.traits:type_name -> api.nft.v1.Trait
+	4,  // 5: api.nft.v1.Summary.rarity:type_name -> api.nft.v1.Rarity
+	10, // 6: api.nft.v1.Stat.max_price:type_name -> api.nft.v1.Stat.PriceInfo
+	10, // 7: api.nft.v1.Stat.min_price:type_name -> api.nft.v1.Stat.PriceInfo
+	10, // 8: api.nft.v1.Stat.last_price:type_name -> api.nft.v1.Stat.PriceInfo
+	11, // 9: api.nft.v1.Stat.past_owners:type_name -> api.nft.v1.Stat.OwnerStat
+	0,  // 10: api.nft.v1.Sort.byPrice:type_name -> api.nft.v1.SortByPrice
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_api_nft_v1_typs_proto_init() }
@@ -1113,7 +1224,7 @@ func file_api_nft_v1_typs_proto_init() {
 			}
 		}
 		file_api_nft_v1_typs_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stat_PriceInfo); i {
+			switch v := v.(*Sort); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1125,6 +1236,18 @@ func file_api_nft_v1_typs_proto_init() {
 			}
 		}
 		file_api_nft_v1_typs_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Stat_PriceInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_nft_v1_typs_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Stat_OwnerStat); i {
 			case 0:
 				return &v.state
@@ -1142,13 +1265,14 @@ func file_api_nft_v1_typs_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_nft_v1_typs_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   10,
+			NumEnums:      1,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_api_nft_v1_typs_proto_goTypes,
 		DependencyIndexes: file_api_nft_v1_typs_proto_depIdxs,
+		EnumInfos:         file_api_nft_v1_typs_proto_enumTypes,
 		MessageInfos:      file_api_nft_v1_typs_proto_msgTypes,
 	}.Build()
 	File_api_nft_v1_typs_proto = out.File

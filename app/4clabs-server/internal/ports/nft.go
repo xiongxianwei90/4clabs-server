@@ -1,6 +1,7 @@
 package ports
 
 import (
+	"4clabs-server/api/nft/v1"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"context"
 )
@@ -14,5 +15,5 @@ type Register interface {
 	Register(ctx context.Context, nfts []entity.BaseNft, userAddress string) error
 	Registered(ctx context.Context, nftTokenId string, nftContractAddress string, userAddress string) (bool, error)
 	UserRegistered(ctx context.Context, userAddress string) (bool, error)
-	ListRegistedNfts(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error)
+	ListRegistedNfts(ctx context.Context, userAddress string, sort *v1.Sort, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error)
 }

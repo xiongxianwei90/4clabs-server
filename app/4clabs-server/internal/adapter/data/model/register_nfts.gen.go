@@ -18,6 +18,7 @@ type RegisterNft struct {
 	UserAddress     string    `gorm:"column:user_address;type:varchar(200);not null;uniqueIndex:uniq_idx_token_id_contract_address_user_address,priority:3;index:idx_user_address,priority:1" json:"user_address"`
 	CreatedAt       time.Time `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt       time.Time `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	Price           float64   `gorm:"column:price;type:double;index:idx_price,priority:1" json:"price"`
 }
 
 // TableName RegisterNft's table name
