@@ -110,6 +110,18 @@ func TestTokenId(t *testing.T) {
 	println(decoder)
 }
 
+func TestIsAuthorized(t *testing.T) {
+	_, bc, _ := GetEnvironment()
+	client, err := ethclient.Dial(bc.ThirdParty.Contract.Rawurl)
+	if err != nil {
+		t.Fail()
+	}
+	contract := common.HexToAddress(bc.ThirdParty.Contract.Address)
+	instance, err := forClabs.NewForClabs(contract, client)
+	isAuthorized, err := instance.IsContractAndTokenAuthorized(nil, common.HexToAddress("0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7"), big.NewInt(9596))
+	println(isAuthorized)
+}
+
 func Base64Decode(str string) string {
 	reader := strings.NewReader(str)
 	decoder := base64.NewDecoder(base64.RawStdEncoding, reader)
