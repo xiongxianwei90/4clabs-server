@@ -144,10 +144,11 @@ func (s *Service) BatchGetNftSummary(ctx context.Context, infos []struct {
 	for _, i := range infos {
 		i := i
 		eg.Go(func() error {
-			nft, _ := s.GetNftSummary(ctx, i.ContractAddress, i.TokenId)
-			//if err != nil {
-			//	return err
-			//}
+			nft, err := s.GetNftSummary(ctx, i.ContractAddress, i.TokenId)
+			// nftgo 429 频次限制
+			if err != nil {
+				return err
+			}
 			nfts <- nft
 			return nil
 		})
@@ -179,6 +180,7 @@ func (s *Service) BatchGetNftSummary(ctx context.Context, infos []struct {
 func (s *Service) GetNftSummary(ctx context.Context, contractAddress, tokenId string) (entity.Nft, error) {
 	urlStr := fmt.Sprintf("https://api.nftgo.dev/eth/v1/nft/%s/%s/info", contractAddress, tokenId)
 	reader, err := s.baseGet(ctx, urlStr)
+
 	if err != nil {
 		return entity.Nft{}, err
 	}

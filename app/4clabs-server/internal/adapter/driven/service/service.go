@@ -4,6 +4,7 @@ import (
 	auth "4clabs-server/api/auth/v1"
 	apibase "4clabs-server/api/base/v1"
 	nft "4clabs-server/api/nft/v1"
+	script "4clabs-server/api/script/v1"
 	v1 "4clabs-server/api/service/v1"
 	ticketPb "4clabs-server/api/tickets/v1"
 	"4clabs-server/app/4clabs-server/internal/adapter/assembler"
@@ -21,10 +22,11 @@ type Service struct {
 	authUtils *authUtils.ContextUtils
 	ticket    *usecase.Ticket
 	comic     *usecase.Comics
+	script    *usecase.Script
 }
 
-func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, authUtils *authUtils.ContextUtils, ticket *usecase.Ticket, comic *usecase.Comics) *Service {
-	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, authUtils: authUtils, ticket: ticket, comic: comic}
+func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Auth, authUtils *authUtils.ContextUtils, ticket *usecase.Ticket, comic *usecase.Comics, script *usecase.Script) *Service {
+	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, authUtils: authUtils, ticket: ticket, comic: comic, script: script}
 }
 
 func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) (*nft.ComicCreateResponse, error) {
@@ -174,4 +176,9 @@ func (s *Service) GetComicNftById(ctx context.Context, req *nft.ListComicNftByCo
 		},
 		ComicNft: assembler.CoverComicNftToHttpDtos(nfts...),
 	}, err
+}
+
+func (s *Service) ScriptRegisterUpdate(ctx context.Context, req *script.ScriptRegisterRequest) (*script.ScriptRegisterResponse, error) {
+	err := s.script.RegisterUpdate(ctx, req.ContractAddress, req.TokenId, req.UserAddress)
+	return &script.ScriptRegisterResponse{}, err
 }

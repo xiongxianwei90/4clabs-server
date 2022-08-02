@@ -8,4 +8,5 @@ var ProvderSet = wire.NewSet(
 	NewAuth,
 	NewTicket,
 	NewComics,
+	NewScript,
 )

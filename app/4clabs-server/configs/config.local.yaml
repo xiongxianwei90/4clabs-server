@@ -15,6 +15,7 @@ third_party:
   contract:
     address: 0xE71b4b58D34364552C455847E1AFCAE88b29eF9F
     rawurl: wss://rinkeby.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb
+    from_block: 11085929
 data:
   database:
     driver: mysql

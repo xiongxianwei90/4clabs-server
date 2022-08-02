@@ -22,8 +22,8 @@ require (
 
 require (
 	github.com/go-stack/stack v1.8.1 // indirect
+	go.opentelemetry.io/otel/sdk v1.8.0 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/sys v0.0.0-20220615213510-4f61da869c0c // indirect
 	golang.org/x/tools v0.1.11 // indirect
-	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 )

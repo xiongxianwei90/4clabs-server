@@ -9,6 +9,7 @@ package v1
 import (
 	v12 "4clabs-server/api/auth/v1"
 	v1 "4clabs-server/api/nft/v1"
+	v13 "4clabs-server/api/script/v1"
 	v11 "4clabs-server/api/tickets/v1"
 	context "context"
 	grpc "google.golang.org/grpc"
@@ -48,6 +49,8 @@ type NftClient interface {
 	GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v1.ListComicNftByComicResponse, error)
 	// register nft
 	NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v1.PurchaseComicNftResponse, error)
+	// 合约事件监听 更新数据库
+	ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...grpc.CallOption) (*v13.ScriptRegisterResponse, error)
 }
 
 type nftClient struct {
@@ -166,6 +169,15 @@ func (c *nftClient) NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequ
 	return out, nil
 }
 
+func (c *nftClient) ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...grpc.CallOption) (*v13.ScriptRegisterResponse, error) {
+	out := new(v13.ScriptRegisterResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ScriptRegisterUpdate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NftServer is the server API for Nft service.
 // All implementations must embed UnimplementedNftServer
 // for forward compatibility
@@ -193,6 +205,8 @@ type NftServer interface {
 	GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error)
 	// register nft
 	NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error)
+	// 合约事件监听 更新数据库
+	ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error)
 	mustEmbedUnimplementedNftServer()
 }
 
@@ -235,6 +249,9 @@ func (UnimplementedNftServer) GetComicNftById(context.Context, *v1.ListComicNftB
 }
 func (UnimplementedNftServer) NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NftPurchase not implemented")
+}
+func (UnimplementedNftServer) ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScriptRegisterUpdate not implemented")
 }
 func (UnimplementedNftServer) mustEmbedUnimplementedNftServer() {}
 
@@ -465,6 +482,24 @@ func _Nft_NftPurchase_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nft_ScriptRegisterUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v13.ScriptRegisterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).ScriptRegisterUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/ScriptRegisterUpdate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).ScriptRegisterUpdate(ctx, req.(*v13.ScriptRegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Nft_ServiceDesc is the grpc.ServiceDesc for Nft service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -519,6 +554,10 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NftPurchase",
 			Handler:    _Nft_NftPurchase_Handler,
+		},
+		{
+			MethodName: "ScriptRegisterUpdate",
+			Handler:    _Nft_ScriptRegisterUpdate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

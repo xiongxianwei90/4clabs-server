@@ -8,6 +8,7 @@ import "api/nft/v1/nft.proto";
 import "api/nft/v1/register.proto";
 import "api/tickets/v1/tickets.proto";
 import "api/nft/v1/comic_nft.proto";
+import "api/script/v1/script.proto";
 import "third_party/google/api/annotations.proto";
 
 
@@ -94,6 +95,14 @@ service Nft {
     rpc NftPurchase(api.nft.v1.PurchaseComicNftRequest) returns (api.nft.v1.PurchaseComicNftResponse) {
         option (google.api.http) = {
             post: "/v1/comic/nft/purchase",
+            body: "*"
+        };
+    }
+
+    // 合约事件监听 更新数据库
+    rpc ScriptRegisterUpdate(api.script.v1.ScriptRegisterRequest) returns (api.script.v1.ScriptRegisterResponse){
+        option (google.api.http) = {
+            post: "/v1/script/register/update",
             body: "*"
         };
     }

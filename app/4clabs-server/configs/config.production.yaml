@@ -15,7 +15,7 @@ third_party:
   contract:
     address: 0x2659f6208b53C691c8969c5F06A776f37be65e5a
     rawurl: wss://mainnet.infura.io/ws/v3/011c5e6aa1fc44daab9ab5e51baeb9fb
-
+    from_block: 15070364
 data:
   database:
     driver: mysql

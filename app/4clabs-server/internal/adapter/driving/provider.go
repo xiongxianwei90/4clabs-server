@@ -28,5 +28,8 @@ var ProviderSet = wire.NewSet(
 	wire.Bind(new(ports.Trade), new(*trade.Trade)),
 	trade.NewTrade,
 
+	wire.Bind(new(ports.Script), new(*repo.Script)),
+	repo.NewScript,
+
 	nft.NewNft,
 )

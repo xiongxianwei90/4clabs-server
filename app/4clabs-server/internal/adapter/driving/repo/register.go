@@ -107,11 +107,15 @@ func (r Register) Register(ctx context.Context, nfts []entity.BaseNft, userAddre
 		if err != nil {
 			return err
 		}
+
+		detail, _ := r.nftgo.GetNftDetail(ctx, n.ContractAddress, n.TokenId)
+
 		if !ok {
 			needCreated = append(needCreated, &model.RegisterNft{
 				TokenID:         n.TokenId,
 				ContractAddress: n.ContractAddress,
 				UserAddress:     userAddress,
+				Price:           detail.Stat.LastPrice.PriceToken,
 			})
 		}
 	}

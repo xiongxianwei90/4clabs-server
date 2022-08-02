@@ -253,6 +253,20 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -368,6 +382,51 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "sort.byPrice",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "SORT_BY_PRICE_UNSPECIFIED",
+              "SORT_BY_PRICE_ASCENDING",
+              "SORT_BY_PRICE_DESCENDING"
+            ],
+            "default": "SORT_BY_PRICE_UNSPECIFIED"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/script/register/update": {
+      "post": {
+        "summary": "合约事件监听 更新数据库",
+        "operationId": "Nft_ScriptRegisterUpdate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ScriptRegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ScriptRegisterRequest"
+            }
           }
         ],
         "tags": [
@@ -699,6 +758,9 @@
     "v1ListComicNftByComicResponse": {
       "type": "object",
       "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
         "comicNft": {
           "type": "array",
           "items": {
@@ -796,6 +858,40 @@
     },
     "v1RegisterNftResponse": {
       "type": "object"
+    },
+    "v1ScriptRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "contractAddress": {
+          "type": "string"
+        },
+        "tokenId": {
+          "type": "string"
+        },
+        "userAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ScriptRegisterResponse": {
+      "type": "object"
+    },
+    "v1Sort": {
+      "type": "object",
+      "properties": {
+        "byPrice": {
+          "$ref": "#/definitions/v1SortByPrice"
+        }
+      }
+    },
+    "v1SortByPrice": {
+      "type": "string",
+      "enum": [
+        "SORT_BY_PRICE_UNSPECIFIED",
+        "SORT_BY_PRICE_ASCENDING",
+        "SORT_BY_PRICE_DESCENDING"
+      ],
+      "default": "SORT_BY_PRICE_UNSPECIFIED"
     },
     "v1Stat": {
       "type": "object",

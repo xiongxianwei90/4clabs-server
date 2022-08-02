@@ -1,6 +1,8 @@
 package test
 
 import (
+	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
+	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
@@ -11,6 +13,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/go-kratos/kratos/v2/config"
@@ -24,7 +27,7 @@ import (
 )
 
 func GetEnvironment() (*data.Data, conf.Bootstrap, error) {
-	var environment = "production"
+	var environment = "local"
 	c := config.New(
 		config.WithSource(
 			file.NewSource(fmt.Sprintf("/Users/xiongwei/GolandProjects/4clabs-server/app/4clabs-server/configs/config.%s.yaml", environment)),
@@ -118,8 +121,80 @@ func TestIsAuthorized(t *testing.T) {
 	}
 	contract := common.HexToAddress(bc.ThirdParty.Contract.Address)
 	instance, err := forClabs.NewForClabs(contract, client)
-	isAuthorized, err := instance.IsContractAndTokenAuthorized(nil, common.HexToAddress("0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7"), big.NewInt(9596))
+	// 5438 1041 2413 0xD10b3AAe17C7a0950Dca17D0F21D23dae368c283
+	isAuthorized, err := instance.IsContractAndTokenAuthorized(nil, common.HexToAddress("0x9401518f4EBBA857BAA879D9f76E1Cc8b31ed197"), big.NewInt(380))
 	println(isAuthorized)
+}
+
+func TestGetContractAndTokenAuthorized(t *testing.T) {
+	dataData, bc, err := GetEnvironment()
+	cacheNfts := nft.NewNft(dataData)
+	s := nftgo.NewService(&bc, cacheNfts, dataData)
+	register := repo.NewRegister(s, dataData)
+	client, err := ethclient.Dial(bc.ThirdParty.Contract.Rawurl)
+	if err != nil {
+		t.Fail()
+	}
+
+	contract := common.HexToAddress(bc.ThirdParty.Contract.Address)
+	instance, err := forClabs.NewForClabs(contract, client)
+	filterQuery := ethereum.FilterQuery{
+		FromBlock: big.NewInt(bc.ThirdParty.Contract.FromBlock),
+		Addresses: []common.Address{
+			common.HexToAddress(bc.ThirdParty.Contract.Address),
+		},
+	}
+	logs, err := client.FilterLogs(context.Background(), filterQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
+	authorized := make(map[string]*forClabs.ForClabsContractAndTokenAuthorized)
+	for _, item := range logs {
+		forclabsLog, _ := instance.ParseContractAndTokenAuthorized(item)
+		if forclabsLog == nil {
+			continue
+		}
+		key := fmt.Sprintf("%s_%s", strings.ToUpper(forclabsLog.ContractAddress.String()), forclabsLog.TokenId.String())
+		authorized[key] = forclabsLog
+	}
+	println("合约授权数量", len(authorized))
+
+	var i int64 = 0
+	var list []*entity.Nft
+	var hasMore = true
+
+	for {
+		list, i, _, hasMore, err = register.ListRegistedNfts(context.TODO(), "", nil, 1000, i)
+		for _, item := range list {
+			key := fmt.Sprintf("%s_%s", strings.ToUpper(item.ContractAddress), item.TokenId)
+			_, exists := authorized[key]
+			if exists {
+				delete(authorized, key)
+				continue
+			}
+		}
+		if !hasMore {
+			break
+		}
+	}
+
+	println("需要更新的数量", len(authorized))
+
+	for _, item := range authorized {
+		println("update --", item.ContractAddress.String(), item.TokenId.String())
+
+		detail, err := s.GetNftDetail(context.TODO(), item.ContractAddress.String(), item.TokenId.String())
+		if err != nil {
+			t.Fail()
+		}
+		registerNft := query.Use(dataData.DB).RegisterNft
+		registerNft.WithContext(context.TODO()).Create(&model.RegisterNft{
+			TokenID:         item.TokenId.String(),
+			ContractAddress: item.ContractAddress.String(),
+			UserAddress:     item.Holder.String(),
+			Price:           detail.Stat.LastPrice.PriceToken,
+		})
+	}
 }
 
 func Base64Decode(str string) string {

@@ -9,6 +9,7 @@ package v1
 import (
 	v12 "4clabs-server/api/auth/v1"
 	v1 "4clabs-server/api/nft/v1"
+	v13 "4clabs-server/api/script/v1"
 	v11 "4clabs-server/api/tickets/v1"
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
@@ -33,6 +34,7 @@ const OperationNftListComicWorks = "/api.service.v1.Nft/ListComicWorks"
 const OperationNftListRegsiterNfts = "/api.service.v1.Nft/ListRegsiterNfts"
 const OperationNftNftPurchase = "/api.service.v1.Nft/NftPurchase"
 const OperationNftRegisterNft = "/api.service.v1.Nft/RegisterNft"
+const OperationNftScriptRegisterUpdate = "/api.service.v1.Nft/ScriptRegisterUpdate"
 const OperationNftSignToLogin = "/api.service.v1.Nft/SignToLogin"
 
 type NftHTTPServer interface {
@@ -47,6 +49,7 @@ type NftHTTPServer interface {
 	ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error)
 	NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error)
 	RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error)
+	ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error)
 	SignToLogin(context.Context, *v12.VerifySignToLoginSignRequest) (*v12.VerifySignToLoginSighResponse, error)
 }
 
@@ -64,6 +67,7 @@ func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
 	r.GET("/v1/comic/nft/list", _Nft_GetComicNftList0_HTTP_Handler(srv))
 	r.GET("/v1/comic/{comic_id}/nft/list", _Nft_GetComicNftById0_HTTP_Handler(srv))
 	r.POST("/v1/comic/nft/purchase", _Nft_NftPurchase0_HTTP_Handler(srv))
+	r.POST("/v1/script/register/update", _Nft_ScriptRegisterUpdate0_HTTP_Handler(srv))
 }
 
 func _Nft_ListComicWorks0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
@@ -312,6 +316,25 @@ func _Nft_NftPurchase0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) er
 	}
 }
 
+func _Nft_ScriptRegisterUpdate0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v13.ScriptRegisterRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNftScriptRegisterUpdate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ScriptRegisterUpdate(ctx, req.(*v13.ScriptRegisterRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v13.ScriptRegisterResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NftHTTPClient interface {
 	CreateComic(ctx context.Context, req *v1.ComicCreateRequest, opts ...http.CallOption) (rsp *v1.ComicCreateResponse, err error)
 	FetchNonce(ctx context.Context, req *v12.FetchSignMessageRequest, opts ...http.CallOption) (rsp *v12.FetchSignMessageResponse, err error)
@@ -324,6 +347,7 @@ type NftHTTPClient interface {
 	ListRegsiterNfts(ctx context.Context, req *v1.ListRegisterNftRequest, opts ...http.CallOption) (rsp *v1.ListRegisterNftResponse, err error)
 	NftPurchase(ctx context.Context, req *v1.PurchaseComicNftRequest, opts ...http.CallOption) (rsp *v1.PurchaseComicNftResponse, err error)
 	RegisterNft(ctx context.Context, req *v1.RegisterNftRequest, opts ...http.CallOption) (rsp *v1.RegisterNftResponse, err error)
+	ScriptRegisterUpdate(ctx context.Context, req *v13.ScriptRegisterRequest, opts ...http.CallOption) (rsp *v13.ScriptRegisterResponse, err error)
 	SignToLogin(ctx context.Context, req *v12.VerifySignToLoginSignRequest, opts ...http.CallOption) (rsp *v12.VerifySignToLoginSighResponse, err error)
 }
 
@@ -470,6 +494,19 @@ func (c *NftHTTPClientImpl) RegisterNft(ctx context.Context, in *v1.RegisterNftR
 	pattern := "/v1/nft/register"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftRegisterNft))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftHTTPClientImpl) ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...http.CallOption) (*v13.ScriptRegisterResponse, error) {
+	var out v13.ScriptRegisterResponse
+	pattern := "/v1/script/register/update"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationNftScriptRegisterUpdate))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
