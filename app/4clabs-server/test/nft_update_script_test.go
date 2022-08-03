@@ -27,7 +27,7 @@ import (
 )
 
 func GetEnvironment() (*data.Data, conf.Bootstrap, error) {
-	var environment = "production"
+	var environment = "local"
 	c := config.New(
 		config.WithSource(
 			file.NewSource(fmt.Sprintf("/Users/xiongwei/GolandProjects/4clabs-server/app/4clabs-server/configs/config.%s.yaml", environment)),

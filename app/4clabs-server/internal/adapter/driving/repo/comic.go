@@ -21,6 +21,10 @@ type Comic struct {
 	nftgo *nftgo.Service
 }
 
+func (c Comic) GetComicAboutMine(ctx context.Context, userAdderss string, limit uint32, score int64) ([]entity.Comic, int64, uint32, bool, error) {
+	return nil, 0, 0, false, nil
+}
+
 func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error) {
 	if nextScore == 0 {
 		nextScore = time.Now().Unix()
