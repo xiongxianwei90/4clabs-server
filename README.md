@@ -53,3 +53,5 @@ docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf 
 # 通过abi 生成go 文件
 abigen --abi 4clabs.abi --pkg main --type ForClabs --out ForClabs.go 
 ```
+
+contractlistener 服务运行在 华为云香港服务器
