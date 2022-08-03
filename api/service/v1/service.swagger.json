@@ -465,6 +465,50 @@
         ]
       }
     },
+    "/v1/{address}/comic/about_mine": {
+      "get": {
+        "operationId": "Nft_GetAboutMine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListAboutMineComicWorkResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "baseListRequest.lastScore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "baseListRequest.limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/{address}/comic/list": {
       "get": {
         "summary": "commic works",
@@ -752,6 +796,20 @@
       "properties": {
         "detail": {
           "$ref": "#/definitions/v1Detail"
+        }
+      }
+    },
+    "v1ListAboutMineComicWorkResponse": {
+      "type": "object",
+      "properties": {
+        "baseListResponse": {
+          "$ref": "#/definitions/v1BaseListResponse"
+        },
+        "comicWorks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ComicWork"
+          }
         }
       }
     },

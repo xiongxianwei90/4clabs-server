@@ -3,6 +3,7 @@ package service
 import (
 	auth "4clabs-server/api/auth/v1"
 	apibase "4clabs-server/api/base/v1"
+	comic "4clabs-server/api/comic/v1"
 	nft "4clabs-server/api/nft/v1"
 	script "4clabs-server/api/script/v1"
 	v1 "4clabs-server/api/service/v1"
@@ -29,7 +30,7 @@ func NewService(addressUc *usecase.Address, nftUc *usecase.Nft, auth *usecase.Au
 	return &Service{addressUc: addressUc, nftUc: nftUc, auth: auth, authUtils: authUtils, ticket: ticket, comic: comic, script: script}
 }
 
-func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) (*nft.ComicCreateResponse, error) {
+func (s *Service) CreateComic(ctx context.Context, req *comic.ComicCreateRequest) (*comic.ComicCreateResponse, error) {
 	if err := s.comic.Create(ctx, entity.Comic{
 		Origin: entity.Nft{
 			ContractAddress: req.OriginNftContractAddress,
@@ -43,16 +44,16 @@ func (s *Service) CreateComic(ctx context.Context, req *nft.ComicCreateRequest) 
 	}); err != nil {
 		return nil, err
 	}
-	return &nft.ComicCreateResponse{}, nil
+	return &comic.ComicCreateResponse{}, nil
 }
 
 // commic works
-func (s *Service) ListComicWorks(ctx context.Context, req *nft.ListComicWorkRequest) (*nft.ListComicWorkResponse, error) {
+func (s *Service) ListComicWorks(ctx context.Context, req *comic.ListComicWorkRequest) (*comic.ListComicWorkResponse, error) {
 	comics, nextScore, total, hasMore, err := s.comic.List(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
 	if err != nil {
 		return nil, err
 	}
-	return &nft.ListComicWorkResponse{
+	return &comic.ListComicWorkResponse{
 		BaseListResponse: &apibase.BaseListResponse{
 			LastScore: nextScore,
 			HasMore:   hasMore,
@@ -181,4 +182,16 @@ func (s *Service) GetComicNftById(ctx context.Context, req *nft.ListComicNftByCo
 func (s *Service) ScriptRegisterUpdate(ctx context.Context, req *script.ScriptRegisterRequest) (*script.ScriptRegisterResponse, error) {
 	err := s.script.RegisterUpdate(ctx, req.ContractAddress, req.TokenId, req.UserAddress)
 	return &script.ScriptRegisterResponse{}, err
+}
+
+func (s *Service) GetAboutMine(ctx context.Context, req *comic.ListAboutMineComicWorkRequest) (*comic.ListAboutMineComicWorkResponse, error) {
+	nfts, nextScore, total, hasMore, err := s.comic.GetComicAboutMine(ctx, req.Address, req.BaseListRequest.Limit, req.BaseListRequest.LastScore)
+	return &comic.ListAboutMineComicWorkResponse{
+		BaseListResponse: &apibase.BaseListResponse{
+			LastScore: nextScore,
+			HasMore:   hasMore,
+			Total:     total,
+		},
+		ComicWorks: assembler.CoverComicToHttpDto(nfts...),
+	}, err
 }
