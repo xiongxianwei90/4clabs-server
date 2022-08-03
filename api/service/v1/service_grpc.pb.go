@@ -7,10 +7,11 @@
 package v1
 
 import (
-	v12 "4clabs-server/api/auth/v1"
-	v1 "4clabs-server/api/nft/v1"
-	v13 "4clabs-server/api/script/v1"
-	v11 "4clabs-server/api/tickets/v1"
+	v13 "4clabs-server/api/auth/v1"
+	v1 "4clabs-server/api/comic/v1"
+	v11 "4clabs-server/api/nft/v1"
+	v14 "4clabs-server/api/script/v1"
+	v12 "4clabs-server/api/tickets/v1"
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -30,27 +31,28 @@ type NftClient interface {
 	ListComicWorks(ctx context.Context, in *v1.ListComicWorkRequest, opts ...grpc.CallOption) (*v1.ListComicWorkResponse, error)
 	CreateComic(ctx context.Context, in *v1.ComicCreateRequest, opts ...grpc.CallOption) (*v1.ComicCreateResponse, error)
 	// register nft
-	RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, opts ...grpc.CallOption) (*v1.RegisterNftResponse, error)
+	RegisterNft(ctx context.Context, in *v11.RegisterNftRequest, opts ...grpc.CallOption) (*v11.RegisterNftResponse, error)
 	// register nfts
-	ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNftRequest, opts ...grpc.CallOption) (*v1.ListRegisterNftResponse, error)
+	ListRegsiterNfts(ctx context.Context, in *v11.ListRegisterNftRequest, opts ...grpc.CallOption) (*v11.ListRegisterNftResponse, error)
 	// ticket WL
-	InTicketsWLRequest(ctx context.Context, in *v11.CanMintRequest, opts ...grpc.CallOption) (*v11.CantMintResponse, error)
+	InTicketsWLRequest(ctx context.Context, in *v12.CanMintRequest, opts ...grpc.CallOption) (*v12.CantMintResponse, error)
 	// 签名登录
-	SignToLogin(ctx context.Context, in *v12.VerifySignToLoginSignRequest, opts ...grpc.CallOption) (*v12.VerifySignToLoginSighResponse, error)
+	SignToLogin(ctx context.Context, in *v13.VerifySignToLoginSignRequest, opts ...grpc.CallOption) (*v13.VerifySignToLoginSighResponse, error)
 	// 拉取地址对应的nonce
-	FetchNonce(ctx context.Context, in *v12.FetchSignMessageRequest, opts ...grpc.CallOption) (*v12.FetchSignMessageResponse, error)
+	FetchNonce(ctx context.Context, in *v13.FetchSignMessageRequest, opts ...grpc.CallOption) (*v13.FetchSignMessageResponse, error)
 	// 地址下nft列表
-	GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsRequest, opts ...grpc.CallOption) (*v1.GetAddressNftResponse, error)
+	GetAddressNfts(ctx context.Context, in *v11.GetAddressNftsRequest, opts ...grpc.CallOption) (*v11.GetAddressNftResponse, error)
 	// nft详情页
-	GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...grpc.CallOption) (*v1.GetNftDetailResponse, error)
+	GetNftDetail(ctx context.Context, in *v11.GetNftDetailRequest, opts ...grpc.CallOption) (*v11.GetNftDetailResponse, error)
 	// 二创NFT列表
-	GetComicNftList(ctx context.Context, in *v1.ListComicNftRequest, opts ...grpc.CallOption) (*v1.ListComicNftResponse, error)
+	GetComicNftList(ctx context.Context, in *v11.ListComicNftRequest, opts ...grpc.CallOption) (*v11.ListComicNftResponse, error)
 	// 获取comic 下所有token
-	GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v1.ListComicNftByComicResponse, error)
+	GetComicNftById(ctx context.Context, in *v11.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v11.ListComicNftByComicResponse, error)
 	// register nft
-	NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v1.PurchaseComicNftResponse, error)
+	NftPurchase(ctx context.Context, in *v11.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v11.PurchaseComicNftResponse, error)
 	// 合约事件监听 更新数据库
-	ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...grpc.CallOption) (*v13.ScriptRegisterResponse, error)
+	ScriptRegisterUpdate(ctx context.Context, in *v14.ScriptRegisterRequest, opts ...grpc.CallOption) (*v14.ScriptRegisterResponse, error)
+	GetAboutMine(ctx context.Context, in *v1.ListAboutMineComicWorkRequest, opts ...grpc.CallOption) (*v1.ListAboutMineComicWorkResponse, error)
 }
 
 type nftClient struct {
@@ -79,8 +81,8 @@ func (c *nftClient) CreateComic(ctx context.Context, in *v1.ComicCreateRequest, 
 	return out, nil
 }
 
-func (c *nftClient) RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, opts ...grpc.CallOption) (*v1.RegisterNftResponse, error) {
-	out := new(v1.RegisterNftResponse)
+func (c *nftClient) RegisterNft(ctx context.Context, in *v11.RegisterNftRequest, opts ...grpc.CallOption) (*v11.RegisterNftResponse, error) {
+	out := new(v11.RegisterNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/RegisterNft", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,8 +90,8 @@ func (c *nftClient) RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, 
 	return out, nil
 }
 
-func (c *nftClient) ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNftRequest, opts ...grpc.CallOption) (*v1.ListRegisterNftResponse, error) {
-	out := new(v1.ListRegisterNftResponse)
+func (c *nftClient) ListRegsiterNfts(ctx context.Context, in *v11.ListRegisterNftRequest, opts ...grpc.CallOption) (*v11.ListRegisterNftResponse, error) {
+	out := new(v11.ListRegisterNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ListRegsiterNfts", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -97,8 +99,8 @@ func (c *nftClient) ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNft
 	return out, nil
 }
 
-func (c *nftClient) InTicketsWLRequest(ctx context.Context, in *v11.CanMintRequest, opts ...grpc.CallOption) (*v11.CantMintResponse, error) {
-	out := new(v11.CantMintResponse)
+func (c *nftClient) InTicketsWLRequest(ctx context.Context, in *v12.CanMintRequest, opts ...grpc.CallOption) (*v12.CantMintResponse, error) {
+	out := new(v12.CantMintResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/InTicketsWLRequest", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -106,8 +108,8 @@ func (c *nftClient) InTicketsWLRequest(ctx context.Context, in *v11.CanMintReque
 	return out, nil
 }
 
-func (c *nftClient) SignToLogin(ctx context.Context, in *v12.VerifySignToLoginSignRequest, opts ...grpc.CallOption) (*v12.VerifySignToLoginSighResponse, error) {
-	out := new(v12.VerifySignToLoginSighResponse)
+func (c *nftClient) SignToLogin(ctx context.Context, in *v13.VerifySignToLoginSignRequest, opts ...grpc.CallOption) (*v13.VerifySignToLoginSighResponse, error) {
+	out := new(v13.VerifySignToLoginSighResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/SignToLogin", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -115,8 +117,8 @@ func (c *nftClient) SignToLogin(ctx context.Context, in *v12.VerifySignToLoginSi
 	return out, nil
 }
 
-func (c *nftClient) FetchNonce(ctx context.Context, in *v12.FetchSignMessageRequest, opts ...grpc.CallOption) (*v12.FetchSignMessageResponse, error) {
-	out := new(v12.FetchSignMessageResponse)
+func (c *nftClient) FetchNonce(ctx context.Context, in *v13.FetchSignMessageRequest, opts ...grpc.CallOption) (*v13.FetchSignMessageResponse, error) {
+	out := new(v13.FetchSignMessageResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/FetchNonce", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -124,8 +126,8 @@ func (c *nftClient) FetchNonce(ctx context.Context, in *v12.FetchSignMessageRequ
 	return out, nil
 }
 
-func (c *nftClient) GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsRequest, opts ...grpc.CallOption) (*v1.GetAddressNftResponse, error) {
-	out := new(v1.GetAddressNftResponse)
+func (c *nftClient) GetAddressNfts(ctx context.Context, in *v11.GetAddressNftsRequest, opts ...grpc.CallOption) (*v11.GetAddressNftResponse, error) {
+	out := new(v11.GetAddressNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetAddressNfts", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -133,8 +135,8 @@ func (c *nftClient) GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsReq
 	return out, nil
 }
 
-func (c *nftClient) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...grpc.CallOption) (*v1.GetNftDetailResponse, error) {
-	out := new(v1.GetNftDetailResponse)
+func (c *nftClient) GetNftDetail(ctx context.Context, in *v11.GetNftDetailRequest, opts ...grpc.CallOption) (*v11.GetNftDetailResponse, error) {
+	out := new(v11.GetNftDetailResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetNftDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -142,8 +144,8 @@ func (c *nftClient) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest
 	return out, nil
 }
 
-func (c *nftClient) GetComicNftList(ctx context.Context, in *v1.ListComicNftRequest, opts ...grpc.CallOption) (*v1.ListComicNftResponse, error) {
-	out := new(v1.ListComicNftResponse)
+func (c *nftClient) GetComicNftList(ctx context.Context, in *v11.ListComicNftRequest, opts ...grpc.CallOption) (*v11.ListComicNftResponse, error) {
+	out := new(v11.ListComicNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetComicNftList", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -151,8 +153,8 @@ func (c *nftClient) GetComicNftList(ctx context.Context, in *v1.ListComicNftRequ
 	return out, nil
 }
 
-func (c *nftClient) GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v1.ListComicNftByComicResponse, error) {
-	out := new(v1.ListComicNftByComicResponse)
+func (c *nftClient) GetComicNftById(ctx context.Context, in *v11.ListComicNftByComicRequest, opts ...grpc.CallOption) (*v11.ListComicNftByComicResponse, error) {
+	out := new(v11.ListComicNftByComicResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetComicNftById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -160,8 +162,8 @@ func (c *nftClient) GetComicNftById(ctx context.Context, in *v1.ListComicNftByCo
 	return out, nil
 }
 
-func (c *nftClient) NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v1.PurchaseComicNftResponse, error) {
-	out := new(v1.PurchaseComicNftResponse)
+func (c *nftClient) NftPurchase(ctx context.Context, in *v11.PurchaseComicNftRequest, opts ...grpc.CallOption) (*v11.PurchaseComicNftResponse, error) {
+	out := new(v11.PurchaseComicNftResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/NftPurchase", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -169,9 +171,18 @@ func (c *nftClient) NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequ
 	return out, nil
 }
 
-func (c *nftClient) ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...grpc.CallOption) (*v13.ScriptRegisterResponse, error) {
-	out := new(v13.ScriptRegisterResponse)
+func (c *nftClient) ScriptRegisterUpdate(ctx context.Context, in *v14.ScriptRegisterRequest, opts ...grpc.CallOption) (*v14.ScriptRegisterResponse, error) {
+	out := new(v14.ScriptRegisterResponse)
 	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ScriptRegisterUpdate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nftClient) GetAboutMine(ctx context.Context, in *v1.ListAboutMineComicWorkRequest, opts ...grpc.CallOption) (*v1.ListAboutMineComicWorkResponse, error) {
+	out := new(v1.ListAboutMineComicWorkResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/GetAboutMine", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -186,27 +197,28 @@ type NftServer interface {
 	ListComicWorks(context.Context, *v1.ListComicWorkRequest) (*v1.ListComicWorkResponse, error)
 	CreateComic(context.Context, *v1.ComicCreateRequest) (*v1.ComicCreateResponse, error)
 	// register nft
-	RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error)
+	RegisterNft(context.Context, *v11.RegisterNftRequest) (*v11.RegisterNftResponse, error)
 	// register nfts
-	ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error)
+	ListRegsiterNfts(context.Context, *v11.ListRegisterNftRequest) (*v11.ListRegisterNftResponse, error)
 	// ticket WL
-	InTicketsWLRequest(context.Context, *v11.CanMintRequest) (*v11.CantMintResponse, error)
+	InTicketsWLRequest(context.Context, *v12.CanMintRequest) (*v12.CantMintResponse, error)
 	// 签名登录
-	SignToLogin(context.Context, *v12.VerifySignToLoginSignRequest) (*v12.VerifySignToLoginSighResponse, error)
+	SignToLogin(context.Context, *v13.VerifySignToLoginSignRequest) (*v13.VerifySignToLoginSighResponse, error)
 	// 拉取地址对应的nonce
-	FetchNonce(context.Context, *v12.FetchSignMessageRequest) (*v12.FetchSignMessageResponse, error)
+	FetchNonce(context.Context, *v13.FetchSignMessageRequest) (*v13.FetchSignMessageResponse, error)
 	// 地址下nft列表
-	GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error)
+	GetAddressNfts(context.Context, *v11.GetAddressNftsRequest) (*v11.GetAddressNftResponse, error)
 	// nft详情页
-	GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error)
+	GetNftDetail(context.Context, *v11.GetNftDetailRequest) (*v11.GetNftDetailResponse, error)
 	// 二创NFT列表
-	GetComicNftList(context.Context, *v1.ListComicNftRequest) (*v1.ListComicNftResponse, error)
+	GetComicNftList(context.Context, *v11.ListComicNftRequest) (*v11.ListComicNftResponse, error)
 	// 获取comic 下所有token
-	GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error)
+	GetComicNftById(context.Context, *v11.ListComicNftByComicRequest) (*v11.ListComicNftByComicResponse, error)
 	// register nft
-	NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error)
+	NftPurchase(context.Context, *v11.PurchaseComicNftRequest) (*v11.PurchaseComicNftResponse, error)
 	// 合约事件监听 更新数据库
-	ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error)
+	ScriptRegisterUpdate(context.Context, *v14.ScriptRegisterRequest) (*v14.ScriptRegisterResponse, error)
+	GetAboutMine(context.Context, *v1.ListAboutMineComicWorkRequest) (*v1.ListAboutMineComicWorkResponse, error)
 	mustEmbedUnimplementedNftServer()
 }
 
@@ -220,38 +232,41 @@ func (UnimplementedNftServer) ListComicWorks(context.Context, *v1.ListComicWorkR
 func (UnimplementedNftServer) CreateComic(context.Context, *v1.ComicCreateRequest) (*v1.ComicCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComic not implemented")
 }
-func (UnimplementedNftServer) RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error) {
+func (UnimplementedNftServer) RegisterNft(context.Context, *v11.RegisterNftRequest) (*v11.RegisterNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterNft not implemented")
 }
-func (UnimplementedNftServer) ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error) {
+func (UnimplementedNftServer) ListRegsiterNfts(context.Context, *v11.ListRegisterNftRequest) (*v11.ListRegisterNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRegsiterNfts not implemented")
 }
-func (UnimplementedNftServer) InTicketsWLRequest(context.Context, *v11.CanMintRequest) (*v11.CantMintResponse, error) {
+func (UnimplementedNftServer) InTicketsWLRequest(context.Context, *v12.CanMintRequest) (*v12.CantMintResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InTicketsWLRequest not implemented")
 }
-func (UnimplementedNftServer) SignToLogin(context.Context, *v12.VerifySignToLoginSignRequest) (*v12.VerifySignToLoginSighResponse, error) {
+func (UnimplementedNftServer) SignToLogin(context.Context, *v13.VerifySignToLoginSignRequest) (*v13.VerifySignToLoginSighResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignToLogin not implemented")
 }
-func (UnimplementedNftServer) FetchNonce(context.Context, *v12.FetchSignMessageRequest) (*v12.FetchSignMessageResponse, error) {
+func (UnimplementedNftServer) FetchNonce(context.Context, *v13.FetchSignMessageRequest) (*v13.FetchSignMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchNonce not implemented")
 }
-func (UnimplementedNftServer) GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error) {
+func (UnimplementedNftServer) GetAddressNfts(context.Context, *v11.GetAddressNftsRequest) (*v11.GetAddressNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAddressNfts not implemented")
 }
-func (UnimplementedNftServer) GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error) {
+func (UnimplementedNftServer) GetNftDetail(context.Context, *v11.GetNftDetailRequest) (*v11.GetNftDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNftDetail not implemented")
 }
-func (UnimplementedNftServer) GetComicNftList(context.Context, *v1.ListComicNftRequest) (*v1.ListComicNftResponse, error) {
+func (UnimplementedNftServer) GetComicNftList(context.Context, *v11.ListComicNftRequest) (*v11.ListComicNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetComicNftList not implemented")
 }
-func (UnimplementedNftServer) GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error) {
+func (UnimplementedNftServer) GetComicNftById(context.Context, *v11.ListComicNftByComicRequest) (*v11.ListComicNftByComicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetComicNftById not implemented")
 }
-func (UnimplementedNftServer) NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error) {
+func (UnimplementedNftServer) NftPurchase(context.Context, *v11.PurchaseComicNftRequest) (*v11.PurchaseComicNftResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NftPurchase not implemented")
 }
-func (UnimplementedNftServer) ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error) {
+func (UnimplementedNftServer) ScriptRegisterUpdate(context.Context, *v14.ScriptRegisterRequest) (*v14.ScriptRegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ScriptRegisterUpdate not implemented")
+}
+func (UnimplementedNftServer) GetAboutMine(context.Context, *v1.ListAboutMineComicWorkRequest) (*v1.ListAboutMineComicWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAboutMine not implemented")
 }
 func (UnimplementedNftServer) mustEmbedUnimplementedNftServer() {}
 
@@ -303,7 +318,7 @@ func _Nft_CreateComic_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Nft_RegisterNft_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.RegisterNftRequest)
+	in := new(v11.RegisterNftRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -315,13 +330,13 @@ func _Nft_RegisterNft_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/api.service.v1.Nft/RegisterNft",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).RegisterNft(ctx, req.(*v1.RegisterNftRequest))
+		return srv.(NftServer).RegisterNft(ctx, req.(*v11.RegisterNftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_ListRegsiterNfts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.ListRegisterNftRequest)
+	in := new(v11.ListRegisterNftRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -333,13 +348,13 @@ func _Nft_ListRegsiterNfts_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/api.service.v1.Nft/ListRegsiterNfts",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).ListRegsiterNfts(ctx, req.(*v1.ListRegisterNftRequest))
+		return srv.(NftServer).ListRegsiterNfts(ctx, req.(*v11.ListRegisterNftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_InTicketsWLRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v11.CanMintRequest)
+	in := new(v12.CanMintRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -351,13 +366,13 @@ func _Nft_InTicketsWLRequest_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/api.service.v1.Nft/InTicketsWLRequest",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).InTicketsWLRequest(ctx, req.(*v11.CanMintRequest))
+		return srv.(NftServer).InTicketsWLRequest(ctx, req.(*v12.CanMintRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_SignToLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v12.VerifySignToLoginSignRequest)
+	in := new(v13.VerifySignToLoginSignRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -369,13 +384,13 @@ func _Nft_SignToLogin_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/api.service.v1.Nft/SignToLogin",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).SignToLogin(ctx, req.(*v12.VerifySignToLoginSignRequest))
+		return srv.(NftServer).SignToLogin(ctx, req.(*v13.VerifySignToLoginSignRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_FetchNonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v12.FetchSignMessageRequest)
+	in := new(v13.FetchSignMessageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -387,13 +402,13 @@ func _Nft_FetchNonce_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/api.service.v1.Nft/FetchNonce",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).FetchNonce(ctx, req.(*v12.FetchSignMessageRequest))
+		return srv.(NftServer).FetchNonce(ctx, req.(*v13.FetchSignMessageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_GetAddressNfts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.GetAddressNftsRequest)
+	in := new(v11.GetAddressNftsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -405,13 +420,13 @@ func _Nft_GetAddressNfts_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/api.service.v1.Nft/GetAddressNfts",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).GetAddressNfts(ctx, req.(*v1.GetAddressNftsRequest))
+		return srv.(NftServer).GetAddressNfts(ctx, req.(*v11.GetAddressNftsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_GetNftDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.GetNftDetailRequest)
+	in := new(v11.GetNftDetailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -423,13 +438,13 @@ func _Nft_GetNftDetail_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/api.service.v1.Nft/GetNftDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).GetNftDetail(ctx, req.(*v1.GetNftDetailRequest))
+		return srv.(NftServer).GetNftDetail(ctx, req.(*v11.GetNftDetailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_GetComicNftList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.ListComicNftRequest)
+	in := new(v11.ListComicNftRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -441,13 +456,13 @@ func _Nft_GetComicNftList_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/api.service.v1.Nft/GetComicNftList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).GetComicNftList(ctx, req.(*v1.ListComicNftRequest))
+		return srv.(NftServer).GetComicNftList(ctx, req.(*v11.ListComicNftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_GetComicNftById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.ListComicNftByComicRequest)
+	in := new(v11.ListComicNftByComicRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -459,13 +474,13 @@ func _Nft_GetComicNftById_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/api.service.v1.Nft/GetComicNftById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).GetComicNftById(ctx, req.(*v1.ListComicNftByComicRequest))
+		return srv.(NftServer).GetComicNftById(ctx, req.(*v11.ListComicNftByComicRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_NftPurchase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.PurchaseComicNftRequest)
+	in := new(v11.PurchaseComicNftRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -477,13 +492,13 @@ func _Nft_NftPurchase_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/api.service.v1.Nft/NftPurchase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).NftPurchase(ctx, req.(*v1.PurchaseComicNftRequest))
+		return srv.(NftServer).NftPurchase(ctx, req.(*v11.PurchaseComicNftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Nft_ScriptRegisterUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v13.ScriptRegisterRequest)
+	in := new(v14.ScriptRegisterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -495,7 +510,25 @@ func _Nft_ScriptRegisterUpdate_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/api.service.v1.Nft/ScriptRegisterUpdate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftServer).ScriptRegisterUpdate(ctx, req.(*v13.ScriptRegisterRequest))
+		return srv.(NftServer).ScriptRegisterUpdate(ctx, req.(*v14.ScriptRegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Nft_GetAboutMine_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.ListAboutMineComicWorkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).GetAboutMine(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/GetAboutMine",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).GetAboutMine(ctx, req.(*v1.ListAboutMineComicWorkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -558,6 +591,10 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ScriptRegisterUpdate",
 			Handler:    _Nft_ScriptRegisterUpdate_Handler,
+		},
+		{
+			MethodName: "GetAboutMine",
+			Handler:    _Nft_GetAboutMine_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

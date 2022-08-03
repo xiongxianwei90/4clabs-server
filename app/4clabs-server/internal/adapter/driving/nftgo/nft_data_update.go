@@ -14,12 +14,17 @@ import (
 	"strings"
 )
 
-func RegisterNftUpdate(ctx context.Context, db *gorm.DB, tokenId string, contractAddress string, price float64) error {
+func RegisterNftUpdate(ctx context.Context, db *gorm.DB, tokenId string, name string, collectionName string, contractAddress string, price float64, image string) error {
 	registerNft := query.Use(db).RegisterNft
 	registerNft.WithContext(ctx).
 		Where(registerNft.TokenID.Eq(tokenId)).
 		Where(registerNft.ContractAddress.Eq(contractAddress)).
-		Update(registerNft.Price, price)
+		Updates(&model.RegisterNft{
+			Name:           name,
+			CollectionName: collectionName,
+			Price:          price,
+			Image:          image,
+		})
 	return nil
 }
 
@@ -61,7 +66,7 @@ func ComicNftUpdate(ctx context.Context, db *gorm.DB, rawurl string, contractAdd
 		}
 
 		query := comicsNfts.WithContext(ctx).
-			Where(comicsNfts.ID.Eq(int32(i)))
+			Where(comicsNfts.ID.Eq(int32(i + 1)))
 		_, err = query.First()
 		if err == nil {
 			query.Updates(map[string]interface{}{"owner": owner.String(), "comics_id": comicId, "author": comicWorks.Author.String()})

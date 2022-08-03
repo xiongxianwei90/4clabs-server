@@ -27,7 +27,7 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort
 	rnft := query.Use(r.data.DB).RegisterNft
 
 	var datas []*model.RegisterNft
-	query := rnft.WithContext(ctx).Offset(int(nextScore)).Limit(int(limit))
+	query := rnft.WithContext(ctx)
 
 	var err error
 	if userAddress != "" {
@@ -39,6 +39,7 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort
 	if err != nil {
 		return nil, 0, 0, false, err
 	}
+	query = query.Offset(int(nextScore)).Limit(int(limit))
 
 	if sort != nil {
 		if sort.ByPrice == 2 {
@@ -71,19 +72,29 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort
 		}{ContractAddress: d.ContractAddress, TokenId: d.TokenID})
 	}
 
-	nfts, err := r.nftgo.BatchGetNftSummary(ctx, infos)
-	nftMap := make(map[string]entity.Nft)
+	//nfts, err := r.nftgo.BatchGetNftSummary(ctx, infos)
+	//nftMap := make(map[string]entity.Nft)
+	//
+	//if err != nil {
+	//	return nil, 0, 0, false, err
+	//}
+	//for _, item := range nfts {
+	//	nftMap[item.TokenId] = item
+	//}
 
-	if err != nil {
-		return nil, 0, 0, false, err
-	}
-	for _, item := range nfts {
-		nftMap[item.TokenId] = item
-	}
+	// 每次从nftgo 获取会有频次限制。数据存入数据库
 	var result []*entity.Nft
 	for _, d := range datas {
-		nft := nftMap[d.TokenID]
-		result = append(result, &nft)
+		//nft := nftMap[d.TokenID]
+
+		result = append(result, &entity.Nft{
+			CollectionName:  d.CollectionName,
+			ContractAddress: d.ContractAddress,
+			TokenId:         d.TokenID,
+			Name:            d.Name,
+			OwnerAddresses:  []string{d.UserAddress},
+			Image:           d.Image,
+		})
 	}
 
 	return result, nextScore + int64(limit), uint32(total), nextScore+int64(limit) < total, nil
@@ -113,9 +124,12 @@ func (r Register) Register(ctx context.Context, nfts []entity.BaseNft, userAddre
 		if !ok {
 			needCreated = append(needCreated, &model.RegisterNft{
 				TokenID:         n.TokenId,
+				Name:            detail.Summary.Name,
+				CollectionName:  detail.Summary.CollectionName,
 				ContractAddress: n.ContractAddress,
 				UserAddress:     userAddress,
 				Price:           detail.Stat.LastPrice.PriceToken,
+				Image:           detail.Summary.Image,
 			})
 		}
 	}

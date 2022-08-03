@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/nft/v1/comic.proto",
+    "title": "api/comic/v1/comic.proto",
     "version": "version not set"
   },
   "consumes": [

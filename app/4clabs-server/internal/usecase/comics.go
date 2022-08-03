@@ -33,3 +33,7 @@ func (c *Comics) NftPurchase(ctx context.Context, tokenId string, buyerAddress s
 func (c *Comics) GetComicNftListByComicId(ctx context.Context, id string, limit uint32, nextScore int64) ([]entity.ComicNft, int64, uint32, bool, error) {
 	return c.Comic.GetComicNftsByComicId(ctx, id, limit, nextScore)
 }
+
+func (c *Comics) GetComicAboutMine(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error) {
+	return c.Comic.GetComicAboutMine(ctx, userAddress, limit, nextScore)
+}

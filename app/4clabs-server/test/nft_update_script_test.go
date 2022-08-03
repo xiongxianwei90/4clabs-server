@@ -62,6 +62,7 @@ func GetEnvironment() (*data.Data, conf.Bootstrap, error) {
 	return dataData, bc, err
 }
 
+// 更新已经登记过的nft 价格
 func TestRegisterNftUpdate(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
 	cacheNfts := nft.NewNft(dataData)
@@ -80,7 +81,19 @@ func TestRegisterNftUpdate(t *testing.T) {
 			if err != nil {
 				t.Fail()
 			}
-			nftgo.RegisterNftUpdate(context.TODO(), dataData.DB, item.TokenId, item.ContractAddress, detail.Stat.LastPrice.PriceToken)
+			if detail.Summary.Name == "" {
+				continue
+			}
+			nftgo.RegisterNftUpdate(
+				context.TODO(),
+				dataData.DB,
+				detail.Summary.TokenId,
+				detail.Summary.Name,
+				detail.Summary.CollectionName,
+				detail.Summary.ContractAddress,
+				detail.Stat.LastPrice.PriceToken,
+				detail.Summary.Image,
+			)
 		}
 		if !hasMore {
 			break
@@ -91,13 +104,14 @@ func TestRegisterNftUpdate(t *testing.T) {
 
 func TestComicNftAllUpdate(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
-	err = nftgo.ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
-	//err = ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
+	//err = nftgo.ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
+	err = nftgo.ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
 	if err != nil {
 		t.Fail()
 	}
 }
 
+// tokenUri解析
 func TestTokenId(t *testing.T) {
 	_, bc, _ := GetEnvironment()
 	client, err := ethclient.Dial(bc.ThirdParty.Contract.Rawurl)
@@ -113,6 +127,7 @@ func TestTokenId(t *testing.T) {
 	println(decoder)
 }
 
+// 验证是否登记过
 func TestIsAuthorized(t *testing.T) {
 	_, bc, _ := GetEnvironment()
 	client, err := ethclient.Dial(bc.ThirdParty.Contract.Rawurl)
@@ -126,6 +141,7 @@ func TestIsAuthorized(t *testing.T) {
 	println(isAuthorized)
 }
 
+// 从合约更新所有登记过的nft
 func TestGetContractAndTokenAuthorized(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
 	cacheNfts := nft.NewNft(dataData)
@@ -188,13 +204,21 @@ func TestGetContractAndTokenAuthorized(t *testing.T) {
 			t.Fail()
 		}
 		registerNft := query.Use(dataData.DB).RegisterNft
+
 		registerNft.WithContext(context.TODO()).Create(&model.RegisterNft{
 			TokenID:         item.TokenId.String(),
+			Name:            detail.Summary.Name,
+			CollectionName:  detail.Summary.CollectionName,
 			ContractAddress: item.ContractAddress.String(),
 			UserAddress:     item.Holder.String(),
 			Price:           detail.Stat.LastPrice.PriceToken,
+			Image:           detail.Summary.Image,
 		})
 	}
+}
+
+func TestUpdateRegisterNft(t *testing.T) {
+
 }
 
 func Base64Decode(str string) string {

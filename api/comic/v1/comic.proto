@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package api.nft.v1;
+package api.comic.v1;
 
 import "api/base/v1/base.proto";
 import "api/nft/v1/typs.proto";
 import "validate/validate.proto";
 
 
-option go_package = "4clabs-server/api/nft/v1;v1";
+option go_package = "4clabs-server/api/comic/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.nft.v1";
 
@@ -31,6 +31,16 @@ message ListComicWorkRequest {
     string address = 2;
 }
 message ListComicWorkResponse {
+    api.base.v1.BaseListResponse base_list_response = 1;
+    repeated api.nft.v1.ComicWork comic_works = 2;
+}
+
+message ListAboutMineComicWorkRequest {
+    api.base.v1.BaseListRequest base_list_request = 1;
+    string address = 2;
+}
+
+message ListAboutMineComicWorkResponse {
     api.base.v1.BaseListResponse base_list_response = 1;
     repeated api.nft.v1.ComicWork comic_works = 2;
 }

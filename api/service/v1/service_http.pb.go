@@ -7,10 +7,11 @@
 package v1
 
 import (
-	v12 "4clabs-server/api/auth/v1"
-	v1 "4clabs-server/api/nft/v1"
-	v13 "4clabs-server/api/script/v1"
-	v11 "4clabs-server/api/tickets/v1"
+	v13 "4clabs-server/api/auth/v1"
+	v1 "4clabs-server/api/comic/v1"
+	v11 "4clabs-server/api/nft/v1"
+	v14 "4clabs-server/api/script/v1"
+	v12 "4clabs-server/api/tickets/v1"
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
@@ -25,6 +26,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationNftCreateComic = "/api.service.v1.Nft/CreateComic"
 const OperationNftFetchNonce = "/api.service.v1.Nft/FetchNonce"
+const OperationNftGetAboutMine = "/api.service.v1.Nft/GetAboutMine"
 const OperationNftGetAddressNfts = "/api.service.v1.Nft/GetAddressNfts"
 const OperationNftGetComicNftById = "/api.service.v1.Nft/GetComicNftById"
 const OperationNftGetComicNftList = "/api.service.v1.Nft/GetComicNftList"
@@ -39,18 +41,19 @@ const OperationNftSignToLogin = "/api.service.v1.Nft/SignToLogin"
 
 type NftHTTPServer interface {
 	CreateComic(context.Context, *v1.ComicCreateRequest) (*v1.ComicCreateResponse, error)
-	FetchNonce(context.Context, *v12.FetchSignMessageRequest) (*v12.FetchSignMessageResponse, error)
-	GetAddressNfts(context.Context, *v1.GetAddressNftsRequest) (*v1.GetAddressNftResponse, error)
-	GetComicNftById(context.Context, *v1.ListComicNftByComicRequest) (*v1.ListComicNftByComicResponse, error)
-	GetComicNftList(context.Context, *v1.ListComicNftRequest) (*v1.ListComicNftResponse, error)
-	GetNftDetail(context.Context, *v1.GetNftDetailRequest) (*v1.GetNftDetailResponse, error)
-	InTicketsWLRequest(context.Context, *v11.CanMintRequest) (*v11.CantMintResponse, error)
+	FetchNonce(context.Context, *v13.FetchSignMessageRequest) (*v13.FetchSignMessageResponse, error)
+	GetAboutMine(context.Context, *v1.ListAboutMineComicWorkRequest) (*v1.ListAboutMineComicWorkResponse, error)
+	GetAddressNfts(context.Context, *v11.GetAddressNftsRequest) (*v11.GetAddressNftResponse, error)
+	GetComicNftById(context.Context, *v11.ListComicNftByComicRequest) (*v11.ListComicNftByComicResponse, error)
+	GetComicNftList(context.Context, *v11.ListComicNftRequest) (*v11.ListComicNftResponse, error)
+	GetNftDetail(context.Context, *v11.GetNftDetailRequest) (*v11.GetNftDetailResponse, error)
+	InTicketsWLRequest(context.Context, *v12.CanMintRequest) (*v12.CantMintResponse, error)
 	ListComicWorks(context.Context, *v1.ListComicWorkRequest) (*v1.ListComicWorkResponse, error)
-	ListRegsiterNfts(context.Context, *v1.ListRegisterNftRequest) (*v1.ListRegisterNftResponse, error)
-	NftPurchase(context.Context, *v1.PurchaseComicNftRequest) (*v1.PurchaseComicNftResponse, error)
-	RegisterNft(context.Context, *v1.RegisterNftRequest) (*v1.RegisterNftResponse, error)
-	ScriptRegisterUpdate(context.Context, *v13.ScriptRegisterRequest) (*v13.ScriptRegisterResponse, error)
-	SignToLogin(context.Context, *v12.VerifySignToLoginSignRequest) (*v12.VerifySignToLoginSighResponse, error)
+	ListRegsiterNfts(context.Context, *v11.ListRegisterNftRequest) (*v11.ListRegisterNftResponse, error)
+	NftPurchase(context.Context, *v11.PurchaseComicNftRequest) (*v11.PurchaseComicNftResponse, error)
+	RegisterNft(context.Context, *v11.RegisterNftRequest) (*v11.RegisterNftResponse, error)
+	ScriptRegisterUpdate(context.Context, *v14.ScriptRegisterRequest) (*v14.ScriptRegisterResponse, error)
+	SignToLogin(context.Context, *v13.VerifySignToLoginSignRequest) (*v13.VerifySignToLoginSighResponse, error)
 }
 
 func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
@@ -68,6 +71,7 @@ func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
 	r.GET("/v1/comic/{comic_id}/nft/list", _Nft_GetComicNftById0_HTTP_Handler(srv))
 	r.POST("/v1/comic/nft/purchase", _Nft_NftPurchase0_HTTP_Handler(srv))
 	r.POST("/v1/script/register/update", _Nft_ScriptRegisterUpdate0_HTTP_Handler(srv))
+	r.GET("/v1/{address}/comic/about_mine", _Nft_GetAboutMine0_HTTP_Handler(srv))
 }
 
 func _Nft_ListComicWorks0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
@@ -113,45 +117,45 @@ func _Nft_CreateComic0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) er
 
 func _Nft_RegisterNft0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.RegisterNftRequest
+		var in v11.RegisterNftRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftRegisterNft)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.RegisterNft(ctx, req.(*v1.RegisterNftRequest))
+			return srv.RegisterNft(ctx, req.(*v11.RegisterNftRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.RegisterNftResponse)
+		reply := out.(*v11.RegisterNftResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_ListRegsiterNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.ListRegisterNftRequest
+		var in v11.ListRegisterNftRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftListRegsiterNfts)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListRegsiterNfts(ctx, req.(*v1.ListRegisterNftRequest))
+			return srv.ListRegsiterNfts(ctx, req.(*v11.ListRegisterNftRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.ListRegisterNftResponse)
+		reply := out.(*v11.ListRegisterNftResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_InTicketsWLRequest0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v11.CanMintRequest
+		var in v12.CanMintRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -160,39 +164,39 @@ func _Nft_InTicketsWLRequest0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Cont
 		}
 		http.SetOperation(ctx, OperationNftInTicketsWLRequest)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.InTicketsWLRequest(ctx, req.(*v11.CanMintRequest))
+			return srv.InTicketsWLRequest(ctx, req.(*v12.CanMintRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v11.CantMintResponse)
+		reply := out.(*v12.CantMintResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_SignToLogin0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v12.VerifySignToLoginSignRequest
+		var in v13.VerifySignToLoginSignRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftSignToLogin)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SignToLogin(ctx, req.(*v12.VerifySignToLoginSignRequest))
+			return srv.SignToLogin(ctx, req.(*v13.VerifySignToLoginSignRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v12.VerifySignToLoginSighResponse)
+		reply := out.(*v13.VerifySignToLoginSighResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_FetchNonce0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v12.FetchSignMessageRequest
+		var in v13.FetchSignMessageRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -201,20 +205,20 @@ func _Nft_FetchNonce0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) err
 		}
 		http.SetOperation(ctx, OperationNftFetchNonce)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.FetchNonce(ctx, req.(*v12.FetchSignMessageRequest))
+			return srv.FetchNonce(ctx, req.(*v13.FetchSignMessageRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v12.FetchSignMessageResponse)
+		reply := out.(*v13.FetchSignMessageResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_GetAddressNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.GetAddressNftsRequest
+		var in v11.GetAddressNftsRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -223,20 +227,20 @@ func _Nft_GetAddressNfts0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context)
 		}
 		http.SetOperation(ctx, OperationNftGetAddressNfts)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetAddressNfts(ctx, req.(*v1.GetAddressNftsRequest))
+			return srv.GetAddressNfts(ctx, req.(*v11.GetAddressNftsRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.GetAddressNftResponse)
+		reply := out.(*v11.GetAddressNftResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_GetNftDetail0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.GetNftDetailRequest
+		var in v11.GetNftDetailRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -245,39 +249,39 @@ func _Nft_GetNftDetail0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) e
 		}
 		http.SetOperation(ctx, OperationNftGetNftDetail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetNftDetail(ctx, req.(*v1.GetNftDetailRequest))
+			return srv.GetNftDetail(ctx, req.(*v11.GetNftDetailRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.GetNftDetailResponse)
+		reply := out.(*v11.GetNftDetailResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_GetComicNftList0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.ListComicNftRequest
+		var in v11.ListComicNftRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftGetComicNftList)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetComicNftList(ctx, req.(*v1.ListComicNftRequest))
+			return srv.GetComicNftList(ctx, req.(*v11.ListComicNftRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.ListComicNftResponse)
+		reply := out.(*v11.ListComicNftResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_GetComicNftById0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.ListComicNftByComicRequest
+		var in v11.ListComicNftByComicRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -286,69 +290,92 @@ func _Nft_GetComicNftById0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context
 		}
 		http.SetOperation(ctx, OperationNftGetComicNftById)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetComicNftById(ctx, req.(*v1.ListComicNftByComicRequest))
+			return srv.GetComicNftById(ctx, req.(*v11.ListComicNftByComicRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.ListComicNftByComicResponse)
+		reply := out.(*v11.ListComicNftByComicResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_NftPurchase0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v1.PurchaseComicNftRequest
+		var in v11.PurchaseComicNftRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftNftPurchase)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.NftPurchase(ctx, req.(*v1.PurchaseComicNftRequest))
+			return srv.NftPurchase(ctx, req.(*v11.PurchaseComicNftRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v1.PurchaseComicNftResponse)
+		reply := out.(*v11.PurchaseComicNftResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 func _Nft_ScriptRegisterUpdate0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in v13.ScriptRegisterRequest
+		var in v14.ScriptRegisterRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationNftScriptRegisterUpdate)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ScriptRegisterUpdate(ctx, req.(*v13.ScriptRegisterRequest))
+			return srv.ScriptRegisterUpdate(ctx, req.(*v14.ScriptRegisterRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*v13.ScriptRegisterResponse)
+		reply := out.(*v14.ScriptRegisterResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Nft_GetAboutMine0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v1.ListAboutMineComicWorkRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNftGetAboutMine)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetAboutMine(ctx, req.(*v1.ListAboutMineComicWorkRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.ListAboutMineComicWorkResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
 type NftHTTPClient interface {
 	CreateComic(ctx context.Context, req *v1.ComicCreateRequest, opts ...http.CallOption) (rsp *v1.ComicCreateResponse, err error)
-	FetchNonce(ctx context.Context, req *v12.FetchSignMessageRequest, opts ...http.CallOption) (rsp *v12.FetchSignMessageResponse, err error)
-	GetAddressNfts(ctx context.Context, req *v1.GetAddressNftsRequest, opts ...http.CallOption) (rsp *v1.GetAddressNftResponse, err error)
-	GetComicNftById(ctx context.Context, req *v1.ListComicNftByComicRequest, opts ...http.CallOption) (rsp *v1.ListComicNftByComicResponse, err error)
-	GetComicNftList(ctx context.Context, req *v1.ListComicNftRequest, opts ...http.CallOption) (rsp *v1.ListComicNftResponse, err error)
-	GetNftDetail(ctx context.Context, req *v1.GetNftDetailRequest, opts ...http.CallOption) (rsp *v1.GetNftDetailResponse, err error)
-	InTicketsWLRequest(ctx context.Context, req *v11.CanMintRequest, opts ...http.CallOption) (rsp *v11.CantMintResponse, err error)
+	FetchNonce(ctx context.Context, req *v13.FetchSignMessageRequest, opts ...http.CallOption) (rsp *v13.FetchSignMessageResponse, err error)
+	GetAboutMine(ctx context.Context, req *v1.ListAboutMineComicWorkRequest, opts ...http.CallOption) (rsp *v1.ListAboutMineComicWorkResponse, err error)
+	GetAddressNfts(ctx context.Context, req *v11.GetAddressNftsRequest, opts ...http.CallOption) (rsp *v11.GetAddressNftResponse, err error)
+	GetComicNftById(ctx context.Context, req *v11.ListComicNftByComicRequest, opts ...http.CallOption) (rsp *v11.ListComicNftByComicResponse, err error)
+	GetComicNftList(ctx context.Context, req *v11.ListComicNftRequest, opts ...http.CallOption) (rsp *v11.ListComicNftResponse, err error)
+	GetNftDetail(ctx context.Context, req *v11.GetNftDetailRequest, opts ...http.CallOption) (rsp *v11.GetNftDetailResponse, err error)
+	InTicketsWLRequest(ctx context.Context, req *v12.CanMintRequest, opts ...http.CallOption) (rsp *v12.CantMintResponse, err error)
 	ListComicWorks(ctx context.Context, req *v1.ListComicWorkRequest, opts ...http.CallOption) (rsp *v1.ListComicWorkResponse, err error)
-	ListRegsiterNfts(ctx context.Context, req *v1.ListRegisterNftRequest, opts ...http.CallOption) (rsp *v1.ListRegisterNftResponse, err error)
-	NftPurchase(ctx context.Context, req *v1.PurchaseComicNftRequest, opts ...http.CallOption) (rsp *v1.PurchaseComicNftResponse, err error)
-	RegisterNft(ctx context.Context, req *v1.RegisterNftRequest, opts ...http.CallOption) (rsp *v1.RegisterNftResponse, err error)
-	ScriptRegisterUpdate(ctx context.Context, req *v13.ScriptRegisterRequest, opts ...http.CallOption) (rsp *v13.ScriptRegisterResponse, err error)
-	SignToLogin(ctx context.Context, req *v12.VerifySignToLoginSignRequest, opts ...http.CallOption) (rsp *v12.VerifySignToLoginSighResponse, err error)
+	ListRegsiterNfts(ctx context.Context, req *v11.ListRegisterNftRequest, opts ...http.CallOption) (rsp *v11.ListRegisterNftResponse, err error)
+	NftPurchase(ctx context.Context, req *v11.PurchaseComicNftRequest, opts ...http.CallOption) (rsp *v11.PurchaseComicNftResponse, err error)
+	RegisterNft(ctx context.Context, req *v11.RegisterNftRequest, opts ...http.CallOption) (rsp *v11.RegisterNftResponse, err error)
+	ScriptRegisterUpdate(ctx context.Context, req *v14.ScriptRegisterRequest, opts ...http.CallOption) (rsp *v14.ScriptRegisterResponse, err error)
+	SignToLogin(ctx context.Context, req *v13.VerifySignToLoginSignRequest, opts ...http.CallOption) (rsp *v13.VerifySignToLoginSighResponse, err error)
 }
 
 type NftHTTPClientImpl struct {
@@ -372,8 +399,8 @@ func (c *NftHTTPClientImpl) CreateComic(ctx context.Context, in *v1.ComicCreateR
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) FetchNonce(ctx context.Context, in *v12.FetchSignMessageRequest, opts ...http.CallOption) (*v12.FetchSignMessageResponse, error) {
-	var out v12.FetchSignMessageResponse
+func (c *NftHTTPClientImpl) FetchNonce(ctx context.Context, in *v13.FetchSignMessageRequest, opts ...http.CallOption) (*v13.FetchSignMessageResponse, error) {
+	var out v13.FetchSignMessageResponse
 	pattern := "/v1/address/{address}/sign_message"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftFetchNonce))
@@ -385,8 +412,21 @@ func (c *NftHTTPClientImpl) FetchNonce(ctx context.Context, in *v12.FetchSignMes
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) GetAddressNfts(ctx context.Context, in *v1.GetAddressNftsRequest, opts ...http.CallOption) (*v1.GetAddressNftResponse, error) {
-	var out v1.GetAddressNftResponse
+func (c *NftHTTPClientImpl) GetAboutMine(ctx context.Context, in *v1.ListAboutMineComicWorkRequest, opts ...http.CallOption) (*v1.ListAboutMineComicWorkResponse, error) {
+	var out v1.ListAboutMineComicWorkResponse
+	pattern := "/v1/{address}/comic/about_mine"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationNftGetAboutMine))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftHTTPClientImpl) GetAddressNfts(ctx context.Context, in *v11.GetAddressNftsRequest, opts ...http.CallOption) (*v11.GetAddressNftResponse, error) {
+	var out v11.GetAddressNftResponse
 	pattern := "/v1/address/{address}/nfts"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftGetAddressNfts))
@@ -398,8 +438,8 @@ func (c *NftHTTPClientImpl) GetAddressNfts(ctx context.Context, in *v1.GetAddres
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) GetComicNftById(ctx context.Context, in *v1.ListComicNftByComicRequest, opts ...http.CallOption) (*v1.ListComicNftByComicResponse, error) {
-	var out v1.ListComicNftByComicResponse
+func (c *NftHTTPClientImpl) GetComicNftById(ctx context.Context, in *v11.ListComicNftByComicRequest, opts ...http.CallOption) (*v11.ListComicNftByComicResponse, error) {
+	var out v11.ListComicNftByComicResponse
 	pattern := "/v1/comic/{comic_id}/nft/list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftGetComicNftById))
@@ -411,8 +451,8 @@ func (c *NftHTTPClientImpl) GetComicNftById(ctx context.Context, in *v1.ListComi
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) GetComicNftList(ctx context.Context, in *v1.ListComicNftRequest, opts ...http.CallOption) (*v1.ListComicNftResponse, error) {
-	var out v1.ListComicNftResponse
+func (c *NftHTTPClientImpl) GetComicNftList(ctx context.Context, in *v11.ListComicNftRequest, opts ...http.CallOption) (*v11.ListComicNftResponse, error) {
+	var out v11.ListComicNftResponse
 	pattern := "/v1/comic/nft/list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftGetComicNftList))
@@ -424,8 +464,8 @@ func (c *NftHTTPClientImpl) GetComicNftList(ctx context.Context, in *v1.ListComi
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) GetNftDetail(ctx context.Context, in *v1.GetNftDetailRequest, opts ...http.CallOption) (*v1.GetNftDetailResponse, error) {
-	var out v1.GetNftDetailResponse
+func (c *NftHTTPClientImpl) GetNftDetail(ctx context.Context, in *v11.GetNftDetailRequest, opts ...http.CallOption) (*v11.GetNftDetailResponse, error) {
+	var out v11.GetNftDetailResponse
 	pattern := "/v1/nft/collection/{contract_address}/token/{token_id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftGetNftDetail))
@@ -437,8 +477,8 @@ func (c *NftHTTPClientImpl) GetNftDetail(ctx context.Context, in *v1.GetNftDetai
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) InTicketsWLRequest(ctx context.Context, in *v11.CanMintRequest, opts ...http.CallOption) (*v11.CantMintResponse, error) {
-	var out v11.CantMintResponse
+func (c *NftHTTPClientImpl) InTicketsWLRequest(ctx context.Context, in *v12.CanMintRequest, opts ...http.CallOption) (*v12.CantMintResponse, error) {
+	var out v12.CantMintResponse
 	pattern := "/v1/tickets/{address}/can_mint"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftInTicketsWLRequest))
@@ -463,8 +503,8 @@ func (c *NftHTTPClientImpl) ListComicWorks(ctx context.Context, in *v1.ListComic
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) ListRegsiterNfts(ctx context.Context, in *v1.ListRegisterNftRequest, opts ...http.CallOption) (*v1.ListRegisterNftResponse, error) {
-	var out v1.ListRegisterNftResponse
+func (c *NftHTTPClientImpl) ListRegsiterNfts(ctx context.Context, in *v11.ListRegisterNftRequest, opts ...http.CallOption) (*v11.ListRegisterNftResponse, error) {
+	var out v11.ListRegisterNftResponse
 	pattern := "/v1/nft/registers"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftListRegsiterNfts))
@@ -476,8 +516,8 @@ func (c *NftHTTPClientImpl) ListRegsiterNfts(ctx context.Context, in *v1.ListReg
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) NftPurchase(ctx context.Context, in *v1.PurchaseComicNftRequest, opts ...http.CallOption) (*v1.PurchaseComicNftResponse, error) {
-	var out v1.PurchaseComicNftResponse
+func (c *NftHTTPClientImpl) NftPurchase(ctx context.Context, in *v11.PurchaseComicNftRequest, opts ...http.CallOption) (*v11.PurchaseComicNftResponse, error) {
+	var out v11.PurchaseComicNftResponse
 	pattern := "/v1/comic/nft/purchase"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftNftPurchase))
@@ -489,8 +529,8 @@ func (c *NftHTTPClientImpl) NftPurchase(ctx context.Context, in *v1.PurchaseComi
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) RegisterNft(ctx context.Context, in *v1.RegisterNftRequest, opts ...http.CallOption) (*v1.RegisterNftResponse, error) {
-	var out v1.RegisterNftResponse
+func (c *NftHTTPClientImpl) RegisterNft(ctx context.Context, in *v11.RegisterNftRequest, opts ...http.CallOption) (*v11.RegisterNftResponse, error) {
+	var out v11.RegisterNftResponse
 	pattern := "/v1/nft/register"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftRegisterNft))
@@ -502,8 +542,8 @@ func (c *NftHTTPClientImpl) RegisterNft(ctx context.Context, in *v1.RegisterNftR
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) ScriptRegisterUpdate(ctx context.Context, in *v13.ScriptRegisterRequest, opts ...http.CallOption) (*v13.ScriptRegisterResponse, error) {
-	var out v13.ScriptRegisterResponse
+func (c *NftHTTPClientImpl) ScriptRegisterUpdate(ctx context.Context, in *v14.ScriptRegisterRequest, opts ...http.CallOption) (*v14.ScriptRegisterResponse, error) {
+	var out v14.ScriptRegisterResponse
 	pattern := "/v1/script/register/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftScriptRegisterUpdate))
@@ -515,8 +555,8 @@ func (c *NftHTTPClientImpl) ScriptRegisterUpdate(ctx context.Context, in *v13.Sc
 	return &out, err
 }
 
-func (c *NftHTTPClientImpl) SignToLogin(ctx context.Context, in *v12.VerifySignToLoginSignRequest, opts ...http.CallOption) (*v12.VerifySignToLoginSighResponse, error) {
-	var out v12.VerifySignToLoginSighResponse
+func (c *NftHTTPClientImpl) SignToLogin(ctx context.Context, in *v13.VerifySignToLoginSignRequest, opts ...http.CallOption) (*v13.VerifySignToLoginSighResponse, error) {
+	var out v13.VerifySignToLoginSighResponse
 	pattern := "/v1/address/verify_sign"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftSignToLogin))
