@@ -113,25 +113,23 @@ func (app *ContractScriptApplication) Run() error {
 		case err := <-sub.Err():
 			log.Fatal(err)
 		case vLog := <-logs:
-			fmt.Println(vLog) // pointer to event log
-			cata, err := instance.ParseContractAndTokenAuthorized(vLog)
-			if err != nil {
-				println("error: ", fmt.Sprint(err))
-			}
+			fmt.Println("TxHash:", vLog.TxHash) // pointer to event log
+			cata, _ := instance.ParseContractAndTokenAuthorized(vLog)
 			if cata != nil {
-				println(fmt.Sprint(cata))
 				request := script.ScriptRegisterRequest{
 					ContractAddress: cata.ContractAddress.String(),
 					TokenId:         cata.TokenId.String(),
 					UserAddress:     cata.Holder.String(),
 				}
 				jsonBytes, _ := json.Marshal(request)
+				println("register data:", string(jsonBytes))
 				url := fmt.Sprintf("%s/v1/script/register/update", app.bc.ThirdParty.ScriptUrl)
 				_, err = app.basePost(context.Background(), url, jsonBytes)
 				if err != nil {
-					return err
+					println("post error: ", fmt.Sprint(err))
 				}
 			}
+			fmt.Println()
 		}
 	}
 	println(" ----------- end")

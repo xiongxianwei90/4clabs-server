@@ -27,7 +27,7 @@ import (
 )
 
 func GetEnvironment() (*data.Data, conf.Bootstrap, error) {
-	var environment = "local"
+	var environment = "production"
 	c := config.New(
 		config.WithSource(
 			file.NewSource(fmt.Sprintf("/Users/xiongwei/GolandProjects/4clabs-server/app/4clabs-server/configs/config.%s.yaml", environment)),
@@ -104,7 +104,7 @@ func TestRegisterNftUpdate(t *testing.T) {
 
 func TestComicNftAllUpdate(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
-	//err = nftgo.ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
+	err = nftgo.ComicUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
 	err = nftgo.ComicNftUpdate(context.TODO(), dataData.DB, bc.ThirdParty.Contract.Rawurl, bc.ThirdParty.Contract.Address, false)
 	if err != nil {
 		t.Fail()

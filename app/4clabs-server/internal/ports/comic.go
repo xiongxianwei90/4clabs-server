@@ -10,7 +10,7 @@ type Comic interface {
 	Create(ctx context.Context, comic entity.Comic) error
 	GetComicNfts(ctx context.Context, limit uint32, lastScore int64) ([]entity.ComicNft, int64, uint32, bool, error)
 	GetComicNftsByComicId(ctx context.Context, comicId string, limit uint32, score int64) ([]entity.ComicNft, int64, uint32, bool, error)
-	GetComicAboutMine(ctx context.Context, userAdderss string, limit uint32, score int64) ([]entity.Comic, int64, uint32, bool, error)
+	GetComicAboutMine(ctx context.Context, userAddress string, limit uint32, score int64) ([]entity.Comic, int64, uint32, bool, error)
 }
 
 type Trade interface {
