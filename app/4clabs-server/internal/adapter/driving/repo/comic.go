@@ -21,8 +21,59 @@ type Comic struct {
 	nftgo *nftgo.Service
 }
 
-func (c Comic) GetComicAboutMine(ctx context.Context, userAdderss string, limit uint32, score int64) ([]entity.Comic, int64, uint32, bool, error) {
-	return nil, 0, 0, false, nil
+func (c Comic) GetComicAboutMine(ctx context.Context, userAddress string, limit uint32, lastScore int64) ([]entity.Comic, int64, uint32, bool, error) {
+	queryDB := query.Use(c.data.DB)
+	register := queryDB.RegisterNft
+	comic := queryDB.Comic
+
+	comicQuery := comic.WithContext(ctx).
+		LeftJoin(register,
+			register.TokenID.EqCol(comic.TokenID),
+			register.ContractAddress.EqCol(comic.ContractAddress)).
+		Where(register.UserAddress.Eq(userAddress))
+	total, err := comicQuery.Count()
+	if err != nil {
+		return nil, 0, 0, false, err
+	}
+
+	var infos []struct {
+		ContractAddress string
+		TokenId         string
+	}
+	datas, err := comicQuery.Limit(int(limit)).Offset(int(lastScore)).Find()
+	for _, d := range datas {
+		infos = append(infos, struct {
+			ContractAddress string
+			TokenId         string
+		}{ContractAddress: d.ContractAddress, TokenId: d.TokenID})
+	}
+
+	origins, err := c.nftgo.BatchGetNftSummary(ctx, infos)
+	originNfts := make(map[string]entity.Nft)
+
+	for _, item := range origins {
+		originNfts[item.TokenId] = item
+	}
+	var result []entity.Comic
+
+	for _, d := range datas {
+		nft := originNfts[d.TokenID]
+		imageUris := strings.Split(d.ImageURIs, ",")
+		result = append(result, entity.Comic{
+			Origin:      nft,
+			ComicId:     fmt.Sprint(int(d.ID)),
+			MintLimit:   uint32(d.MintLimit),
+			MintPrice:   d.MintPrice,
+			Name:        d.Name,
+			CreatedAt:   d.CreatedAt,
+			UserAddress: d.UserAddress,
+			ImageUris:   imageUris,
+		})
+	}
+
+	nextLastScore := int64(limit) + lastScore
+	hasMore := nextLastScore < total
+	return result, nextLastScore, uint32(total), hasMore, nil
 }
 
 func (c Comic) List(ctx context.Context, userAddress string, limit uint32, nextScore int64) ([]entity.Comic, int64, uint32, bool, error) {
