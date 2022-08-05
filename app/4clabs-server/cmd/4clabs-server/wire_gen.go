@@ -32,7 +32,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 	nftNft := nft.NewNft(dataData)
 	nftgoService := nftgo.NewService(bootstrap, nftNft, dataData)
 	address := usecase.NewAddress(nftgoService)
-	register := repo.NewRegister(nftgoService, dataData)
+	register := repo.NewRegister(nftgoService, dataData, nftNft)
 	usecaseNft := usecase.NewNft(nftgoService, register)
 	user := repo.NewUser(dataData)
 	usecaseAuth := usecase.NewAuth(user, register, jwtUtils)

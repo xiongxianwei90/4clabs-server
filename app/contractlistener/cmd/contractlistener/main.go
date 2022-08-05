@@ -105,6 +105,8 @@ func (app *ContractScriptApplication) Run() error {
 		Addresses: []common.Address{contract},
 	}
 
+	// 如果需要监听单独事件可使用
+	// instance.WatchContractAndTokenAuthorized()
 	logs := make(chan types.Log)
 	sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
 	if err != nil {
@@ -116,7 +118,7 @@ func (app *ContractScriptApplication) Run() error {
 		case err := <-sub.Err():
 			log.Fatal(err)
 		case vLog := <-logs:
-			fmt.Println("TxHash:", vLog.TxHash) // pointer to event log
+			fmt.Println("TxHash:", vLog.TxHash)
 			cata, _ := instance.ParseContractAndTokenAuthorized(vLog)
 			if cata != nil {
 				request := script.ScriptRegisterRequest{

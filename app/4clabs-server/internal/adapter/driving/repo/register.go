@@ -5,21 +5,24 @@ import (
 	"4clabs-server/app/4clabs-server/internal/adapter/data/model"
 	"4clabs-server/app/4clabs-server/internal/adapter/data/query"
 	"4clabs-server/app/4clabs-server/internal/adapter/driving/nftgo"
+	"4clabs-server/app/4clabs-server/internal/adapter/driving/repo/nft"
 	"4clabs-server/app/4clabs-server/internal/data"
 	"4clabs-server/app/4clabs-server/internal/domain/entity"
 	"4clabs-server/app/4clabs-server/internal/ports"
 	"context"
+	"fmt"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 type Register struct {
-	nftgo *nftgo.Service
-	data  *data.Data
+	nftgo     *nftgo.Service
+	data      *data.Data
+	cacheNfts *nft.Nft
 }
 
-func NewRegister(nftgo *nftgo.Service, data *data.Data) *Register {
-	return &Register{nftgo: nftgo, data: data}
+func NewRegister(nftgo *nftgo.Service, data *data.Data, cacheNfts *nft.Nft) *Register {
+	return &Register{nftgo: nftgo, data: data, cacheNfts: cacheNfts}
 }
 
 func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort *v1.Sort, limit uint32, nextScore int64) ([]*entity.Nft, int64, uint32, bool, error) {
@@ -65,35 +68,32 @@ func (r Register) ListRegistedNfts(ctx context.Context, userAddress string, sort
 		ContractAddress string
 		TokenId         string
 	}
+	var ids []string
 	for _, d := range datas {
 		infos = append(infos, struct {
 			ContractAddress string
 			TokenId         string
 		}{ContractAddress: d.ContractAddress, TokenId: d.TokenID})
+
+		ids = append(ids, fmt.Sprintf("%s_%s", d.ContractAddress, d.TokenID))
 	}
 
-	//nfts, err := r.nftgo.BatchGetNftSummary(ctx, infos)
-	//nftMap := make(map[string]entity.Nft)
-	//
-	//if err != nil {
-	//	return nil, 0, 0, false, err
-	//}
-	//for _, item := range nfts {
-	//	nftMap[item.TokenId] = item
-	//}
+	images, err := r.cacheNfts.Image(ctx, ids...)
 
 	// 每次从nftgo 获取会有频次限制。数据存入数据库
 	var result []*entity.Nft
 	for _, d := range datas {
-		//nft := nftMap[d.TokenID]
-
+		image := d.Image
+		if im, ok := images[fmt.Sprintf("%s_%s", d.ContractAddress, d.TokenID)]; ok {
+			image = im
+		}
 		result = append(result, &entity.Nft{
 			CollectionName:  d.CollectionName,
 			ContractAddress: d.ContractAddress,
 			TokenId:         d.TokenID,
 			Name:            d.Name,
 			OwnerAddresses:  []string{d.UserAddress},
-			Image:           d.Image,
+			Image:           image,
 		})
 	}
 

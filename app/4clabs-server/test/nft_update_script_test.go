@@ -67,7 +67,7 @@ func TestRegisterNftUpdate(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
 	cacheNfts := nft.NewNft(dataData)
 	s := nftgo.NewService(&bc, cacheNfts, dataData)
-	register := repo.NewRegister(s, dataData)
+	register := repo.NewRegister(s, dataData, cacheNfts)
 	if err != nil {
 		t.Fail()
 	}
@@ -146,7 +146,7 @@ func TestGetContractAndTokenAuthorized(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
 	cacheNfts := nft.NewNft(dataData)
 	s := nftgo.NewService(&bc, cacheNfts, dataData)
-	register := repo.NewRegister(s, dataData)
+	register := repo.NewRegister(s, dataData, cacheNfts)
 	client, err := ethclient.Dial(bc.ThirdParty.Contract.Rawurl)
 	if err != nil {
 		t.Fail()
@@ -164,6 +164,18 @@ func TestGetContractAndTokenAuthorized(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// 或者只筛选FilterContractAndTokenAuthorized 日志更简便
+	//filterOpts := &bind.FilterOpts{
+	//	Start:   uint64(bc.ThirdParty.Contract.FromBlock),
+	//	Context: context.Background(),
+	//}
+	//auther, err := instance.FilterContractAndTokenAuthorized(filterOpts)
+	//for auther.Next() {
+	//	event := auther.Event
+	//	println(fmt.Printf(event.Holder.String()))
+	//}
+
 	authorized := make(map[string]*forClabs.ForClabsContractAndTokenAuthorized)
 	for _, item := range logs {
 		forclabsLog, _ := instance.ParseContractAndTokenAuthorized(item)
@@ -217,7 +229,7 @@ func TestGetContractAndTokenAuthorized(t *testing.T) {
 	}
 }
 
-func TestUpdateRegisterNft(t *testing.T) {
+func TestParseLog(t *testing.T) {
 
 }
 
