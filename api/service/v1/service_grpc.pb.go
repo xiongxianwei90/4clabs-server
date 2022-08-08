@@ -53,6 +53,8 @@ type NftClient interface {
 	// 合约事件监听 更新数据库
 	ScriptRegisterUpdate(ctx context.Context, in *v14.ScriptRegisterRequest, opts ...grpc.CallOption) (*v14.ScriptRegisterResponse, error)
 	GetAboutMine(ctx context.Context, in *v1.ListAboutMineComicWorkRequest, opts ...grpc.CallOption) (*v1.ListAboutMineComicWorkResponse, error)
+	ScriptComicWorkCreate(ctx context.Context, in *v14.ScriptComicWorksCreateRequest, opts ...grpc.CallOption) (*v14.ScriptComicWorksCreateResponse, error)
+	ScriptComicWorkSold(ctx context.Context, in *v14.ScriptComicWorksSoldRequest, opts ...grpc.CallOption) (*v14.ScriptComicWorksSoldResponse, error)
 }
 
 type nftClient struct {
@@ -189,6 +191,24 @@ func (c *nftClient) GetAboutMine(ctx context.Context, in *v1.ListAboutMineComicW
 	return out, nil
 }
 
+func (c *nftClient) ScriptComicWorkCreate(ctx context.Context, in *v14.ScriptComicWorksCreateRequest, opts ...grpc.CallOption) (*v14.ScriptComicWorksCreateResponse, error) {
+	out := new(v14.ScriptComicWorksCreateResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ScriptComicWorkCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nftClient) ScriptComicWorkSold(ctx context.Context, in *v14.ScriptComicWorksSoldRequest, opts ...grpc.CallOption) (*v14.ScriptComicWorksSoldResponse, error) {
+	out := new(v14.ScriptComicWorksSoldResponse)
+	err := c.cc.Invoke(ctx, "/api.service.v1.Nft/ScriptComicWorkSold", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NftServer is the server API for Nft service.
 // All implementations must embed UnimplementedNftServer
 // for forward compatibility
@@ -219,6 +239,8 @@ type NftServer interface {
 	// 合约事件监听 更新数据库
 	ScriptRegisterUpdate(context.Context, *v14.ScriptRegisterRequest) (*v14.ScriptRegisterResponse, error)
 	GetAboutMine(context.Context, *v1.ListAboutMineComicWorkRequest) (*v1.ListAboutMineComicWorkResponse, error)
+	ScriptComicWorkCreate(context.Context, *v14.ScriptComicWorksCreateRequest) (*v14.ScriptComicWorksCreateResponse, error)
+	ScriptComicWorkSold(context.Context, *v14.ScriptComicWorksSoldRequest) (*v14.ScriptComicWorksSoldResponse, error)
 	mustEmbedUnimplementedNftServer()
 }
 
@@ -267,6 +289,12 @@ func (UnimplementedNftServer) ScriptRegisterUpdate(context.Context, *v14.ScriptR
 }
 func (UnimplementedNftServer) GetAboutMine(context.Context, *v1.ListAboutMineComicWorkRequest) (*v1.ListAboutMineComicWorkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAboutMine not implemented")
+}
+func (UnimplementedNftServer) ScriptComicWorkCreate(context.Context, *v14.ScriptComicWorksCreateRequest) (*v14.ScriptComicWorksCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScriptComicWorkCreate not implemented")
+}
+func (UnimplementedNftServer) ScriptComicWorkSold(context.Context, *v14.ScriptComicWorksSoldRequest) (*v14.ScriptComicWorksSoldResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScriptComicWorkSold not implemented")
 }
 func (UnimplementedNftServer) mustEmbedUnimplementedNftServer() {}
 
@@ -533,6 +561,42 @@ func _Nft_GetAboutMine_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nft_ScriptComicWorkCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v14.ScriptComicWorksCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).ScriptComicWorkCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/ScriptComicWorkCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).ScriptComicWorkCreate(ctx, req.(*v14.ScriptComicWorksCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Nft_ScriptComicWorkSold_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v14.ScriptComicWorksSoldRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftServer).ScriptComicWorkSold(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.service.v1.Nft/ScriptComicWorkSold",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftServer).ScriptComicWorkSold(ctx, req.(*v14.ScriptComicWorksSoldRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Nft_ServiceDesc is the grpc.ServiceDesc for Nft service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -595,6 +659,14 @@ var Nft_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAboutMine",
 			Handler:    _Nft_GetAboutMine_Handler,
+		},
+		{
+			MethodName: "ScriptComicWorkCreate",
+			Handler:    _Nft_ScriptComicWorkCreate_Handler,
+		},
+		{
+			MethodName: "ScriptComicWorkSold",
+			Handler:    _Nft_ScriptComicWorkSold_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

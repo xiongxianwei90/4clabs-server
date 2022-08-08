@@ -45,7 +45,7 @@ var file_api_service_v1_service_proto_rawDesc = []byte{
 	0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x28, 0x74, 0x68, 0x69, 0x72, 0x64, 0x5f, 0x70,
 	0x61, 0x72, 0x74, 0x79, 0x2f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f,
 	0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x32, 0x97, 0x0e, 0x0a, 0x03, 0x4e, 0x66, 0x74, 0x12, 0x7b, 0x0a, 0x0e, 0x4c, 0x69, 0x73,
+	0x6f, 0x32, 0xc9, 0x10, 0x0a, 0x03, 0x4e, 0x66, 0x74, 0x12, 0x7b, 0x0a, 0x0e, 0x4c, 0x69, 0x73,
 	0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x12, 0x22, 0x2e, 0x61, 0x70,
 	0x69, 0x2e, 0x63, 0x6f, 0x6d, 0x69, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x43,
 	0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
@@ -158,41 +158,64 @@ var file_api_service_v1_service_proto_rawDesc = []byte{
 	0x6e, 0x65, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x22, 0x26, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x20, 0x12, 0x1e, 0x2f, 0x76, 0x31,
 	0x2f, 0x7b, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x63, 0x6f, 0x6d, 0x69, 0x63,
-	0x2f, 0x61, 0x62, 0x6f, 0x75, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x65, 0x42, 0x21, 0x5a, 0x1f, 0x34,
-	0x63, 0x6c, 0x61, 0x62, 0x73, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2f, 0x61, 0x62, 0x6f, 0x75, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x65, 0x12, 0x98, 0x01, 0x0a, 0x15,
+	0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x2c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x63, 0x72, 0x69,
+	0x70, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x43, 0x6f, 0x6d, 0x69,
+	0x63, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
+	0x2e, 0x76, 0x31, 0x2e, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57,
+	0x6f, 0x72, 0x6b, 0x73, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x22, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1c, 0x22, 0x17, 0x2f, 0x76, 0x31, 0x2f,
+	0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x2f, 0x63, 0x6f, 0x6d, 0x69, 0x63, 0x2f, 0x75, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x3a, 0x01, 0x2a, 0x12, 0x94, 0x01, 0x0a, 0x13, 0x53, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x53, 0x6f, 0x6c, 0x64, 0x12, 0x2a,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x53,
+	0x63, 0x72, 0x69, 0x70, 0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x53,
+	0x6f, 0x6c, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x43, 0x6f, 0x6d, 0x69, 0x63, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x53, 0x6f, 0x6c, 0x64, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x22,
+	0x19, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x2f, 0x63, 0x6f, 0x6d, 0x69,
+	0x63, 0x2f, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x3a, 0x01, 0x2a, 0x42, 0x21, 0x5a,
+	0x1f, 0x34, 0x63, 0x6c, 0x61, 0x62, 0x73, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var file_api_service_v1_service_proto_goTypes = []interface{}{
-	(*v1.ListComicWorkRequest)(nil),           // 0: api.comic.v1.ListComicWorkRequest
-	(*v1.ComicCreateRequest)(nil),             // 1: api.comic.v1.ComicCreateRequest
-	(*v11.RegisterNftRequest)(nil),            // 2: api.nft.v1.RegisterNftRequest
-	(*v11.ListRegisterNftRequest)(nil),        // 3: api.nft.v1.ListRegisterNftRequest
-	(*v12.CanMintRequest)(nil),                // 4: api.tickets.v1.CanMintRequest
-	(*v13.VerifySignToLoginSignRequest)(nil),  // 5: api.auth.v1.VerifySignToLoginSignRequest
-	(*v13.FetchSignMessageRequest)(nil),       // 6: api.auth.v1.FetchSignMessageRequest
-	(*v11.GetAddressNftsRequest)(nil),         // 7: api.nft.v1.GetAddressNftsRequest
-	(*v11.GetNftDetailRequest)(nil),           // 8: api.nft.v1.GetNftDetailRequest
-	(*v11.ListComicNftRequest)(nil),           // 9: api.nft.v1.ListComicNftRequest
-	(*v11.ListComicNftByComicRequest)(nil),    // 10: api.nft.v1.ListComicNftByComicRequest
-	(*v11.PurchaseComicNftRequest)(nil),       // 11: api.nft.v1.PurchaseComicNftRequest
-	(*v14.ScriptRegisterRequest)(nil),         // 12: api.script.v1.ScriptRegisterRequest
-	(*v1.ListAboutMineComicWorkRequest)(nil),  // 13: api.comic.v1.ListAboutMineComicWorkRequest
-	(*v1.ListComicWorkResponse)(nil),          // 14: api.comic.v1.ListComicWorkResponse
-	(*v1.ComicCreateResponse)(nil),            // 15: api.comic.v1.ComicCreateResponse
-	(*v11.RegisterNftResponse)(nil),           // 16: api.nft.v1.RegisterNftResponse
-	(*v11.ListRegisterNftResponse)(nil),       // 17: api.nft.v1.ListRegisterNftResponse
-	(*v12.CantMintResponse)(nil),              // 18: api.tickets.v1.CantMintResponse
-	(*v13.VerifySignToLoginSighResponse)(nil), // 19: api.auth.v1.VerifySignToLoginSighResponse
-	(*v13.FetchSignMessageResponse)(nil),      // 20: api.auth.v1.FetchSignMessageResponse
-	(*v11.GetAddressNftResponse)(nil),         // 21: api.nft.v1.GetAddressNftResponse
-	(*v11.GetNftDetailResponse)(nil),          // 22: api.nft.v1.GetNftDetailResponse
-	(*v11.ListComicNftResponse)(nil),          // 23: api.nft.v1.ListComicNftResponse
-	(*v11.ListComicNftByComicResponse)(nil),   // 24: api.nft.v1.ListComicNftByComicResponse
-	(*v11.PurchaseComicNftResponse)(nil),      // 25: api.nft.v1.PurchaseComicNftResponse
-	(*v14.ScriptRegisterResponse)(nil),        // 26: api.script.v1.ScriptRegisterResponse
-	(*v1.ListAboutMineComicWorkResponse)(nil), // 27: api.comic.v1.ListAboutMineComicWorkResponse
+	(*v1.ListComicWorkRequest)(nil),            // 0: api.comic.v1.ListComicWorkRequest
+	(*v1.ComicCreateRequest)(nil),              // 1: api.comic.v1.ComicCreateRequest
+	(*v11.RegisterNftRequest)(nil),             // 2: api.nft.v1.RegisterNftRequest
+	(*v11.ListRegisterNftRequest)(nil),         // 3: api.nft.v1.ListRegisterNftRequest
+	(*v12.CanMintRequest)(nil),                 // 4: api.tickets.v1.CanMintRequest
+	(*v13.VerifySignToLoginSignRequest)(nil),   // 5: api.auth.v1.VerifySignToLoginSignRequest
+	(*v13.FetchSignMessageRequest)(nil),        // 6: api.auth.v1.FetchSignMessageRequest
+	(*v11.GetAddressNftsRequest)(nil),          // 7: api.nft.v1.GetAddressNftsRequest
+	(*v11.GetNftDetailRequest)(nil),            // 8: api.nft.v1.GetNftDetailRequest
+	(*v11.ListComicNftRequest)(nil),            // 9: api.nft.v1.ListComicNftRequest
+	(*v11.ListComicNftByComicRequest)(nil),     // 10: api.nft.v1.ListComicNftByComicRequest
+	(*v11.PurchaseComicNftRequest)(nil),        // 11: api.nft.v1.PurchaseComicNftRequest
+	(*v14.ScriptRegisterRequest)(nil),          // 12: api.script.v1.ScriptRegisterRequest
+	(*v1.ListAboutMineComicWorkRequest)(nil),   // 13: api.comic.v1.ListAboutMineComicWorkRequest
+	(*v14.ScriptComicWorksCreateRequest)(nil),  // 14: api.script.v1.ScriptComicWorksCreateRequest
+	(*v14.ScriptComicWorksSoldRequest)(nil),    // 15: api.script.v1.ScriptComicWorksSoldRequest
+	(*v1.ListComicWorkResponse)(nil),           // 16: api.comic.v1.ListComicWorkResponse
+	(*v1.ComicCreateResponse)(nil),             // 17: api.comic.v1.ComicCreateResponse
+	(*v11.RegisterNftResponse)(nil),            // 18: api.nft.v1.RegisterNftResponse
+	(*v11.ListRegisterNftResponse)(nil),        // 19: api.nft.v1.ListRegisterNftResponse
+	(*v12.CantMintResponse)(nil),               // 20: api.tickets.v1.CantMintResponse
+	(*v13.VerifySignToLoginSighResponse)(nil),  // 21: api.auth.v1.VerifySignToLoginSighResponse
+	(*v13.FetchSignMessageResponse)(nil),       // 22: api.auth.v1.FetchSignMessageResponse
+	(*v11.GetAddressNftResponse)(nil),          // 23: api.nft.v1.GetAddressNftResponse
+	(*v11.GetNftDetailResponse)(nil),           // 24: api.nft.v1.GetNftDetailResponse
+	(*v11.ListComicNftResponse)(nil),           // 25: api.nft.v1.ListComicNftResponse
+	(*v11.ListComicNftByComicResponse)(nil),    // 26: api.nft.v1.ListComicNftByComicResponse
+	(*v11.PurchaseComicNftResponse)(nil),       // 27: api.nft.v1.PurchaseComicNftResponse
+	(*v14.ScriptRegisterResponse)(nil),         // 28: api.script.v1.ScriptRegisterResponse
+	(*v1.ListAboutMineComicWorkResponse)(nil),  // 29: api.comic.v1.ListAboutMineComicWorkResponse
+	(*v14.ScriptComicWorksCreateResponse)(nil), // 30: api.script.v1.ScriptComicWorksCreateResponse
+	(*v14.ScriptComicWorksSoldResponse)(nil),   // 31: api.script.v1.ScriptComicWorksSoldResponse
 }
 var file_api_service_v1_service_proto_depIdxs = []int32{
 	0,  // 0: api.service.v1.Nft.ListComicWorks:input_type -> api.comic.v1.ListComicWorkRequest
@@ -209,22 +232,26 @@ var file_api_service_v1_service_proto_depIdxs = []int32{
 	11, // 11: api.service.v1.Nft.NftPurchase:input_type -> api.nft.v1.PurchaseComicNftRequest
 	12, // 12: api.service.v1.Nft.ScriptRegisterUpdate:input_type -> api.script.v1.ScriptRegisterRequest
 	13, // 13: api.service.v1.Nft.GetAboutMine:input_type -> api.comic.v1.ListAboutMineComicWorkRequest
-	14, // 14: api.service.v1.Nft.ListComicWorks:output_type -> api.comic.v1.ListComicWorkResponse
-	15, // 15: api.service.v1.Nft.CreateComic:output_type -> api.comic.v1.ComicCreateResponse
-	16, // 16: api.service.v1.Nft.RegisterNft:output_type -> api.nft.v1.RegisterNftResponse
-	17, // 17: api.service.v1.Nft.ListRegsiterNfts:output_type -> api.nft.v1.ListRegisterNftResponse
-	18, // 18: api.service.v1.Nft.InTicketsWLRequest:output_type -> api.tickets.v1.CantMintResponse
-	19, // 19: api.service.v1.Nft.SignToLogin:output_type -> api.auth.v1.VerifySignToLoginSighResponse
-	20, // 20: api.service.v1.Nft.FetchNonce:output_type -> api.auth.v1.FetchSignMessageResponse
-	21, // 21: api.service.v1.Nft.GetAddressNfts:output_type -> api.nft.v1.GetAddressNftResponse
-	22, // 22: api.service.v1.Nft.GetNftDetail:output_type -> api.nft.v1.GetNftDetailResponse
-	23, // 23: api.service.v1.Nft.GetComicNftList:output_type -> api.nft.v1.ListComicNftResponse
-	24, // 24: api.service.v1.Nft.GetComicNftById:output_type -> api.nft.v1.ListComicNftByComicResponse
-	25, // 25: api.service.v1.Nft.NftPurchase:output_type -> api.nft.v1.PurchaseComicNftResponse
-	26, // 26: api.service.v1.Nft.ScriptRegisterUpdate:output_type -> api.script.v1.ScriptRegisterResponse
-	27, // 27: api.service.v1.Nft.GetAboutMine:output_type -> api.comic.v1.ListAboutMineComicWorkResponse
-	14, // [14:28] is the sub-list for method output_type
-	0,  // [0:14] is the sub-list for method input_type
+	14, // 14: api.service.v1.Nft.ScriptComicWorkCreate:input_type -> api.script.v1.ScriptComicWorksCreateRequest
+	15, // 15: api.service.v1.Nft.ScriptComicWorkSold:input_type -> api.script.v1.ScriptComicWorksSoldRequest
+	16, // 16: api.service.v1.Nft.ListComicWorks:output_type -> api.comic.v1.ListComicWorkResponse
+	17, // 17: api.service.v1.Nft.CreateComic:output_type -> api.comic.v1.ComicCreateResponse
+	18, // 18: api.service.v1.Nft.RegisterNft:output_type -> api.nft.v1.RegisterNftResponse
+	19, // 19: api.service.v1.Nft.ListRegsiterNfts:output_type -> api.nft.v1.ListRegisterNftResponse
+	20, // 20: api.service.v1.Nft.InTicketsWLRequest:output_type -> api.tickets.v1.CantMintResponse
+	21, // 21: api.service.v1.Nft.SignToLogin:output_type -> api.auth.v1.VerifySignToLoginSighResponse
+	22, // 22: api.service.v1.Nft.FetchNonce:output_type -> api.auth.v1.FetchSignMessageResponse
+	23, // 23: api.service.v1.Nft.GetAddressNfts:output_type -> api.nft.v1.GetAddressNftResponse
+	24, // 24: api.service.v1.Nft.GetNftDetail:output_type -> api.nft.v1.GetNftDetailResponse
+	25, // 25: api.service.v1.Nft.GetComicNftList:output_type -> api.nft.v1.ListComicNftResponse
+	26, // 26: api.service.v1.Nft.GetComicNftById:output_type -> api.nft.v1.ListComicNftByComicResponse
+	27, // 27: api.service.v1.Nft.NftPurchase:output_type -> api.nft.v1.PurchaseComicNftResponse
+	28, // 28: api.service.v1.Nft.ScriptRegisterUpdate:output_type -> api.script.v1.ScriptRegisterResponse
+	29, // 29: api.service.v1.Nft.GetAboutMine:output_type -> api.comic.v1.ListAboutMineComicWorkResponse
+	30, // 30: api.service.v1.Nft.ScriptComicWorkCreate:output_type -> api.script.v1.ScriptComicWorksCreateResponse
+	31, // 31: api.service.v1.Nft.ScriptComicWorkSold:output_type -> api.script.v1.ScriptComicWorksSoldResponse
+	16, // [16:32] is the sub-list for method output_type
+	0,  // [0:16] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

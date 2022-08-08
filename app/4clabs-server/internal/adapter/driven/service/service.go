@@ -195,3 +195,17 @@ func (s *Service) GetAboutMine(ctx context.Context, req *comic.ListAboutMineComi
 		ComicWorks: assembler.CoverComicToHttpDto(nfts...),
 	}, err
 }
+
+func (s *Service) ScriptComicWorkCreate(ctx context.Context, req *script.ScriptComicWorksCreateRequest) (*script.ScriptComicWorksCreateResponse, error) {
+	isIncrement := false
+	if req.IsIncrement == 1 {
+		isIncrement = true
+	}
+	err := s.script.ComicWorksUpdate(ctx, isIncrement)
+	return &script.ScriptComicWorksCreateResponse{}, err
+}
+
+func (s *Service) ScriptComicWorkSold(ctx context.Context, req *script.ScriptComicWorksSoldRequest) (*script.ScriptComicWorksSoldResponse, error) {
+	err := s.script.ComicWorksSold(ctx, req.To, req.TokenId)
+	return &script.ScriptComicWorksSoldResponse{}, err
+}

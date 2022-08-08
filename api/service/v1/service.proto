@@ -112,4 +112,18 @@ service Nft {
             get: "/v1/{address}/comic/about_mine",
         };
     }
+
+    rpc ScriptComicWorkCreate(api.script.v1.ScriptComicWorksCreateRequest) returns (api.script.v1.ScriptComicWorksCreateResponse){
+        option (google.api.http) = {
+            post: "/v1/script/comic/update",
+            body: "*"
+        };
+    }
+
+    rpc ScriptComicWorkSold(api.script.v1.ScriptComicWorksSoldRequest) returns (api.script.v1.ScriptComicWorksSoldResponse){
+        option (google.api.http) = {
+            post: "/v1/script/comic/transfer",
+            body: "*"
+        };
+    }
 }

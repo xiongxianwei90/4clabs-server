@@ -401,6 +401,70 @@
         ]
       }
     },
+    "/v1/script/comic/transfer": {
+      "post": {
+        "operationId": "Nft_ScriptComicWorkSold",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ScriptComicWorksSoldResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ScriptComicWorksSoldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
+    "/v1/script/comic/update": {
+      "post": {
+        "operationId": "Nft_ScriptComicWorkCreate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ScriptComicWorksCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ScriptComicWorksCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Nft"
+        ]
+      }
+    },
     "/v1/script/register/update": {
       "post": {
         "summary": "合约事件监听 更新数据库",
@@ -915,6 +979,33 @@
       }
     },
     "v1RegisterNftResponse": {
+      "type": "object"
+    },
+    "v1ScriptComicWorksCreateRequest": {
+      "type": "object",
+      "properties": {
+        "isIncrement": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1ScriptComicWorksCreateResponse": {
+      "type": "object"
+    },
+    "v1ScriptComicWorksSoldRequest": {
+      "type": "object",
+      "properties": {
+        "tokenId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "to": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ScriptComicWorksSoldResponse": {
       "type": "object"
     },
     "v1ScriptRegisterRequest": {

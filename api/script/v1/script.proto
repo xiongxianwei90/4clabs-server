@@ -5,6 +5,7 @@ package api.script.v1;
 option go_package = "4clabs-server/api/script/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.script.v1";
+import "validate/validate.proto";
 
 message ScriptRegisterRequest {
   string contract_address = 1;
@@ -13,5 +14,22 @@ message ScriptRegisterRequest {
 }
 
 message ScriptRegisterResponse {
+
+}
+
+message ScriptComicWorksCreateRequest {
+  int32 isIncrement = 1; // 0 全量更新，1 增量更新
+}
+
+message ScriptComicWorksCreateResponse {
+
+}
+
+message ScriptComicWorksSoldRequest {
+  int64 tokenId = 1;
+  string to = 2 [(validate.rules).string = {min_len: 1}];
+}
+
+message ScriptComicWorksSoldResponse {
 
 }

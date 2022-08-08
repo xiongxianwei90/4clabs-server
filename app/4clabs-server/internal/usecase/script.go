@@ -18,3 +18,11 @@ func NewScript(script ports.Script) *Script {
 func (s Script) RegisterUpdate(ctx context.Context, contactAddress string, tokenId string, userAddress string) error {
 	return s.script.RegisterUpdate(ctx, contactAddress, tokenId, userAddress)
 }
+
+func (s Script) ComicWorksUpdate(ctx context.Context, isIncrement bool) error {
+	return s.script.ComicWorksUpdate(ctx, isIncrement)
+}
+
+func (s Script) ComicWorksSold(ctx context.Context, to string, tokenId int64) error {
+	return s.script.ComicWorksSold(ctx, to, tokenId)
+}
