@@ -172,3 +172,286 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ScriptRegisterResponseValidationError{}
+
+// Validate checks the field values on ScriptComicWorksCreateRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ScriptComicWorksCreateRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for IsIncrement
+
+	return nil
+}
+
+// ScriptComicWorksCreateRequestValidationError is the validation error
+// returned by ScriptComicWorksCreateRequest.Validate if the designated
+// constraints aren't met.
+type ScriptComicWorksCreateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScriptComicWorksCreateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScriptComicWorksCreateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScriptComicWorksCreateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScriptComicWorksCreateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScriptComicWorksCreateRequestValidationError) ErrorName() string {
+	return "ScriptComicWorksCreateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScriptComicWorksCreateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScriptComicWorksCreateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScriptComicWorksCreateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScriptComicWorksCreateRequestValidationError{}
+
+// Validate checks the field values on ScriptComicWorksCreateResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ScriptComicWorksCreateResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// ScriptComicWorksCreateResponseValidationError is the validation error
+// returned by ScriptComicWorksCreateResponse.Validate if the designated
+// constraints aren't met.
+type ScriptComicWorksCreateResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScriptComicWorksCreateResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScriptComicWorksCreateResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScriptComicWorksCreateResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScriptComicWorksCreateResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScriptComicWorksCreateResponseValidationError) ErrorName() string {
+	return "ScriptComicWorksCreateResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScriptComicWorksCreateResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScriptComicWorksCreateResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScriptComicWorksCreateResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScriptComicWorksCreateResponseValidationError{}
+
+// Validate checks the field values on ScriptComicWorksSoldRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ScriptComicWorksSoldRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for TokenId
+
+	if utf8.RuneCountInString(m.GetTo()) < 1 {
+		return ScriptComicWorksSoldRequestValidationError{
+			field:  "To",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// ScriptComicWorksSoldRequestValidationError is the validation error returned
+// by ScriptComicWorksSoldRequest.Validate if the designated constraints
+// aren't met.
+type ScriptComicWorksSoldRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScriptComicWorksSoldRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScriptComicWorksSoldRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScriptComicWorksSoldRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScriptComicWorksSoldRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScriptComicWorksSoldRequestValidationError) ErrorName() string {
+	return "ScriptComicWorksSoldRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScriptComicWorksSoldRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScriptComicWorksSoldRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScriptComicWorksSoldRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScriptComicWorksSoldRequestValidationError{}
+
+// Validate checks the field values on ScriptComicWorksSoldResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ScriptComicWorksSoldResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// ScriptComicWorksSoldResponseValidationError is the validation error returned
+// by ScriptComicWorksSoldResponse.Validate if the designated constraints
+// aren't met.
+type ScriptComicWorksSoldResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScriptComicWorksSoldResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScriptComicWorksSoldResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScriptComicWorksSoldResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScriptComicWorksSoldResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScriptComicWorksSoldResponseValidationError) ErrorName() string {
+	return "ScriptComicWorksSoldResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ScriptComicWorksSoldResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScriptComicWorksSoldResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScriptComicWorksSoldResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScriptComicWorksSoldResponseValidationError{}

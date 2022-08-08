@@ -41,7 +41,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, jwtUtils *auth.JwtUti
 	comic := repo.NewComic(dataData, nftgoService)
 	tradeTrade := trade.NewTrade(dataData, nftgoService)
 	comics := usecase.NewComics(comic, tradeTrade)
-	script := repo.NewScript(dataData, nftgoService, register)
+	script := repo.NewScript(bootstrap, dataData, nftgoService, register)
 	usecaseScript := usecase.NewScript(script)
 	serviceService := service.NewService(address, usecaseNft, usecaseAuth, contextUtils, usecaseTicket, comics, usecaseScript)
 	httpServer := server.NewHTTPServer(bootstrap, serviceService, logger, contextUtils, jwtUtils)

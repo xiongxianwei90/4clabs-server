@@ -119,16 +119,47 @@ func (app *ContractScriptApplication) Run() error {
 			log.Fatal(err)
 		case vLog := <-logs:
 			fmt.Println("TxHash:", vLog.TxHash)
-			cata, _ := instance.ParseContractAndTokenAuthorized(vLog)
-			if cata != nil {
+			authorizedLog, _ := instance.ParseContractAndTokenAuthorized(vLog)
+			if authorizedLog != nil {
+
 				request := script.ScriptRegisterRequest{
-					ContractAddress: cata.ContractAddress.String(),
-					TokenId:         cata.TokenId.String(),
-					UserAddress:     cata.Holder.String(),
+					ContractAddress: authorizedLog.ContractAddress.String(),
+					TokenId:         authorizedLog.TokenId.String(),
+					UserAddress:     authorizedLog.Holder.String(),
 				}
 				jsonBytes, _ := json.Marshal(request)
-				println("register data:", string(jsonBytes))
+				println("ContractAndTokenAuthorized data:", string(jsonBytes))
 				url := fmt.Sprintf("%s/v1/script/register/update", app.bc.ThirdParty.ScriptUrl)
+				_, err = app.basePost(context.Background(), url, jsonBytes)
+				if err != nil {
+					println("post error: ", fmt.Sprint(err))
+				}
+			}
+			comicWorksCreate, _ := instance.ParseComicWorksCreated(vLog)
+			if comicWorksCreate != nil {
+
+				request := script.ScriptComicWorksCreateRequest{
+					IsIncrement: 1,
+				}
+				jsonBytes, _ := json.Marshal(request)
+				comicBytes, _ := json.Marshal(comicWorksCreate.ComicWorks)
+				println("ComicWorksCreated data:", string(comicBytes))
+				url := fmt.Sprintf("%s/v1/script/comic/update", app.bc.ThirdParty.ScriptUrl)
+				_, err = app.basePost(context.Background(), url, jsonBytes)
+				if err != nil {
+					println("post error: ", fmt.Sprint(err))
+				}
+			}
+			transfer, _ := instance.ParseTransfer(vLog)
+			if transfer != nil {
+				request := script.ScriptComicWorksSoldRequest{
+					TokenId: transfer.TokenId.Int64(),
+					To:      transfer.To.String(),
+				}
+				jsonBytes, _ := json.Marshal(request)
+				comicBytes, _ := json.Marshal(transfer)
+				println("transfer data:", string(comicBytes))
+				url := fmt.Sprintf("%s/v1/script/comic/transfer", app.bc.ThirdParty.ScriptUrl)
 				_, err = app.basePost(context.Background(), url, jsonBytes)
 				if err != nil {
 					println("post error: ", fmt.Sprint(err))

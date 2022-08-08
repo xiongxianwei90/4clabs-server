@@ -36,6 +36,8 @@ const OperationNftListComicWorks = "/api.service.v1.Nft/ListComicWorks"
 const OperationNftListRegsiterNfts = "/api.service.v1.Nft/ListRegsiterNfts"
 const OperationNftNftPurchase = "/api.service.v1.Nft/NftPurchase"
 const OperationNftRegisterNft = "/api.service.v1.Nft/RegisterNft"
+const OperationNftScriptComicWorkCreate = "/api.service.v1.Nft/ScriptComicWorkCreate"
+const OperationNftScriptComicWorkSold = "/api.service.v1.Nft/ScriptComicWorkSold"
 const OperationNftScriptRegisterUpdate = "/api.service.v1.Nft/ScriptRegisterUpdate"
 const OperationNftSignToLogin = "/api.service.v1.Nft/SignToLogin"
 
@@ -52,6 +54,8 @@ type NftHTTPServer interface {
 	ListRegsiterNfts(context.Context, *v11.ListRegisterNftRequest) (*v11.ListRegisterNftResponse, error)
 	NftPurchase(context.Context, *v11.PurchaseComicNftRequest) (*v11.PurchaseComicNftResponse, error)
 	RegisterNft(context.Context, *v11.RegisterNftRequest) (*v11.RegisterNftResponse, error)
+	ScriptComicWorkCreate(context.Context, *v14.ScriptComicWorksCreateRequest) (*v14.ScriptComicWorksCreateResponse, error)
+	ScriptComicWorkSold(context.Context, *v14.ScriptComicWorksSoldRequest) (*v14.ScriptComicWorksSoldResponse, error)
 	ScriptRegisterUpdate(context.Context, *v14.ScriptRegisterRequest) (*v14.ScriptRegisterResponse, error)
 	SignToLogin(context.Context, *v13.VerifySignToLoginSignRequest) (*v13.VerifySignToLoginSighResponse, error)
 }
@@ -72,6 +76,8 @@ func RegisterNftHTTPServer(s *http.Server, srv NftHTTPServer) {
 	r.POST("/v1/comic/nft/purchase", _Nft_NftPurchase0_HTTP_Handler(srv))
 	r.POST("/v1/script/register/update", _Nft_ScriptRegisterUpdate0_HTTP_Handler(srv))
 	r.GET("/v1/{address}/comic/about_mine", _Nft_GetAboutMine0_HTTP_Handler(srv))
+	r.POST("/v1/script/comic/update", _Nft_ScriptComicWorkCreate0_HTTP_Handler(srv))
+	r.POST("/v1/script/comic/transfer", _Nft_ScriptComicWorkSold0_HTTP_Handler(srv))
 }
 
 func _Nft_ListComicWorks0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
@@ -361,6 +367,44 @@ func _Nft_GetAboutMine0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) e
 	}
 }
 
+func _Nft_ScriptComicWorkCreate0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v14.ScriptComicWorksCreateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNftScriptComicWorkCreate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ScriptComicWorkCreate(ctx, req.(*v14.ScriptComicWorksCreateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v14.ScriptComicWorksCreateResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Nft_ScriptComicWorkSold0_HTTP_Handler(srv NftHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v14.ScriptComicWorksSoldRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNftScriptComicWorkSold)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ScriptComicWorkSold(ctx, req.(*v14.ScriptComicWorksSoldRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v14.ScriptComicWorksSoldResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NftHTTPClient interface {
 	CreateComic(ctx context.Context, req *v1.ComicCreateRequest, opts ...http.CallOption) (rsp *v1.ComicCreateResponse, err error)
 	FetchNonce(ctx context.Context, req *v13.FetchSignMessageRequest, opts ...http.CallOption) (rsp *v13.FetchSignMessageResponse, err error)
@@ -374,6 +418,8 @@ type NftHTTPClient interface {
 	ListRegsiterNfts(ctx context.Context, req *v11.ListRegisterNftRequest, opts ...http.CallOption) (rsp *v11.ListRegisterNftResponse, err error)
 	NftPurchase(ctx context.Context, req *v11.PurchaseComicNftRequest, opts ...http.CallOption) (rsp *v11.PurchaseComicNftResponse, err error)
 	RegisterNft(ctx context.Context, req *v11.RegisterNftRequest, opts ...http.CallOption) (rsp *v11.RegisterNftResponse, err error)
+	ScriptComicWorkCreate(ctx context.Context, req *v14.ScriptComicWorksCreateRequest, opts ...http.CallOption) (rsp *v14.ScriptComicWorksCreateResponse, err error)
+	ScriptComicWorkSold(ctx context.Context, req *v14.ScriptComicWorksSoldRequest, opts ...http.CallOption) (rsp *v14.ScriptComicWorksSoldResponse, err error)
 	ScriptRegisterUpdate(ctx context.Context, req *v14.ScriptRegisterRequest, opts ...http.CallOption) (rsp *v14.ScriptRegisterResponse, err error)
 	SignToLogin(ctx context.Context, req *v13.VerifySignToLoginSignRequest, opts ...http.CallOption) (rsp *v13.VerifySignToLoginSighResponse, err error)
 }
@@ -534,6 +580,32 @@ func (c *NftHTTPClientImpl) RegisterNft(ctx context.Context, in *v11.RegisterNft
 	pattern := "/v1/nft/register"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNftRegisterNft))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftHTTPClientImpl) ScriptComicWorkCreate(ctx context.Context, in *v14.ScriptComicWorksCreateRequest, opts ...http.CallOption) (*v14.ScriptComicWorksCreateResponse, error) {
+	var out v14.ScriptComicWorksCreateResponse
+	pattern := "/v1/script/comic/update"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationNftScriptComicWorkCreate))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftHTTPClientImpl) ScriptComicWorkSold(ctx context.Context, in *v14.ScriptComicWorksSoldRequest, opts ...http.CallOption) (*v14.ScriptComicWorksSoldResponse, error) {
+	var out v14.ScriptComicWorksSoldResponse
+	pattern := "/v1/script/comic/transfer"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationNftScriptComicWorkSold))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
