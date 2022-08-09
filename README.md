@@ -54,4 +54,5 @@ docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf 
 abigen --abi 4clabs.abi --pkg main --type ForClabs --out ForClabs.go 
 ```
 
-contractlistener 服务运行在 华为云香港服务器
+contractlistener 合约监听服务
+app/4clabs-server/test/nft_update_script_test.go nft 更新合约脚本

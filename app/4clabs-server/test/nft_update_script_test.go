@@ -62,7 +62,7 @@ func GetEnvironment() (*data.Data, conf.Bootstrap, error) {
 	return dataData, bc, err
 }
 
-// 更新已经登记过的nft 价格
+// 更新已经登记过的nft 价格图片等
 func TestRegisterNftUpdate(t *testing.T) {
 	dataData, bc, err := GetEnvironment()
 	cacheNfts := nft.NewNft(dataData)
